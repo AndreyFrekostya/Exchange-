@@ -1,0 +1,32 @@
+.wrap{
+    grid-template-columns: 74px 60px repeat(8, 40px);
+    align-items: center;
+    justify-items: center;
+    display: grid;
+    padding: 5px 0px 6px 10px;
+    color: #fff;
+    background-color: #141414;
+}
+.wrap svg:nth-child(2){
+    margin-left: 20px;
+}
+.wrap h4{
+    font-weight: 100;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+.wrap svg{
+    font-size: 15px;
+}
+.options{
+    display: flex;
+    gap: 25px;
+    align-items: center;
+    margin-left: 50px;
+}
+.options h5{
+    margin: 0;
+    font-size: 14px;
+}

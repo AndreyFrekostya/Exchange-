@@ -1,0 +1,19 @@
+.wrap{
+    display: flex;
+    color: #fff;
+    gap: 10px;
+    align-items: center;
+    padding: 0px 0px 0px 25px;  
+}
+.wrap svg{
+    font-size: 20px;
+    cursor: pointer;
+    transition: .1s ease-in-out;
+}
+.wrap h3:hover{
+    cursor: pointer;
+    color: #879ec6;
+}
+.wrap svg:hover{
+    color: #879ec6;
+}

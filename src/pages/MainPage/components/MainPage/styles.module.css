@@ -1,0 +1,14 @@
+.wrap{
+    display: flex;
+}
+.firstColomn{
+    display: flex;
+    flex-direction: column;
+}
+.secondColomn{
+    display: flex;
+    width: 469px;
+    height: 100vh;
+    background-color: #202020;
+    flex-direction: column;
+}

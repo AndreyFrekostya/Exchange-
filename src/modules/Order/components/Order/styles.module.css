@@ -1,0 +1,16 @@
+.wrap{
+    color: #fff;
+    background-color: #141414;
+    margin-left: 5px;
+}
+.name{
+    font-weight: 300;
+    font-size: 16px;
+    margin-left: 10px;
+}
+.thead{
+    display: grid;
+    margin-top: 10px;
+    margin-left: 10px;
+    grid-template-columns: 125px 175px 113px 40px;
+}

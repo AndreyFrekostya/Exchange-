@@ -1,0 +1,16 @@
+.wrap h1{
+    color: #fff;
+    font-size: 15px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+.wrap h1 svg{
+    font-size: 19px;
+    cursor: pointer;
+    color: #a2a2a2;
+    transition: .1s ease-in-out;
+}
+.wrap h1 svg:hover{
+    color: #898989;
+}

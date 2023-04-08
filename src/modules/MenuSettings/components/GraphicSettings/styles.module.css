@@ -1,0 +1,8 @@
+.wrap{
+    display: flex;
+    gap: 7px;
+    padding-left: 20px;
+}
+.wrap div:nth-child(5){
+    margin-left: 15px;
+}
