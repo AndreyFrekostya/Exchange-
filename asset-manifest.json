@@ -1,0 +1,35 @@
+{
+  "files": {
+    "main.css": "/Exchange-/static/css/main.25489ed3.css",
+    "main.js": "/Exchange-/static/js/main.e65c0d29.js",
+    "static/media/30m.svg": "/Exchange-/static/media/30m.bc2b61928b307a26e3e46574b506ef85.svg",
+    "static/media/15m.svg": "/Exchange-/static/media/15m.ad9338e59324660a6ecef07126cde911.svg",
+    "static/media/5m.svg": "/Exchange-/static/media/5m.18dbe2cd9436a3d264437798ca40cdb4.svg",
+    "static/media/1d.svg": "/Exchange-/static/media/1d.7c98b56365a6a37b4afffc8965309187.svg",
+    "static/media/rubber and  time.svg": "/Exchange-/static/media/rubber and  time.dfa651b6d67d5bb7eceae9954384b054.svg",
+    "static/media/rubber.svg": "/Exchange-/static/media/rubber.a92d879338c192a9b1f55e9267fe5038.svg",
+    "static/media/volume.svg": "/Exchange-/static/media/volume.384bbac84ce0d1cae2dac7aa965b5a48.svg",
+    "static/media/dollar.svg": "/Exchange-/static/media/dollar.00458bbc33afc5a750d80407dc952fc8.svg",
+    "static/media/trand with 2 sq.svg": "/Exchange-/static/media/trand with 2 sq.6000a913ddd0e2265664dea6affe956d.svg",
+    "index.html": "/Exchange-/index.html",
+    "static/media/lineal.svg": "/Exchange-/static/media/lineal.3e03fe6b5d84ebef99cfcb259d23283e.svg",
+    "static/media/trand.svg": "/Exchange-/static/media/trand.a6d5a13d9da23c29a4d9e3c4a7d3f943.svg",
+    "static/media/line b and s.svg": "/Exchange-/static/media/line b and s.ebc35e34ff22a3d2886e56e9ef6f7ebd.svg",
+    "static/media/matches.svg": "/Exchange-/static/media/matches.34763cac59a9d43701b64f129113c21f.svg",
+    "static/media/1m.svg": "/Exchange-/static/media/1m.3049fb0bccc01833be0d2cb2ce54d80e.svg",
+    "static/media/4 gr.svg": "/Exchange-/static/media/4 gr.9736e3028209413c4bccd4cdc03199f9.svg",
+    "static/media/4h.svg": "/Exchange-/static/media/4h.5481e32d04f771c807ac5a8875f93d03.svg",
+    "static/media/1h.svg": "/Exchange-/static/media/1h.7a547b6bbf39519d2277ecf60abfa01e.svg",
+    "static/media/3 line nakl.svg": "/Exchange-/static/media/3 line nakl.5a46b3e22f31b268848d22e12c8b58e0.svg",
+    "static/media/2 line nakl.svg": "/Exchange-/static/media/2 line nakl.3874a29af730a62c6faefad4353681f8.svg",
+    "static/media/rectangle.svg": "/Exchange-/static/media/rectangle.729d0f49f3e07e4c993c36afc632717a.svg",
+    "static/media/2 gor gr.svg": "/Exchange-/static/media/2 gor gr.f41cc2b8f589d7ca962d2c931922424f.svg",
+    "static/media/2 vert gr.svg": "/Exchange-/static/media/2 vert gr.fcbf0d0f2bae1ae9c47402bdbbaec88c.svg",
+    "main.25489ed3.css.map": "/Exchange-/static/css/main.25489ed3.css.map",
+    "main.e65c0d29.js.map": "/Exchange-/static/js/main.e65c0d29.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.25489ed3.css",
+    "static/js/main.e65c0d29.js"
+  ]
+}
