@@ -3,7 +3,8 @@
     color: #fff;
     gap: 10px;
     align-items: center;
-    padding: 0px 0px 0px 25px;  
+    padding: 0px 0px 0px 58px;
+    align-items: center;  
 }
 .wrap svg{
     font-size: 20px;

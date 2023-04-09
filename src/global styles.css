@@ -2,4 +2,19 @@
 body{
     background-color: #141414;
     font-family: 'Quicksand', sans-serif;
+    overflow-y: hidden;
 }
+::-webkit-scrollbar {
+    height: 10px;
+    background-color: transparent;
+  }
+  
+ ::-webkit-scrollbar-thumb {
+    border-radius: 2px;
+    background-color: #424a4a;
+  }
+  
+ ::-webkit-scrollbar-track {
+    /* -webkit-box-shadow: inset 0 0 2px rgba(0,0,0,0.2); */
+    background-color: transparent;
+  }

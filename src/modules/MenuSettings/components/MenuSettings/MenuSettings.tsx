@@ -4,14 +4,22 @@ import DrawingSettings from '../../../../modules/MenuSettings/components/Drawing
 import GraphicSettings from '../../../../modules/MenuSettings/components/GraphicSettings/GraphicSettings'
 import Other from '../../../../modules/MenuSettings/components/OtherSettings/Other'
 import CoinName from '../../../../modules/MenuSettings/components/CoinName/CoinName'
+import styles  from './styles.module.css'
 export const MenuSettings = () => {
   return (
     <>
-        <CoinName/>
-        <DistanceSettings/>
-        <DrawingSettings/>
-        <GraphicSettings/>
-        <Other/>
+        <div className={styles.FirstColomn}>
+            <CoinName/>
+            <DistanceSettings/>
+        </div>
+        <div className={styles.SecondColomn}>
+          <div style={{display:'flex'}}>
+              <GraphicSettings/>
+              <Other/>
+          </div>
+          <DrawingSettings/>
+        </div>
+      
     </>
   )
 }

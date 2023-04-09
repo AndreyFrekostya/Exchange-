@@ -1,8 +1,18 @@
 .wrap{
     display: flex;
     gap: 7px;
-    padding-left: 20px;
+    align-items: center;
+    
 }
 .wrap div:nth-child(5){
     margin-left: 15px;
+}
+.wrap img{
+    width: 27px;
+    height: 27px;
+    cursor: pointer;
+    filter: invert(100%) sepia(7%) saturate(1870%) hue-rotate(187deg) brightness(107%) contrast(108%);
+}
+.active *{
+    filter: invert(9%) sepia(6%) saturate(3851%) hue-rotate(316deg) brightness(100%) contrast(86%);
 }

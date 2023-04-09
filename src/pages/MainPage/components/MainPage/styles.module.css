@@ -1,12 +1,11 @@
 .wrap{
     display: flex;
-    justify-content: space-between;
 }
 .firstColomn{
     display: flex;
     flex-direction: column;
     flex-basis: auto;
-    width: 76%;
+    width: 100%;
 }
 .secondColomn{
     display: flex;

@@ -2,11 +2,12 @@
     padding: 3px 20px;
     position: absolute;
     font-size: 14px;
+    top: 35px;
     color: #fff;
     background-color: #353535;
     font-weight: 500;
     border-radius: 5px;
     border: 1px solid #000000;
-    left: 20px;
+    left: 130px;
     transition: .5s ease-in-out;
 }

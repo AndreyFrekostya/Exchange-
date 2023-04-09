@@ -1,0 +1,29 @@
+.wrap{
+    display: flex;
+    flex-wrap: wrap;
+    flex-basis: 100%;
+}
+.wrap div{
+    background-color: #fff;
+}
+.one{
+    width: 100%;
+    height: 100%;
+    display: flex;
+}
+.two_v{
+    display: flex;
+    align-items: center;
+    flex: 1 1 0
+}
+.two_h{
+    display:flex;
+    flex-direction: column;
+    flex: 1 1 0;
+}
+.four{
+    display: grid;
+    grid-template-columns: 50% 50%;
+    grid-template-rows: 50% 50%;
+    width: 100%;
+}

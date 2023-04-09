@@ -1,52 +1,56 @@
 import React from 'react'
 import styles from './styles.module.css'
 import IconMenu from '../../../../ui/IconMenu/IconMenu'
-import two_line_nakl from './../../../../images/drawing/2 line nakl.svg'
-import three_line_nakl from './../../../../images/drawing/3 line nakl.svg'
-import dollar from './../../../../images/drawing/dollar.svg'
-import line_b_and_s from './../../../../images/drawing/line b and s.svg'
-import lineal from './../../../../images/drawing/lineal.svg'
-import rectangle from './../../../../images/drawing/rectangle.svg'
-import rubber_and_time from './../../../../images/drawing/rubber and  time.svg'
-import rubber from './../../../../images/drawing/rubber.svg'
-import trand_2_sq from './../../../../images/drawing/trand with 2 sq.svg'
 import trand from './../../../../images/drawing/trand.svg'
-import volume from './../../../../images/drawing/volume.svg'
+import dlin_poz from './../../../../images/drawing/dlin poz.svg'
+import fib from './../../../../images/drawing/fib.svg'
+import gorizontal from './../../../../images/drawing/gorizontal.svg'
+import gr_luch from './../../../../images/drawing/gr luch.svg'
+import magnit1 from './../../../../images/drawing/magnit 1.svg'
+import korot_poz from './../../../../images/drawing/korot poz.svg'
+import price from './../../../../images/drawing/price.svg'
+import profile_ob from './../../../../images/drawing/profile ob.svg'
+import rect from './../../../../images/drawing/rect.svg'
+import rubber from './../../../../images/drawing/rubber.svg'
+import text from './../../../../images/drawing/text.svg'
 const DrawingSettings = () => {
   return (
     <div className={styles.wrap}>
         <IconMenu>
-            <img src={volume} alt="" />
-        </IconMenu>
-        <IconMenu>
-            <img src={dollar} alt="" />
-        </IconMenu>
-        <IconMenu>
             <img src={trand} alt="" />
         </IconMenu>
         <IconMenu>
-            <img src={line_b_and_s} alt="" />
+            <img src={gorizontal} alt="" />
         </IconMenu>
         <IconMenu>
-            <img src={two_line_nakl} alt="" />
+            <img src={gr_luch} alt="" />
         </IconMenu>
         <IconMenu>
-            <img src={three_line_nakl} alt="" />
+            <img src={dlin_poz} alt="" />
         </IconMenu>
         <IconMenu>
-            <img src={trand_2_sq} alt="" />
+            <img src={korot_poz} alt="" />
         </IconMenu>
         <IconMenu>
-            <img src={rectangle} alt="" />
+            <img src={fib} alt="" />
         </IconMenu>
         <IconMenu>
-            <img src={lineal} alt="" />
+            <img src={rect} alt="" />
+        </IconMenu>
+        <IconMenu>
+            <img src={price} alt="" />
+        </IconMenu>
+        <IconMenu>
+            <img src={profile_ob} alt="" />
+        </IconMenu>
+        <IconMenu>
+            <img src={text} alt="" />
         </IconMenu>
         <IconMenu>
             <img src={rubber} alt="" />
         </IconMenu>
         <IconMenu>
-            <img src={rubber_and_time} alt="" />
+            <img src={magnit1} alt="" />
         </IconMenu>
     </div>
   )

@@ -1,5 +1,6 @@
 .wrap{
     display: flex;
     gap: 7px;
-    padding-left: 20px;
+    
+    max-height: 28px;
 }

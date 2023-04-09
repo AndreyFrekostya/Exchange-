@@ -1,36 +1,30 @@
 import React from 'react'
 import styles from './styles.module.css'
 import IconMenu from '../../../../ui/IconMenu/IconMenu'
-import one_minute from './../../../../images/distance/1m.svg'
-import five_minute from './../../../../images/distance/5m.svg'
-import fiveteen_minute from './../../../../images/distance/15m.svg'
-import thirty_minute from './../../../../images/distance/30m.svg'
-import one_hour from './../../../../images/distance/1h.svg'
-import four_hour  from './../../../../images/distance/4h.svg'
-import one_day  from './../../../../images/distance/1d.svg'
+
 const DistanceSettings = () => {
   return (
     <div className={styles.wrap}>
         <IconMenu>
-            <img src={one_minute}/>
+            <p>1m</p>
         </IconMenu>
         <IconMenu>
-            <img src={five_minute}/>
+            <p>5m</p>
         </IconMenu>
         <IconMenu>
-            <img src={fiveteen_minute}/>
+            <p>15m</p>
         </IconMenu>
         <IconMenu>
-            <img src={thirty_minute}/>
+            <p>30m</p>
         </IconMenu>
         <IconMenu>
-            <img src={one_hour}/>
+            <p>1h</p>
         </IconMenu>
         <IconMenu>
-            <img src={four_hour}/>
+            <p>4h</p>
         </IconMenu>
         <IconMenu>
-            <img src={one_day}/>
+            <p>1d</p>
         </IconMenu>
     </div>
   )

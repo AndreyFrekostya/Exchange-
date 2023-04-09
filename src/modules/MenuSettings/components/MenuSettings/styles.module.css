@@ -1,0 +1,20 @@
+.wrap{
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    width: 720px;
+}
+.FirstColomn{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 14px;
+}
+.SecondColomn{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 9px;
+}
