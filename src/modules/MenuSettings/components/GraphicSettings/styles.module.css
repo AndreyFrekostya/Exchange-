@@ -7,12 +7,31 @@
 .wrap div:nth-child(5){
     margin-left: 15px;
 }
-.wrap img{
+.active{
     width: 27px;
     height: 27px;
     cursor: pointer;
-    filter: invert(100%) sepia(7%) saturate(1870%) hue-rotate(187deg) brightness(107%) contrast(108%);
+    display: block;
+    filter: invert(48%) sepia(18%) saturate(733%) hue-rotate(175deg) brightness(90%) contrast(92%);
 }
-.active *{
-    filter: invert(9%) sepia(6%) saturate(3851%) hue-rotate(316deg) brightness(100%) contrast(86%);
+.wrap .disabled{
+    width: 27px;
+    cursor: pointer;
+    height: 27px;
+    display: block;
+    filter: invert(98%) sepia(1%) saturate(5%) hue-rotate(18deg) brightness(102%) contrast(101%);
+}
+.wrap div{
+    align-items: center;
+    border: 1px solid #fff;
+    border-radius: 2px;
+    display: flex;
+    justify-content: center;
+    max-height: 28px;
+    min-height: 25px;
+    min-width: 25px;
+}
+.wrap div img{
+    height: 25px;
+    width: 25px;
 }

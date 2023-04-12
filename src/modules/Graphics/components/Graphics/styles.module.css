@@ -11,6 +11,9 @@
     height: 100%;
     display: flex;
 }
+.one div div{
+    border: none;
+}
 .two_v{
     display: flex;
     align-items: center;

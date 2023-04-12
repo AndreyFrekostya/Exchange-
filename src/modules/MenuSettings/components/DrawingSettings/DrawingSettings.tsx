@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import styles from './styles.module.css'
 import IconMenu from '../../../../ui/IconMenu/IconMenu'
 import trand from './../../../../images/drawing/trand.svg'
@@ -13,10 +13,26 @@ import profile_ob from './../../../../images/drawing/profile ob.svg'
 import rect from './../../../../images/drawing/rect.svg'
 import rubber from './../../../../images/drawing/rubber.svg'
 import text from './../../../../images/drawing/text.svg'
+import { useAppDispatch, useAppSelector } from '../../../../hooks/redux-hooks'
+import { changeInstrument } from '../../slices/DrawigSetSlice'
 const DrawingSettings = () => {
-  return (
+    const instruments=[trand,gorizontal,gr_luch,dlin_poz,korot_poz,fib,rect,price,profile_ob,text,rubber,magnit1]
+    const dispatch=useAppDispatch()
+    const drawingChoosed=useAppSelector(state=>state.drawing)
+    const setDrawing=(index:number)=>{
+        const clicked=instruments[index].substring(24, instruments[index].indexOf('.'))
+        dispatch(changeInstrument(clicked))
+    }
+    return (
     <div className={styles.wrap}>
-        <IconMenu>
+        {instruments.map((instrument,index)=>(
+            <IconMenu key={index} 
+            className={instruments[index].substring(24, instruments[index].indexOf('.'))==drawingChoosed ? styles.activeDraw : styles.disabledDraw} 
+            onClick={()=>setDrawing(index)}>
+                <img src={instrument} alt="" />
+            </IconMenu>
+        ))}
+        {/* <IconMenu>
             <img src={trand} alt="" />
         </IconMenu>
         <IconMenu>
@@ -51,7 +67,7 @@ const DrawingSettings = () => {
         </IconMenu>
         <IconMenu>
             <img src={magnit1} alt="" />
-        </IconMenu>
+        </IconMenu> */}
     </div>
   )
 }

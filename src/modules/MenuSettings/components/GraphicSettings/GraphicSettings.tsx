@@ -1,23 +1,39 @@
 import React from 'react'
 import styles from './styles.module.css'
 import IconMenu from '../../../../ui/IconMenu/IconMenu'
-import two_gor_gr from './../../../../images/graphic/2 gor.svg'
-import four_gr from './../../../../images/graphic/4 gr.svg'
+import one from './../../../../images/graphic/one gr.svg'
+import two_gor from './../../../../images/graphic/2 gor.svg'
+import four from './../../../../images/graphic/4 gr.svg'
 import matches from './../../../../images/graphic/matches.svg'
-import two_vert_gr from './../../../../images/graphic/2 vert.svg'
-import one_gr from './../../../../images/graphic/one gr.svg'
+import two_vert from './../../../../images/graphic/2 vert.svg'
 import { useAppDispatch, useAppSelector } from '../../../../hooks/redux-hooks'
 import { changeGraphicMode } from '../../slices/GraphicModeSlice'
+import { changeDistance } from '../../slices/DistanceSetSlice'
+import { clearChoosed } from '../../../../pages/MainPage/slices/GraphicSlice'
 const GraphicSettings = () => {
   const dispatch=useAppDispatch()
-  const mode=useAppSelector(state=>state.modeGraphic)
+  const mode=useAppSelector(state=>state.modeGraphic.find(m=>m.choosed===true))
+  const allGraphics=useAppSelector(state=>state.graphics)
+  const allModeGraphics=useAppSelector(state=>state.modeGraphic)
+  const choosedGraphic=useAppSelector(state=>state.graphics.find(item=>item.choosed===true))
+  const setMode=(mode_arg:string)=>{
+    const previousMode=mode
+    const choosedMode=allModeGraphics.find(item=>item.name===mode_arg)
+    if(choosedMode && previousMode && choosedGraphic){
+      if(choosedMode.numOfGraph<previousMode.numOfGraph && choosedGraphic.id>choosedMode.id){
+        dispatch(clearChoosed())
+        dispatch(changeDistance(allGraphics[0].distance))
+      }
+    }
+    dispatch(changeGraphicMode(mode_arg))
+  }
   return (
     <div className={styles.wrap}>
-        <img className={mode==='one' ? 'active' : ''} onClick={()=>dispatch(changeGraphicMode('one'))} src={one_gr} alt="" />
-        <img className={mode==='two_vertical' ? 'active' : ''} onClick={()=>dispatch(changeGraphicMode('two_vertical'))} src={two_vert_gr} alt="" />
-        <img src={two_gor_gr} alt='' className={mode==='two_horizontal' ? 'active' : ''} onClick={()=>dispatch(changeGraphicMode('two_horizontal'))} />
-        <img className={mode==='four' ? 'active' : ''} onClick={()=>dispatch(changeGraphicMode('four'))} src={four_gr} alt="" />
-        <IconMenu><img src={matches} alt="" /></IconMenu>
+        <img src={one} alt="" className={mode?.name==='one' ? styles.active : styles.disabled}  onClick={()=>setMode('one')} />
+        <img src={two_vert} alt=""  className={mode?.name==='two_vertical' ? styles.active : styles.disabled} onClick={()=>setMode('two_vertical')} />
+        <img src={two_gor} alt=""  className={mode?.name==='two_horizontal' ? styles.active : styles.disabled} onClick={()=>setMode('two_horizontal')} />
+        <img  src={four} alt="" className={mode?.name==='four' ? styles.active : styles.disabled} onClick={()=>setMode('four')}/>
+        <IconMenu><img className={styles.disabled} src={matches} alt="" /></IconMenu>
     </div>
   )
 }
