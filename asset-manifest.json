@@ -1,30 +1,30 @@
 {
   "files": {
-    "main.css": "/Exchange-/static/css/main.cee1af71.css",
-    "main.js": "/Exchange-/static/js/main.bc001157.js",
+    "main.css": "/Exchange-/static/css/main.2f59ded7.css",
+    "main.js": "/Exchange-/static/js/main.3713a27f.js",
     "static/media/korot poz.svg": "/Exchange-/static/media/korot poz.3e6f6ec27f577128c1f265c069c5bdd5.svg",
     "static/media/dlin poz.svg": "/Exchange-/static/media/dlin poz.9ad38416f39a022323447a9339aff6eb.svg",
     "static/media/profile ob.svg": "/Exchange-/static/media/profile ob.90b44c62139e373fe17dee01fd99b912.svg",
     "index.html": "/Exchange-/index.html",
-    "static/media/rect.svg": "/Exchange-/static/media/rect.76e3d251ccc5321759143dd6ece8c1d5.svg",
-    "static/media/rubber.svg": "/Exchange-/static/media/rubber.e04db36ff76bbee4367265813f876d6c.svg",
-    "static/media/matches.svg": "/Exchange-/static/media/matches.85b8fc38ba0745ab466f06d7838ce2ba.svg",
-    "static/media/4 gr.svg": "/Exchange-/static/media/4 gr.27209400ef513f20cde3312c49a66905.svg",
-    "static/media/fib.svg": "/Exchange-/static/media/fib.82145d1f53e48582ae440dbd495359f8.svg",
-    "static/media/price.svg": "/Exchange-/static/media/price.e0fc636971423f32bfe95aea57e6c6bd.svg",
-    "static/media/2 vert.svg": "/Exchange-/static/media/2 vert.ea693c97c20cac8832517130d3ad86ca.svg",
-    "static/media/trand.svg": "/Exchange-/static/media/trand.8a4af16b47a60fea6f9287111e53f928.svg",
-    "static/media/2 gor.svg": "/Exchange-/static/media/2 gor.8ade0f4858a8da44a014e77ebe19402a.svg",
-    "static/media/magnit 1.svg": "/Exchange-/static/media/magnit 1.b7ed45c9182ca3157c2d2ae19b7dd16d.svg",
-    "static/media/one gr.svg": "/Exchange-/static/media/one gr.98695a11a10bccd239240085e5294172.svg",
-    "static/media/gorizontal.svg": "/Exchange-/static/media/gorizontal.f25bfb3cbd7bf662d6c3d7423047afc4.svg",
-    "static/media/gr luch.svg": "/Exchange-/static/media/gr luch.9a26680c7de2e3ebe5f5bd3c92c7eab6.svg",
-    "static/media/text.svg": "/Exchange-/static/media/text.fcf2c9248193d50c120b98fb59f60ccf.svg",
-    "main.cee1af71.css.map": "/Exchange-/static/css/main.cee1af71.css.map",
-    "main.bc001157.js.map": "/Exchange-/static/js/main.bc001157.js.map"
+    "static/media/rect.svg": "/Exchange-/static/media/rect.87bc167b800f2b319af0b24610327baa.svg",
+    "static/media/rubber.svg": "/Exchange-/static/media/rubber.2ef0090ccdf7a49fccc2a0f51baa9139.svg",
+    "static/media/matches.svg": "/Exchange-/static/media/matches.4b55f91320c357d1f34bb8c9e4ed6b77.svg",
+    "static/media/4 gr.svg": "/Exchange-/static/media/4 gr.66c2fbf94f6ea2e8f5778ab284fb261c.svg",
+    "static/media/fib.svg": "/Exchange-/static/media/fib.efecded27aede6fbe3f5377b5920f4fd.svg",
+    "static/media/price.svg": "/Exchange-/static/media/price.a5a7e91667b9d02cb463902bad640288.svg",
+    "static/media/2 vert.svg": "/Exchange-/static/media/2 vert.149e3de3d56863e9099bbab4202afce6.svg",
+    "static/media/trand.svg": "/Exchange-/static/media/trand.9f161b7b08256cf49b62bd160798d183.svg",
+    "static/media/2 gor.svg": "/Exchange-/static/media/2 gor.488e150188b2f36435103e20b21b8635.svg",
+    "static/media/magnit 1.svg": "/Exchange-/static/media/magnit 1.4180f61a22e10672637f8e617933382c.svg",
+    "static/media/one gr.svg": "/Exchange-/static/media/one gr.6d46e7caea027055062206da3fe6ccde.svg",
+    "static/media/gorizontal.svg": "/Exchange-/static/media/gorizontal.4b7de311dcad4e9424d96a2a6edde228.svg",
+    "static/media/gr luch.svg": "/Exchange-/static/media/gr luch.48358cbd49d987a6ca2bc484ca5966e2.svg",
+    "static/media/text.svg": "/Exchange-/static/media/text.4e65000a0fcb1ca0e0cd5393796d6a56.svg",
+    "main.2f59ded7.css.map": "/Exchange-/static/css/main.2f59ded7.css.map",
+    "main.3713a27f.js.map": "/Exchange-/static/js/main.3713a27f.js.map"
   },
   "entrypoints": [
-    "static/css/main.cee1af71.css",
-    "static/js/main.bc001157.js"
+    "static/css/main.2f59ded7.css",
+    "static/js/main.3713a27f.js"
   ]
 }
