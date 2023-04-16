@@ -9,7 +9,7 @@ import two_vert from './../../../../images/graphic/2 vert.svg'
 import { useAppDispatch, useAppSelector } from '../../../../hooks/redux-hooks'
 import { changeGraphicMode } from '../../slices/GraphicModeSlice'
 import { changeDistance } from '../../slices/DistanceSetSlice'
-import { clearChoosed } from '../../../../pages/MainPage/slices/GraphicSlice'
+import { clearChoosed, setGraphicDistance, setGraphicsOnTwoMode } from '../../../../pages/MainPage/slices/GraphicSlice'
 const GraphicSettings = () => {
   const dispatch=useAppDispatch()
   const mode=useAppSelector(state=>state.modeGraphic.find(m=>m.choosed===true))
@@ -25,12 +25,15 @@ const GraphicSettings = () => {
         dispatch(changeDistance(allGraphics[0].distance))
       }
     }
+    if(mode_arg==='two_horizontal'){
+      dispatch(changeDistance('1h'))
+      dispatch(setGraphicsOnTwoMode())
+    }
     dispatch(changeGraphicMode(mode_arg))
   }
   return (
     <div className={styles.wrap}>
         <img src={one} alt="" className={mode?.name==='one' ? styles.active : styles.disabled}  onClick={()=>setMode('one')} />
-        <img src={two_vert} alt=""  className={mode?.name==='two_vertical' ? styles.active : styles.disabled} onClick={()=>setMode('two_vertical')} />
         <img src={two_gor} alt=""  className={mode?.name==='two_horizontal' ? styles.active : styles.disabled} onClick={()=>setMode('two_horizontal')} />
         <img  src={four} alt="" className={mode?.name==='four' ? styles.active : styles.disabled} onClick={()=>setMode('four')}/>
         <IconMenu><img className={styles.disabled} src={matches} alt="" /></IconMenu>

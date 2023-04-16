@@ -1,5 +1,4 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { useAppSelector } from '../../../hooks/redux-hooks';
 const initialState='nothing'
 const DrawingSetSlice = createSlice({
     name: 'drawing',

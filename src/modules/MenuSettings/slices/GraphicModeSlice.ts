@@ -6,7 +6,6 @@ interface IModeGraphics{
     choosed:boolean
 }
 const initialState:IModeGraphics[]=[{id:0, name: 'one',numOfGraph:1, choosed: true},
-{id:1, name: 'two_vertical',numOfGraph:2, choosed: false},
 {id:1, name: 'two_horizontal',numOfGraph:2, choosed: false},
 {id:2, name: 'four',numOfGraph:4, choosed: false},
 ]
@@ -15,7 +14,7 @@ const GraphicModeSlice = createSlice({
     initialState,
     reducers: {
         changeGraphicMode(state, action){
-            const mode=state.find(item=>item.name==action.payload)
+            const mode=state.find(item=>item.name===action.payload) //name
             if (!mode) return;
             state.map(item=>{item.choosed=false})
             mode.choosed=true

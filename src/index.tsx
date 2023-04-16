@@ -6,7 +6,6 @@ import App from './App';
 import { PersistGate } from 'redux-persist/integration/react';
 import { Provider } from 'react-redux';
 import store, {persistor} from './store';
-import Loader from './components/Loading/Loader';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement

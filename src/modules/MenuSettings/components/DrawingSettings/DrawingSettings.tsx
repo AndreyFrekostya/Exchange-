@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import styles from './styles.module.css'
 import IconMenu from '../../../../ui/IconMenu/IconMenu'
 import trand from './../../../../images/drawing/trand.svg'
@@ -27,47 +27,11 @@ const DrawingSettings = () => {
     <div className={styles.wrap}>
         {instruments.map((instrument,index)=>(
             <IconMenu key={index} 
-            className={instruments[index].substring(24, instruments[index].indexOf('.'))==drawingChoosed ? styles.activeDraw : styles.disabledDraw} 
+            className={instruments[index].substring(24, instruments[index].indexOf('.'))===drawingChoosed ? styles.activeDraw : styles.disabledDraw} 
             onClick={()=>setDrawing(index)}>
                 <img src={instrument} alt="" />
             </IconMenu>
         ))}
-        {/* <IconMenu>
-            <img src={trand} alt="" />
-        </IconMenu>
-        <IconMenu>
-            <img src={gorizontal} alt="" />
-        </IconMenu>
-        <IconMenu>
-            <img src={gr_luch} alt="" />
-        </IconMenu>
-        <IconMenu>
-            <img src={dlin_poz} alt="" />
-        </IconMenu>
-        <IconMenu>
-            <img src={korot_poz} alt="" />
-        </IconMenu>
-        <IconMenu>
-            <img src={fib} alt="" />
-        </IconMenu>
-        <IconMenu>
-            <img src={rect} alt="" />
-        </IconMenu>
-        <IconMenu>
-            <img src={price} alt="" />
-        </IconMenu>
-        <IconMenu>
-            <img src={profile_ob} alt="" />
-        </IconMenu>
-        <IconMenu>
-            <img src={text} alt="" />
-        </IconMenu>
-        <IconMenu>
-            <img src={rubber} alt="" />
-        </IconMenu>
-        <IconMenu>
-            <img src={magnit1} alt="" />
-        </IconMenu> */}
     </div>
   )
 }

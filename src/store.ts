@@ -14,12 +14,16 @@ import GraphicModeReducer from './modules/MenuSettings/slices/GraphicModeSlice';
 import GraphicReducer from './pages/MainPage/slices/GraphicSlice';
 import DistanceReducer from './modules/MenuSettings/slices/DistanceSetSlice';
 import DrawigReducer from './modules/MenuSettings/slices/DrawigSetSlice';
+import PresetReducer from './modules/MenuSettings/slices/PresetSlice';
+import GraphicRememberLastModeReducer from './modules/MenuSettings/slices/GraphicRememberLastMode';
 
 const rootReducer = combineReducers({
     modeGraphic: GraphicModeReducer,
     graphics: GraphicReducer,
     distance: DistanceReducer,
     drawing: DrawigReducer, 
+    preset: PresetReducer,
+    lastMode: GraphicRememberLastModeReducer
 });
 const persistConfig = {
   key: 'root',
