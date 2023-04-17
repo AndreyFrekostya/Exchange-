@@ -8,15 +8,16 @@ import { setGraphicDistance } from '../../../../pages/MainPage/slices/GraphicSli
 const DistanceSettings = () => {
     const distances=['1m', '5m', '15m', '30m', '1h', '4h','1d']
     const distanceFromSlice=useAppSelector(state=>state.distance)
+    const mode=useAppSelector(state=>state.modeGraphic)
     const dispatch=useAppDispatch()
-    const setDistace=(arg:string)=>{
+    const setDistance=(arg:string)=>{
         dispatch(setGraphicDistance(arg))
         dispatch(changeDistance(arg))
     }
   return (
     <div className={styles.wrap}>
         {distances.map((distance,index)=>(
-            <IconMenu onClick={()=>setDistace(distance)} key={index} className={distance===distanceFromSlice ? styles.activeWrap : styles.disabledWrap}>
+            <IconMenu onClick={()=>setDistance(distance)} key={index} className={distance===distanceFromSlice ? styles.activeWrap : styles.disabledWrap}>
                 <p>{distance}</p>
             </IconMenu>
         ))}

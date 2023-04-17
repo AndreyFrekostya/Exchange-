@@ -9,8 +9,9 @@
 }
 .secondColomn{
     display: flex;
-    width: 469px;
     height: 100vh;
+    width: 457px;
+    overflow: hidden;
     background-color: #202020;
     flex-direction: column;
 }

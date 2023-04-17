@@ -1,0 +1,89 @@
+.main{
+    position: absolute;
+    background-color: #202020;
+    border: 1px solid #5e5d5d;
+    color: #fff;
+    max-height: 400px;
+}
+.main::-webkit-scrollbar {
+    height: 5px;
+    background-color: transparent;
+    width: 5px;
+  }
+  
+.main ::-webkit-scrollbar-thumb {
+    border-radius: 2px;
+    background-color: #424a4a;
+  }
+  
+.main::-webkit-scrollbar-track {
+    background-color: transparent;
+  }
+.inputField input{
+    outline: none;
+    border: none;
+    background-color: transparent;
+    border-bottom: 1px solid #5e5d5d;
+    color: #fff;
+    font-weight: 400;
+    font-size: 15px;
+}
+.inputField{
+    display: flex;
+    padding: 5px 5px 0px 5px;
+    align-items: center;
+    gap: 5px;
+}
+.wrap{
+    border-bottom: 1px solid #5e5d5d;
+    padding-bottom: 7px;
+}
+.inputField svg{
+    cursor: pointer;
+    transition: .1s ease-in;
+}
+.inputField svg:hover{
+    color: #7e7e7e;
+}
+.preset{
+    text-transform: capitalize;
+    border-bottom: 1px solid #5e5d5d;
+    cursor: pointer;
+    transition: .2s ease-in-out;
+    min-height: 34px;
+    z-index: 10;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.preset svg{
+    color: #5e5d5d;
+    font-size: 20px;
+}
+.info{
+    padding: 5px 10px;
+    width: 100%;
+}
+.delete{
+    height: 34px;
+    width: 34px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: .7s ease-in-out;
+}
+.delete:hover svg{
+    color: #4f4f4f;
+}
+.delete:hover{
+    background-color: rgb(95, 95, 95)
+}
+.preset:hover{
+    background-color: #434343;
+}
+.error p{
+    color:  #B00000;
+    font-size: 15px;
+    font-weight: 200;
+    padding-left: 5px;
+}

@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-const initialState='1d'
+const initialState='5m'
 const DistanceSetSlice = createSlice({
     name: 'distance',
     initialState,

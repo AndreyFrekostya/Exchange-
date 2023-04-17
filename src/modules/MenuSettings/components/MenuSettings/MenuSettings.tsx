@@ -5,6 +5,8 @@ import GraphicSettings from '../../../../modules/MenuSettings/components/Graphic
 import Other from '../../../../modules/MenuSettings/components/OtherSettings/Other'
 import CoinName from '../../../../modules/MenuSettings/components/CoinName/CoinName'
 import styles  from './styles.module.css'
+import preset from './../../../../images/other/preset.svg'
+import PresetSetting from '../PresetSettings/PresetSetting'
 export const MenuSettings = () => {
   return (
     <>
@@ -19,7 +21,9 @@ export const MenuSettings = () => {
           </div>
           <DrawingSettings/>
         </div>
-      
+        <div className={styles.thirdColomn}>
+          <PresetSetting/>
+        </div>
     </>
   )
 }

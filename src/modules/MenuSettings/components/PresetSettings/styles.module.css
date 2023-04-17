@@ -1,0 +1,21 @@
+.wrap{
+    margin-left: 16px;
+}
+.icons img{
+    filter: invert(100%) sepia(0%) saturate(17%) hue-rotate(345deg) brightness(106%) contrast(104%);
+    width: 35px;
+    height: 35px;
+    transition: .1s ease-in-out;
+}
+.icons:hover img{
+    filter: invert(56%) sepia(6%) saturate(9%) hue-rotate(319deg) brightness(87%) contrast(83%);
+}
+.icons:hover svg{
+    color: #7e7e7e;
+}
+.icons{
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    color: #fff;
+}

@@ -5,8 +5,8 @@ const Header = () => {
 
   return (
     <div className={styles.wrap}>
-      <div style={{width:'720px'}}>
-        <div style={{display:'flex', gap:'20px'}}>
+      <div style={{width:'900px'}}>
+        <div style={{display:'flex', gap:'20px', alignItems:'center'}}>
           <MenuSettings/>
         </div>
       </div>

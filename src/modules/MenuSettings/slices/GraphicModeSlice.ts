@@ -6,7 +6,7 @@ interface IModeGraphics{
     choosed:boolean
 }
 const initialState:IModeGraphics[]=[{id:0, name: 'one',numOfGraph:1, choosed: true},
-{id:1, name: 'two_horizontal',numOfGraph:2, choosed: false},
+{id:1, name: 'two',numOfGraph:2, choosed: false},
 {id:2, name: 'four',numOfGraph:4, choosed: false},
 ]
 const GraphicModeSlice = createSlice({
@@ -18,10 +18,13 @@ const GraphicModeSlice = createSlice({
             if (!mode) return;
             state.map(item=>{item.choosed=false})
             mode.choosed=true
+        },
+        setNewModePreset(state,action){
+
         }
     },
 });
 
-export const {changeGraphicMode} = GraphicModeSlice.actions;
+export const {changeGraphicMode,setNewModePreset} = GraphicModeSlice.actions;
 
 export default GraphicModeSlice.reducer;

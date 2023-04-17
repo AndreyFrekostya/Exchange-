@@ -1,19 +1,30 @@
 import { createSlice } from '@reduxjs/toolkit';
+import { IGraphic } from '../../../pages/MainPage/slices/GraphicSlice';
 interface IPreset{
     id: number,
-    name: string
+    name: string,
+    settings: IGraphic[],
+    mode: string
 }
-const initialState: IPreset[]=[{id:1,name: 'coin 1'},{id:2, name:'coin 2'}]
+const initialState: IPreset[]=[]
 const PresetSlice = createSlice({
     name: 'preset',
     initialState,
     reducers: {
         addPreset(state, action){
-            state.push({id: state[-1].id+1, name: `coin ${state[-1].id+1}`})
+            if(state.length===0){
+                state.unshift({id: 1, name: action.payload.name, settings: action.payload.settings, mode: action.payload.mode})
+            }else{
+                state.unshift({id: state[0].id+1, name: action.payload.name,settings: action.payload.settings, mode: action.payload.mode})
+            }
+        },
+        deletePreset(state,action){
+            console.log(action.payload)
+            return state.filter(item=>item.id!==action.payload)
         }
     },
 });
 
-export const {addPreset} = PresetSlice.actions;
+export const {addPreset, deletePreset} = PresetSlice.actions;
 
 export default PresetSlice.reducer;

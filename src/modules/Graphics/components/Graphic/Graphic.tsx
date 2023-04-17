@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import styles from './styles.module.css'
 import { IGraphic, clearWideScreen, setWideScreen } from '../../../../pages/MainPage/slices/GraphicSlice'
 import CropDinIcon from '@mui/icons-material/CropDin';
@@ -17,6 +17,7 @@ const Graphic:React.FC<IGraphicComponent> = ({graphic, onClick, one,wideS}) => {
   const dispatch=useAppDispatch()
   const mode=useAppSelector(state=>state.modeGraphic.find(m=>m.choosed===true)?.name)
   const lastmode=useAppSelector(state=>state.lastMode)
+  const choosedGraphic=useAppSelector(state=>state.graphics.find(item=>item.choosed==true))
   const openWideScreen=()=>{
     dispatch(rememberMode(mode))
     dispatch(changeGraphicMode('one'))
@@ -27,16 +28,41 @@ const Graphic:React.FC<IGraphicComponent> = ({graphic, onClick, one,wideS}) => {
     dispatch(clearWideScreen())
     dispatch(changeGraphicMode(lastmode))
   }
+  const closeFromPress=(e:any)=>{
+    if(graphic.widescreen){
+      if(e.code=="Escape" || e.code=='KeyF'){
+        dispatch(clearWideScreen())
+        dispatch(changeGraphicMode(lastmode))
+      } 
+    }
+  }
+  const openFromPress=(e:any):void=>{
+    if(graphic.choosed==true){
+      if(e.code=='KeyF'){
+        dispatch(rememberMode(mode))
+        dispatch(changeGraphicMode('one'))
+        dispatch(changeDistance(choosedGraphic?.distance))
+        dispatch(setWideScreen(choosedGraphic?.id))
+      }
+    }
+  }
+  useEffect(()=>{
+    console.log(choosedGraphic?.id, choosedGraphic?.choosed)
+      document.addEventListener('keydown', closeFromPress)
+      document.addEventListener('keydown', openFromPress)
+    return () => {
+      document.removeEventListener("keydown", closeFromPress);
+      document.removeEventListener("keydown", openFromPress);
+    };
+  },[graphic.choosed])
   return (
     <div style={{border: one ? 'none' : ''}} className={graphic.choosed ? styles.wrapActive : styles.wrap} onClick={onClick}>
       <div className={styles.headerGraph}>
         <div className={styles.info}> 
-          <p>T: 2023-04-04</p>
           <p>O: 0.00000135</p>
           <p>C: 0.00000135</p>
           <p>H: 0.00000135</p>
           <p>L: 0.00000135</p>
-          <p>V: 11.799K</p>
         </div>
         {!one ? wideS ? (<RemoveIcon onClick={closeWideScreen}/>) : (<CropDinIcon onClick={openWideScreen}/>) : (null)}
       </div>
