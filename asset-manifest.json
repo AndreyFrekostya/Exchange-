@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/Exchange-/static/css/main.c289b57c.css",
-    "main.js": "/Exchange-/static/js/main.e624cf3f.js",
+    "main.css": "/Exchange-/static/css/main.3de8acf2.css",
+    "main.js": "/Exchange-/static/js/main.5d059a38.js",
     "static/media/korot poz.svg": "/Exchange-/static/media/korot poz.3e6f6ec27f577128c1f265c069c5bdd5.svg",
     "static/media/dlin poz.svg": "/Exchange-/static/media/dlin poz.9ad38416f39a022323447a9339aff6eb.svg",
     "static/media/preset.svg": "/Exchange-/static/media/preset.960a1db366cc19300364e5a1149d7851.svg",
@@ -9,22 +9,34 @@
     "index.html": "/Exchange-/index.html",
     "static/media/rect.svg": "/Exchange-/static/media/rect.87bc167b800f2b319af0b24610327baa.svg",
     "static/media/rubber.svg": "/Exchange-/static/media/rubber.2ef0090ccdf7a49fccc2a0f51baa9139.svg",
-    "static/media/matches.svg": "/Exchange-/static/media/matches.4b55f91320c357d1f34bb8c9e4ed6b77.svg",
-    "static/media/4 gr.svg": "/Exchange-/static/media/4 gr.66c2fbf94f6ea2e8f5778ab284fb261c.svg",
+    "static/media/four v.svg": "/Exchange-/static/media/four v.0f269a988014460b4378a257ff3be58d.svg",
+    "static/media/four g 2.svg": "/Exchange-/static/media/four g 2.5ac9a34a518947355dc9062ea6a4fdb9.svg",
+    "static/media/four g 3.svg": "/Exchange-/static/media/four g 3.b53c15e39ab1ada55f4fc5c2d8e9f925.svg",
+    "static/media/four.svg": "/Exchange-/static/media/four.27209400ef513f20cde3312c49a66905.svg",
+    "static/media/panel.svg": "/Exchange-/static/media/panel.8dc2fee5e3002cfa2d14ef45f0437d01.svg",
+    "static/media/four h.svg": "/Exchange-/static/media/four h.21a10b9b10b6b5ec9520533642039de1.svg",
+    "static/media/four g.svg": "/Exchange-/static/media/four g.b2f0d33d8b1417f1f0f7d46145728340.svg",
+    "static/media/three v.svg": "/Exchange-/static/media/three v.8cbdb90f271db0c7a2fdcc01599bc1bf.svg",
     "static/media/fib.svg": "/Exchange-/static/media/fib.efecded27aede6fbe3f5377b5920f4fd.svg",
+    "static/media/three g.svg": "/Exchange-/static/media/three g.8c69ae03c2896c08590d5ccbcdd69d98.svg",
     "static/media/price.svg": "/Exchange-/static/media/price.a5a7e91667b9d02cb463902bad640288.svg",
+    "static/media/three g 2.svg": "/Exchange-/static/media/three g 2.48ff8eb5d5c5618a9c76f99a4fb3103d.svg",
+    "static/media/three g 4.svg": "/Exchange-/static/media/three g 4.881f70f4c255f925b78fa4a8dde46318.svg",
+    "static/media/three h.svg": "/Exchange-/static/media/three h.c74e0a6d0a231999af5780461efdf483.svg",
+    "static/media/three g 3.svg": "/Exchange-/static/media/three g 3.b26c958a144d8dad44bd0e0cc1987c46.svg",
+    "static/media/two v.svg": "/Exchange-/static/media/two v.ea693c97c20cac8832517130d3ad86ca.svg",
+    "static/media/two h.svg": "/Exchange-/static/media/two h.8ade0f4858a8da44a014e77ebe19402a.svg",
     "static/media/trand.svg": "/Exchange-/static/media/trand.9f161b7b08256cf49b62bd160798d183.svg",
-    "static/media/2 gor.svg": "/Exchange-/static/media/2 gor.488e150188b2f36435103e20b21b8635.svg",
     "static/media/magnit 1.svg": "/Exchange-/static/media/magnit 1.4180f61a22e10672637f8e617933382c.svg",
-    "static/media/one gr.svg": "/Exchange-/static/media/one gr.6d46e7caea027055062206da3fe6ccde.svg",
+    "static/media/one.svg": "/Exchange-/static/media/one.98695a11a10bccd239240085e5294172.svg",
     "static/media/gorizontal.svg": "/Exchange-/static/media/gorizontal.4b7de311dcad4e9424d96a2a6edde228.svg",
     "static/media/gr luch.svg": "/Exchange-/static/media/gr luch.48358cbd49d987a6ca2bc484ca5966e2.svg",
     "static/media/text.svg": "/Exchange-/static/media/text.4e65000a0fcb1ca0e0cd5393796d6a56.svg",
-    "main.c289b57c.css.map": "/Exchange-/static/css/main.c289b57c.css.map",
-    "main.e624cf3f.js.map": "/Exchange-/static/js/main.e624cf3f.js.map"
+    "main.3de8acf2.css.map": "/Exchange-/static/css/main.3de8acf2.css.map",
+    "main.5d059a38.js.map": "/Exchange-/static/js/main.5d059a38.js.map"
   },
   "entrypoints": [
-    "static/css/main.c289b57c.css",
-    "static/js/main.e624cf3f.js"
+    "static/css/main.3de8acf2.css",
+    "static/js/main.5d059a38.js"
   ]
 }
