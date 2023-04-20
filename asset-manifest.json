@@ -1,6 +1,6 @@
 {
   "files": {
-    "main.css": "/Exchange-/static/css/main.78a1079b.css",
+    "main.css": "/Exchange-/static/css/main.9e580507.css",
     "main.js": "/Exchange-/static/js/main.1779dfb1.js",
     "static/media/korot poz.svg": "/Exchange-/static/media/korot poz.3e6f6ec27f577128c1f265c069c5bdd5.svg",
     "static/media/dlin poz.svg": "/Exchange-/static/media/dlin poz.9ad38416f39a022323447a9339aff6eb.svg",
@@ -32,11 +32,11 @@
     "static/media/gorizontal.svg": "/Exchange-/static/media/gorizontal.4b7de311dcad4e9424d96a2a6edde228.svg",
     "static/media/gr luch.svg": "/Exchange-/static/media/gr luch.48358cbd49d987a6ca2bc484ca5966e2.svg",
     "static/media/text.svg": "/Exchange-/static/media/text.4e65000a0fcb1ca0e0cd5393796d6a56.svg",
-    "main.78a1079b.css.map": "/Exchange-/static/css/main.78a1079b.css.map",
+    "main.9e580507.css.map": "/Exchange-/static/css/main.9e580507.css.map",
     "main.1779dfb1.js.map": "/Exchange-/static/js/main.1779dfb1.js.map"
   },
   "entrypoints": [
-    "static/css/main.78a1079b.css",
+    "static/css/main.9e580507.css",
     "static/js/main.1779dfb1.js"
   ]
 }
