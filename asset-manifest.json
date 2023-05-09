@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/Exchange-/static/css/main.726d5c95.css",
-    "main.js": "/Exchange-/static/js/main.429fc2dc.js",
+    "main.css": "/Exchange-/static/css/main.2eb714a1.css",
+    "main.js": "/Exchange-/static/js/main.2240ea7f.js",
     "static/media/preset.svg": "/Exchange-/static/media/preset.960a1db366cc19300364e5a1149d7851.svg",
     "static/media/profile ob.svg": "/Exchange-/static/media/profile ob.90b44c62139e373fe17dee01fd99b912.svg",
     "index.html": "/Exchange-/index.html",
@@ -30,11 +30,11 @@
     "static/media/gorizontal.svg": "/Exchange-/static/media/gorizontal.4b7de311dcad4e9424d96a2a6edde228.svg",
     "static/media/gr luch.svg": "/Exchange-/static/media/gr luch.48358cbd49d987a6ca2bc484ca5966e2.svg",
     "static/media/text.svg": "/Exchange-/static/media/text.4e65000a0fcb1ca0e0cd5393796d6a56.svg",
-    "main.726d5c95.css.map": "/Exchange-/static/css/main.726d5c95.css.map",
-    "main.429fc2dc.js.map": "/Exchange-/static/js/main.429fc2dc.js.map"
+    "main.2eb714a1.css.map": "/Exchange-/static/css/main.2eb714a1.css.map",
+    "main.2240ea7f.js.map": "/Exchange-/static/js/main.2240ea7f.js.map"
   },
   "entrypoints": [
-    "static/css/main.726d5c95.css",
-    "static/js/main.429fc2dc.js"
+    "static/css/main.2eb714a1.css",
+    "static/js/main.2240ea7f.js"
   ]
 }
