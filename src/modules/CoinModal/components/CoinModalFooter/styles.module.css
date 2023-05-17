@@ -1,0 +1,50 @@
+.wrap{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    justify-content: space-between;
+    color: #fff;
+    padding: 7px 0px;
+}
+.info{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.info p{
+    font-size: 13px;
+}
+.filter{
+    font-size: 13px;
+    margin-right: 5px;
+}
+.second{
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+.tip{
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+.tip svg:hover + div{
+    opacity: 1;
+    z-index: 100000000;
+}
+@media(max-width: 1000px){
+    .info{
+        gap: 5px;
+    }
+    .filters{
+        gap: 10px;
+    }
+}
+@media(max-width:895px){
+    .info{
+        gap: 3px;
+    }
+    .filters{
+        gap: 0px;
+    }
+}

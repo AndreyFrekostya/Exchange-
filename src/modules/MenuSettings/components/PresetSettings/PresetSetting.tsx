@@ -6,16 +6,14 @@ import preset from './../../../../images/other/preset.svg'
 import PresetModal from '../PresetModal/PresetModal';
 const PresetSetting = () => {
   const [active, setIsActive]=useState<boolean>(false)
-  const onClose=()=>{
-    setIsActive(false)
-  }
   return (
     <div className={styles.wrap}>
-      <div className={styles.icons} onClick={() => setIsActive((v) => !v)}>
-        <img src={preset} alt="" />
-        {active ? (<KeyboardArrowUpIcon/>) : (<KeyboardArrowDownIcon/>)}
+      <div className={styles.icons} onClick={() => setIsActive(!active)}>
+        <div className={active ? styles.disabled : styles.icons}>
+          <img src={preset} alt="" className={active ? styles.presetIcon : styles.presetDisabled}/>
+        </div>
       </div>
-      <PresetModal active={active} onClose={onClose}/>
+      {active ? (<PresetModal active={active} setIsActive={setIsActive}/>) : (null)}
     </div>
   )
 }

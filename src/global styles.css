@@ -1,10 +1,12 @@
 @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap');
 body{
     background-color: #141414;
-    font-family: 'Quicksand', sans-serif;
+    font-family: -apple-system,BlinkMacSystemFont,Trebuchet MS,Roboto,Ubuntu,sans-serif;
     overflow-y: hidden;
+    user-select: none;
+    color: #131722;
 }
-::-webkit-scrollbar {
+/* ::-webkit-scrollbar {
     height: 5px;
     background-color: transparent;
   }
@@ -15,6 +17,20 @@ body{
   }
   
  ::-webkit-scrollbar-track {
-    /* -webkit-box-shadow: inset 0 0 2px rgba(0,0,0,0.2); */
+     -webkit-box-shadow: inset 0 0 2px rgba(0,0,0,0.2); 
+    background-color: transparent;
+  } */
+::-webkit-scrollbar {
+    height: 5px;
+    background-color: transparent;
+    width: 5px;
+  }
+  
+::-webkit-scrollbar-thumb {
+    border-radius: 2px;
+    background-color: #424a4a;
+  }
+  
+::-webkit-scrollbar-track {
     background-color: transparent;
   }

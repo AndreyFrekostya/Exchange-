@@ -2,31 +2,102 @@
     display: flex;
     flex-wrap: wrap;
     flex-basis: 100%;
-}
-.wrap div{
-    background-color: #141414;
+    padding-bottom: 45px;
 }
 .one{
     width: 100%;
     height: 100%;
     display: flex;
-}
-.one div div{
-    border: none;
-}
-.two_v{
-    display: flex;
-    align-items: center;
-    flex: 1 1 0
+    flex: 1 1 0;
 }
 .two_h{
     display:flex;
     flex-direction: column;
     flex: 1 1 0;
+    
+}
+.two_v{
+    display:flex;
+    flex: 1 1 0;
+    
+}
+.three_v{
+    display: flex;
+    flex: 1 1 0;
+    
+}
+.three_h{
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 0;
+    
+}
+.three_g{
+    display: flex;
+    flex: 1 1 0;
+   
+}
+.three_g_p{
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+}
+.three_g2{
+    display: flex;
+    flex: 1 1 0;
+    
+}
+.three_g_p2{
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+}
+.three_g3{
+    display: flex;
+    flex-direction: column;
+    
+    flex: 1 1 0;
+}
+.three_g_p3{
+    display: flex;
+    height: 100%;
+}
+.three_g4{
+    display: flex;
+    flex-direction: column;
+    
+    flex: 1 1 0;
+}
+.obv{
+    flex: 1 1 0;
+    
 }
 .four{
     display: grid;
     grid-template-columns: 50% 50%;
+    height: 100%;
     grid-template-rows: 50% 50%;
-    width: 100%;
+}
+.four_v{
+    display: flex;
+    flex: 1 1 0;
+    
+}
+.four_h{
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 0;
+}
+.four_g_3{
+ display: flex;
+ 
+ flex: 1 1 0;
+ flex-direction: column;
+}
+@media(max-width:1700px){
+    /* .wrap{
+        padding-bottom: 39px;
+    } */
 }

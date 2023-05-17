@@ -1,4 +1,5 @@
 import { configureStore, combineReducers } from '@reduxjs/toolkit';
+
 import { 
   persistStore,
   persistReducer,
@@ -16,29 +17,41 @@ import DistanceReducer from './modules/MenuSettings/slices/DistanceSetSlice';
 import DrawigReducer from './modules/MenuSettings/slices/DrawigSetSlice';
 import PresetReducer from './modules/MenuSettings/slices/PresetSlice';
 import GraphicRememberLastModeReducer from './modules/MenuSettings/slices/GraphicRememberLastMode';
-
+import { CoinApi } from './pages/MainPage/api/CoinApi';
+import CoinReducer from './modules/MenuSettings/slices/CoinSlice';
+import AllCoinsReducer from './pages/MainPage/slices/AllCoinsSlice';
+import CoinChoosedListReducer from './pages/MainPage/slices/CoinChoosedListSlice';
+import { CoinInListApi } from './pages/MainPage/api/CoinInListApi';
+import AllCoinsInListReducer from './pages/MainPage/slices/AllCoinsInListSlice';
+import { klinesSymbolApi } from './modules/Graphics/api/KlinesSymbolApi';
 const rootReducer = combineReducers({
     modeGraphic: GraphicModeReducer,
     graphics: GraphicReducer,
     distance: DistanceReducer,
     drawing: DrawigReducer, 
     preset: PresetReducer,
-    lastMode: GraphicRememberLastModeReducer
+    coin: CoinReducer,
+    lastMode: GraphicRememberLastModeReducer,
+    coins: AllCoinsReducer,
+    coinInList: CoinChoosedListReducer,
+    [CoinApi.reducerPath]:CoinApi.reducer,
+    [CoinInListApi.reducerPath]:CoinInListApi.reducer,
+    coinsInListInGraphics:AllCoinsInListReducer,
+    [klinesSymbolApi.reducerPath]:klinesSymbolApi.reducer
 });
 const persistConfig = {
   key: 'root',
   storage,
-  blacklist:['']
+  blacklist:[CoinApi.reducerPath, 'coins', CoinInListApi.reducerPath,'coinsInListInGraphics','coinInList',klinesSymbolApi.reducerPath]
 }
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 const store = configureStore({
   reducer: persistedReducer,
-  middleware: (getDefaultMiddleware) =>
+  middleware: (getDefaultMiddleware) =>(
     getDefaultMiddleware({
-      serializableCheck: {
-        ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
-      },
-    }),
+      serializableCheck: false,
+      immutableCheck:false,
+    })).concat(CoinApi.middleware).concat(CoinInListApi.middleware).concat(klinesSymbolApi.middleware)
 });
 
 export const persistor = persistStore(store);

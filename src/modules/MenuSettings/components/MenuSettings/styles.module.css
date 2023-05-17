@@ -9,12 +9,13 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    gap: 14px;
+    gap: 15px;
 }
 .SecondColomn{
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    gap: 9px;
+    gap: 3px;
+    margin-top: -5px;
 }

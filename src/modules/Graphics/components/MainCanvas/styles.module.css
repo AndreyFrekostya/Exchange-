@@ -1,0 +1,23 @@
+.wrap{
+    margin: 0px;
+    padding: 0px;
+    position: absolute;
+    top: 40px;
+    bottom: -40px;
+    box-sizing: border-box;
+    left: 0px;
+    scroll-behavior: smooth;
+    overflow: auto;
+    overflow-y: hidden;
+}
+.wrap::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+}
+.canvas{
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    z-index: 2;
+    box-sizing: border-box;
+}

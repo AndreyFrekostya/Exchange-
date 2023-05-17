@@ -1,0 +1,44 @@
+.wrap{
+    position: absolute;
+    top: 19px;
+    left: 0.2px;
+    background-color: #1e222d;
+    z-index: 10;
+    padding: 6px 0px 0px 5px;
+    min-width: 224px;
+}
+.coiIinp input{
+    outline: none;
+    border: none;
+    background-color: transparent;
+    color: #fff;
+    font-weight: 200;
+    font-size: 14px;
+}
+.coiIinp{
+    border-bottom: 1px solid #5e5d5d;
+    padding-right: 10px;
+    display: flex;
+    align-items: center;
+}
+.filter{
+    display: flex;
+    border-radius: 5px;
+    align-items: center;
+    cursor: pointer;
+    min-width: 43px;
+    justify-content: center;
+    padding: 0px 5px;
+}
+.filter:hover{
+    background-color: #2a2e39;
+}
+.filter svg{
+    font-size: 15px;
+}
+.futures{
+    color: green;
+}
+.spot{
+    color:#60b8ca
+}

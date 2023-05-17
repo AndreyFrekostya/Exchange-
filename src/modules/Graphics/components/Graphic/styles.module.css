@@ -1,39 +1,43 @@
 .wrap{
-    border: 1px solid #3c3c3c;
+    border: 1px solid  #2a2e39;
     flex-basis: 100%;
-    height: 100%;
+    --height: 100%;
     color: #fff;
-    padding: 3px;
-    cursor: pointer;
     display: flex;
+    height: --var(height);
     flex-direction: column;
+    padding: 0px 3px 3px 0px;
+    background-color: #161a25;
+    position: relative;
 }
 .wrapActive{
-    border: 1px solid #93a4be;
+    border: 1px solid  #2a2e39;
     flex-basis: 100%;
+    position: relative;
     height: 100%;
     color: #fff;
-    padding: 3px;
+    overflow: hidden;
+    padding: 0px 3px 3px 0px;
+    cursor: crosshair;
     display: flex;
     flex-direction: column;
-}
-.headerGraph{
-    color:#737478;
-    font-size: 13px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+    background-color: #161a25;
 }
 .info{
     display: flex;
     gap: 10px;
+    flex-wrap: wrap;
     height: min-content;
+    align-items: center;
+    color:#737478;
+    padding-left: 3px;
 }
 .info p{
     font-weight: 100;
+    font-size: 11px;
 }
-.headerGraph svg{
-    font-size: 18px;
+.addPersonal{
+    font-size: 20px;
     cursor: pointer;
 }
 .graphic{
@@ -41,4 +45,16 @@
     flex-basis: 100%;
     align-items: center;
     justify-content: center;
+}
+.graphicAdd{
+    display: flex;
+    flex-basis: 100%;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    z-index: 3;
+}
+.graphicAdd svg{
+    font-size: 35px;
+    cursor: pointer;
 }

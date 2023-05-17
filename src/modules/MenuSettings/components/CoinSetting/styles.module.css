@@ -1,0 +1,15 @@
+.wrap{
+    color: #fff;
+    display: flex;
+    justify-content: space-between;
+    cursor: pointer;
+}
+.wrap:hover{
+    background-color: #4f5975;
+}
+.settings{
+    display: flex;
+    align-items: center;
+    flex-basis: 90%;
+    justify-content: space-between;
+}

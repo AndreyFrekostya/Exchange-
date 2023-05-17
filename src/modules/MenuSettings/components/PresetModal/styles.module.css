@@ -1,9 +1,14 @@
 .main{
     position: absolute;
-    background-color: #202020;
-    border: 1px solid #5e5d5d;
+    background-color: #1e222d;
     color: #fff;
     max-height: 400px;
+    z-index: 100000;
+    width: 250px;
+    left: 0;
+    padding: 1px 10px 0px 5px;
+    top: 39px;
+    z-index: 5;
 }
 .main::-webkit-scrollbar {
     height: 5px;
@@ -23,16 +28,16 @@
     outline: none;
     border: none;
     background-color: transparent;
-    border-bottom: 1px solid #5e5d5d;
     color: #fff;
-    font-weight: 400;
-    font-size: 15px;
+    font-weight: 200;
+    font-size: 14px;
 }
 .inputField{
     display: flex;
     padding: 5px 5px 0px 5px;
     align-items: center;
     gap: 5px;
+    justify-content: space-between;
 }
 .wrap{
     border-bottom: 1px solid #5e5d5d;
@@ -45,11 +50,14 @@
 .inputField svg:hover{
     color: #7e7e7e;
 }
+.presets .preset:last-child{
+    border-bottom: none;
+}
 .preset{
     text-transform: capitalize;
     border-bottom: 1px solid #5e5d5d;
     cursor: pointer;
-    transition: .2s ease-in-out;
+    transition: .1s linear;
     min-height: 34px;
     z-index: 10;
     display: flex;
@@ -61,8 +69,13 @@
     font-size: 20px;
 }
 .info{
-    padding: 5px 10px;
+    padding: 2px 5px;
     width: 100%;
+}
+.preset p{
+    font-size: 14px;
+    font-weight: 200;
+    color: #d1d4dc;
 }
 .delete{
     height: 34px;
@@ -70,7 +83,6 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: .7s ease-in-out;
 }
 .delete:hover svg{
     color: #4f4f4f;
@@ -79,11 +91,22 @@
     background-color: rgb(95, 95, 95)
 }
 .preset:hover{
-    background-color: #434343;
+    background-color: #2a2e39;
 }
 .error p{
     color:  #B00000;
     font-size: 15px;
     font-weight: 200;
     padding-left: 5px;
+}
+@media(max-width:880px){
+    .main{
+       right: 60px;
+       left: 0;
+    }
+}
+@media(max-width:855px){
+    .main{
+        left: -40px;
+    }
 }

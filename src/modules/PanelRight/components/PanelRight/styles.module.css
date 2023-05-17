@@ -1,0 +1,43 @@
+.wrap{
+    background-color: #131722;
+    position: relative;
+    z-index: 1000;
+}
+.arrowWrap{
+    height: 100%;
+    width: 45px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    border: 1px solid  #2a2e39;
+    border-right: none;
+}
+.arrowWrap svg{
+    transition: .1s linear;
+}
+.arrowWrap:hover svg{
+    color: #727171;
+}
+.arrow{
+    height: 100%;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+.panel{
+    position: absolute;
+    top: 0;
+    right: 0;
+    right: 44px;
+    background-color: #131722;
+    width: 474px;
+    border: 1px solid  #2a2e39;
+    z-index: 10;
+    bottom: 0px;
+    border-left: 4px solid #2a2e39;
+    border-right: none;
+}
+
+

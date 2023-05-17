@@ -1,0 +1,50 @@
+.modal{
+    position: absolute;
+    top:39px;
+    width: 254px;
+    background-color: #1e222d;
+    z-index: 10;
+}
+.wrap{
+    padding: 3px 10px;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+.group{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #fff;
+    padding: 2px 5px;
+    font-size: 13px;
+    border-bottom: 1px solid #474747;
+    
+}
+.modes{
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    flex-wrap: wrap;
+}
+.wrap div:nth-child(4){
+    border: none;
+}
+.modes_two{
+    padding: 5px;
+    border-radius: 3px;
+}
+.modes_two img{
+    width: 20px;
+   height: 20px;
+}
+.mode{
+    cursor: pointer; 
+    filter: invert(98%) sepia(1%) saturate(5%) hue-rotate(18deg) brightness(102%) contrast(101%);
+}
+.modes_two:hover{
+    background-color: #2a2e39;
+}
+.activeMode{
+    filter: invert(30%) sepia(86%) saturate(3041%) hue-rotate(219deg) brightness(100%) contrast(104%);
+}

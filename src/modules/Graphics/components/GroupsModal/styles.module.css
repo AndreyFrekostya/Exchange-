@@ -1,0 +1,41 @@
+.wrap{
+    position: absolute;
+    top: 19px;
+    left: -0.5px;
+    background-color: #1e222d;
+    width: 63.5px;
+    cursor: default;
+    display: flex;
+    gap: 3px;
+    flex-direction: column;
+    padding-bottom: 3px;
+}
+.groups{
+    display: flex;
+    flex-wrap: wrap;
+}
+.group{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    border: 1px solid #d1d4dc;
+    /* #67594c; */
+    color: #fff;
+    width: 15px;
+    height: 15px;
+    cursor: pointer;
+    position: relative;
+}
+.untie{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.obv{
+    padding: 3px;
+}
+.activeObv{
+    background-color: #0c0f2b;
+    padding: 3px;
+}

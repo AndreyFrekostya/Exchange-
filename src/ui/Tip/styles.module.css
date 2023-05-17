@@ -1,0 +1,16 @@
+.wrap{
+    padding: 0px 5px;
+    color: #d1d4dc;
+    border-radius: 5px;
+    border: 1px solid #5e5d5d;
+    text-align: center;
+    background-color: #2a2e39;
+    opacity: 0;
+    z-index: -1;
+    transition: .2s ease-in-out;
+    position: absolute;
+    right: -75px;
+    font-size: 13px;
+    top: -25px;
+    transform: translateY(-50%);
+}

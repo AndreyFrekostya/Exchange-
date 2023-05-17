@@ -16,7 +16,7 @@ import text from './../../../../images/drawing/text.svg'
 import { useAppDispatch, useAppSelector } from '../../../../hooks/redux-hooks'
 import { changeInstrument } from '../../slices/DrawigSetSlice'
 const DrawingSettings = () => {
-    const instruments=[trand,gorizontal,gr_luch,dlin_poz,korot_poz,fib,rect,price,profile_ob,text,rubber,magnit1]
+    const instruments=[trand,gorizontal,gr_luch,fib,rect,price,profile_ob,text,rubber,magnit1]
     const dispatch=useAppDispatch()
     const drawingChoosed=useAppSelector(state=>state.drawing)
     const setDrawing=(index:number)=>{

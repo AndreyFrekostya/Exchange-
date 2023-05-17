@@ -2,19 +2,55 @@
     display: flex;
     align-items: center;
 }
-.wrap h1{
-    color: #fff;
-    font-size: 15px;
-    display: flex;
-    align-items: center;
-    gap: 6px;
+.wrap p{
+    font-size: 14px;
+
+    font-weight: 200;
 }
-.wrap h1 svg{
-    font-size: 19px;
+.wrap svg{
+    font-size: 15px;
     cursor: pointer;
     color: #a2a2a2;
     transition: .1s ease-in-out;
 }
-.wrap h1 svg:hover{
+.wrap svg:hover{
     color: #898989;
+}
+.container{
+    height: 22px;
+    width: 120px;
+    justify-content: center;
+    display: flex;
+    align-items: center;
+}
+.obv{
+    border-radius: 2px;
+    position: relative;
+    cursor: pointer;
+    padding: 2px;
+    border-radius: 5px;
+}
+.obv:hover{
+    background-color: #2a2e39;
+}
+.activeobv:hover{
+    background-color: #2a2e39;
+}
+.chooseCoin{
+    color: #d1d4dc;
+}
+.activeChooseCoin{
+    color: #2962ff;
+}
+.choose{
+    display: flex;
+    padding: 2px;
+    gap: 6px;
+    align-items: center;
+}
+.futures{
+    color: green;
+}
+.spot{
+    color:#60b8ca
 }

@@ -1,0 +1,52 @@
+.symbol{
+    padding: 5px 0px;
+    font-size: 13px;
+}
+.futures{
+    color: green;
+    font-size: 13px;
+}
+.spot{
+    color:#60b8ca;
+    font-size: 13px;
+}
+.symbolWrap div{
+    width: 14.28%;
+    display: flex;
+    align-items: center;
+    padding-left: 13px;
+    overflow: hidden;
+}
+.symbolWrap div:last-child{
+    padding-left: 19px;
+}
+.symbolWrap span{
+    padding-left: 2px;
+}
+.symbolWrap:hover{
+    font-weight: 700;
+    color: #d1d4c1;
+}
+.symbolWrap:hover .symbol{
+    font-weight: 700;
+}
+.symbolWrap div:last-child{
+    padding-left: 23px;
+}
+.symbolWrap{
+    border-top: 1px solid #5e5d5d;
+    display: flex;
+    overflow: hidden;
+    color: #787b86;
+}
+.check{
+    z-index: 100000000;
+}
+.quoteVolume{
+    min-width: 222px;
+}
+@media(max-width:1480px){
+    .quoteVolume{
+        min-width: 200px;
+    }
+}

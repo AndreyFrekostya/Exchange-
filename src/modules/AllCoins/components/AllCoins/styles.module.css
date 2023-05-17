@@ -1,0 +1,31 @@
+.coins{
+    color: #d1d4dc;
+    /* overflow-y: scroll; */
+    text-align: center;
+    height: --var(height);
+}
+.coins div:first-child{
+    border-top: none;
+}
+.coinsName{
+    text-align: start;
+}
+.symbol{
+    cursor: pointer;
+    padding: 5px 5px 5px 0px;
+    display: flex;
+    gap: 5px;
+    justify-content: space-between;
+
+    align-items: center;
+    border-top: 1px solid #5e5d5d;
+}
+.futures{
+    color: green;
+}
+.spot{
+    color:#60b8ca
+}
+.nothing{
+    text-align: center;
+}

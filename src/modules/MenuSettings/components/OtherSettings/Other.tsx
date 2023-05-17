@@ -7,11 +7,21 @@ import PersonIcon from '@mui/icons-material/Person';
 const Other = () => {
   return (
     <div className={styles.wrap}>
-        <h3>24h</h3>
+      <div className={styles.helpers}>
+        <p>24h</p>
+      </div>
+      <div className={styles.helpers}>
         <QuestionMarkIcon/>
+      </div >
+      <div className={styles.helpers}>
         <PestControlIcon/>
+      </div>
+      <div className={styles.helpers}>
         <SettingsIcon/>
+      </div>
+      <div className={styles.helpers}>
         <PersonIcon/>
+      </div>     
     </div>
   )
 }

@@ -3,7 +3,7 @@ import MainPage from './pages/MainPage/components/MainPage/MainPage';
 
 function App() {
   return (
-    <div className="App">
+    <div className="App" style={{display:'flex'}}>
       <MainPage/>
     </div>
   );

@@ -1,74 +1,100 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import styles from './styles.module.css'
 import { IGraphic, clearWideScreen, setWideScreen } from '../../../../pages/MainPage/slices/GraphicSlice'
-import CropDinIcon from '@mui/icons-material/CropDin';
-import RemoveIcon from '@mui/icons-material/Remove';
 import { useAppDispatch,useAppSelector } from '../../../../hooks/redux-hooks';
-import { changeGraphicMode } from '../../../MenuSettings/slices/GraphicModeSlice';
 import { changeDistance } from '../../../MenuSettings/slices/DistanceSetSlice';
 import { rememberMode } from '../../../MenuSettings/slices/GraphicRememberLastMode';
+import AddIcon from '@mui/icons-material/Add';
+import { changeGraphicMode } from '../../../MenuSettings/slices/GraphicModeSlice';
+import { useGetKlinesSymbolQuery, useLazyGetKlinesSymbolQuery } from '../../api/KlinesSymbolApi';
+import HeaderGraphic from '../HeaderGraphic/HeaderGraphic';
+import MainCanvas from '../MainCanvas/MainCanvas';
+import PriceCanvas from '../PriceCanvas/PriceCanvas';
+import DateCanvas from '../DateCanvas/DateCanvas';
+import VolumeCanvas from '../VolumeCanvas/VolumeCanvas';
+import { TransformDistance } from '../../helpers/TransformDistance';
 interface IGraphicComponent{
   graphic: IGraphic,
   onClick: ()=>void,
   one?: boolean,
   wideS?:boolean
 }
+interface KeyboardEvent {
+  code: string;
+}
 const Graphic:React.FC<IGraphicComponent> = ({graphic, onClick, one,wideS}) => {
   const dispatch=useAppDispatch()
+  const [getKlinesSymbol,{data=[],isLoading}]=useLazyGetKlinesSymbolQuery()
+  const distance=useAppSelector(state=>state.distance)
+  const lastMode=useAppSelector(state=>state.lastMode)
+  const graphicRef=useRef<HTMLDivElement | null>(null)
+  const [activeCoin, setActiveCoin]=useState<boolean>(false)
   const mode=useAppSelector(state=>state.modeGraphic.find(m=>m.choosed===true)?.name)
-  const lastmode=useAppSelector(state=>state.lastMode)
-  const choosedGraphic=useAppSelector(state=>state.graphics.find(item=>item.choosed==true))
-  const openWideScreen=()=>{
-    dispatch(rememberMode(mode))
-    dispatch(changeGraphicMode('one'))
-    dispatch(changeDistance(graphic.distance))
-    dispatch(setWideScreen(graphic.id))
-  }
-  const closeWideScreen=()=>{
-    dispatch(clearWideScreen())
-    dispatch(changeGraphicMode(lastmode))
-  }
-  const closeFromPress=(e:any)=>{
+  const choosedGraphic=useAppSelector(state=>state.graphics.find(item=>item.choosed===true))
+  const closeFromPress=(e:KeyboardEvent)=>{
     if(graphic.widescreen){
-      if(e.code=="Escape" || e.code=='KeyF'){
+      if(e.code==="Escape" || e.code==='KeyF'){
         dispatch(clearWideScreen())
-        dispatch(changeGraphicMode(lastmode))
+        dispatch(changeGraphicMode(lastMode))
       } 
     }
   }
-  const openFromPress=(e:any):void=>{
-    if(graphic.choosed==true){
-      if(e.code=='KeyF'){
+  const openFromPress=(e:KeyboardEvent):void=>{
+    const input=document.getElementById('preset_input')
+    if(graphic.choosed===true && graphic.id!==0){
+      if(e.code==='KeyF' && input!==document.activeElement){
         dispatch(rememberMode(mode))
-        dispatch(changeGraphicMode('one'))
         dispatch(changeDistance(choosedGraphic?.distance))
         dispatch(setWideScreen(choosedGraphic?.id))
+        dispatch(changeGraphicMode('one'))
       }
     }
   }
   useEffect(()=>{
-    console.log(choosedGraphic?.id, choosedGraphic?.choosed)
       document.addEventListener('keydown', closeFromPress)
       document.addEventListener('keydown', openFromPress)
     return () => {
       document.removeEventListener("keydown", closeFromPress);
       document.removeEventListener("keydown", openFromPress);
     };
-  },[graphic.choosed])
+  },[graphic.choosed, distance])
+  useEffect(()=>{
+    if(graphic.coin!=='' && graphic.distance!==''){
+      const timeframe=TransformDistance(graphic.distance)
+      if(timeframe!==undefined){
+        console.log('getData')
+        getKlinesSymbol({symbol:graphic.coin,interval:timeframe,type:graphic.typeCoin})
+      }
+    }
+  },[graphic.coin,graphic.distance])
   return (
-    <div style={{border: one ? 'none' : ''}} className={graphic.choosed ? styles.wrapActive : styles.wrap} onClick={onClick}>
-      <div className={styles.headerGraph}>
-        <div className={styles.info}> 
-          <p>O: 0.00000135</p>
-          <p>C: 0.00000135</p>
-          <p>H: 0.00000135</p>
-          <p>L: 0.00000135</p>
-        </div>
-        {!one ? wideS ? (<RemoveIcon onClick={closeWideScreen}/>) : (<CropDinIcon onClick={openWideScreen}/>) : (null)}
+    <div  ref={graphicRef} className={graphic.choosed ? styles.wrapActive : styles.wrap} onClick={onClick}>
+      <HeaderGraphic wideS={wideS} one={one} setActiveCoin={setActiveCoin} activeCoin={activeCoin} graphic={graphic} graphicRef={graphicRef}/>
+      <div className={styles.info}> 
+        <p>O: 0.00000135</p>
+        <p>C: 0.00000135</p>
+        <p>H: 0.00000135</p>
+        <p>L: 0.00000135</p>
       </div>
-      <div className={styles.graphic}>
-        Graphic number: {graphic.id+1} <br /> Graphic timeframe: {graphic.distance}
-      </div> 
+      <MainCanvas  graphicRef={graphicRef} data={data} graphic={graphic}/>
+      <VolumeCanvas graphicRef={graphicRef}/>
+      <DateCanvas graphicRef={graphicRef}/>
+      <PriceCanvas graphicRef={graphicRef}/>
+      <>
+        {graphic.coin==='' ? (
+          <div className={styles.graphicAdd}>
+            <AddIcon onClick={()=>setActiveCoin(!activeCoin)}/>
+            {graphic.distance==='0' ? (null) : (
+              <div>
+                Graphic timeframe: {graphic.distance}
+              </div>
+              )
+            }
+          </div> 
+        ) : (
+         null
+        )}
+      </>
     </div>
   )
 }

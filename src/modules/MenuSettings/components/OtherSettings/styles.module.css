@@ -10,11 +10,26 @@
     font-size: 20px;
     cursor: pointer;
     transition: .1s ease-in-out;
+    color: #d1d4dc;
 }
-.wrap h3:hover{
+.helpers{
+    padding: 2px;
+    border-radius: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.helpers:hover{
+    background-color: #2a2e39;
+}
+.wrap p{
+    color: #d1d4dc;
+}
+.wrap p:hover{
     cursor: pointer;
-    color: #879ec6;
+    font-weight: 200;
+    color: #2962ff;
 }
 .wrap svg:hover{
-    color: #879ec6;
+    color: #2962ff;
 }

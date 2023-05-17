@@ -1,0 +1,17 @@
+.wrap{
+    position: absolute;
+    left: 12px;
+    top: 32px;
+    background-color: #1e222d;
+    border: 1px solid #5e5d5d;
+}
+.wrap>div{
+    padding: 5px 10px;
+    border-bottom: 1px solid #5e5d5d;
+}
+.wrap>div:hover{
+    background-color: #2b395f;
+}
+.wrap>div:last-child{
+    border-bottom: none;
+}

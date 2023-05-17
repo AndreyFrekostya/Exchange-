@@ -1,0 +1,1 @@
+export {CoinModal} from './components/CoinModal/CoinModal'

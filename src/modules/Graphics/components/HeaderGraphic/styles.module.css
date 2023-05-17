@@ -1,0 +1,48 @@
+.headerGraph{
+    color:#d1d4dc;
+    font-size: 13px;
+    flex-wrap: wrap;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    cursor: default;
+    z-index: 6;
+}
+.headerGraph svg{
+    font-size: 18px;
+}
+.groups{
+    display: flex;
+    align-items: center;
+    gap: 3px;
+}
+.groups svg{
+    font-size: 14px;
+}
+.coin{
+    color: #d1d4dc;
+}
+.coin:hover{
+    color:#b9b9b9;
+    cursor: pointer;
+}
+.futures{
+    color: green;
+}
+.spot{
+    color:#60b8ca
+}
+.leftHand{
+    display: flex;
+    gap: 5px;
+    align-items: center;
+}
+.dot{
+    color: rgb(5, 241, 5);
+    cursor: default;
+   
+}
+.wideS{
+    cursor: pointer;
+}

@@ -6,9 +6,8 @@ import { changeDistance } from '../../slices/DistanceSetSlice'
 import { setGraphicDistance } from '../../../../pages/MainPage/slices/GraphicSlice'
 
 const DistanceSettings = () => {
-    const distances=['1m', '5m', '15m', '30m', '1h', '4h','1d']
+    const distances=['1М', '5М', '15М', '30М', '1Ч', '4Ч','Д', 'Н','Mес']
     const distanceFromSlice=useAppSelector(state=>state.distance)
-    const mode=useAppSelector(state=>state.modeGraphic)
     const dispatch=useAppDispatch()
     const setDistance=(arg:string)=>{
         dispatch(setGraphicDistance(arg))

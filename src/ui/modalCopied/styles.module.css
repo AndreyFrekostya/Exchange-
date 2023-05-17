@@ -2,12 +2,13 @@
     padding: 3px 20px;
     position: absolute;
     font-size: 14px;
-    top: 35px;
+    top: 30px;
     color: #fff;
-    background-color: #353535;
+    background-color: #2f3b5c;
     font-weight: 500;
+    left: 50%;
+    transform: translateX(-50%);
     border-radius: 5px;
     border: 1px solid #000000;
-    left: 130px;
     transition: .5s ease-in-out;
 }

@@ -1,0 +1,51 @@
+.row{
+    display: flex;
+    color: #d1d4dc;
+    align-items: center;
+}
+.row>div{
+    width: 14.28%;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 5px 13px;
+    text-align: start;
+    position: relative;
+}
+.row>div p{
+    transition: .1s linear;
+}
+.row>div p:hover{
+    color: #828284;
+    cursor: pointer;
+}
+.filterWithIcon svg{
+    color: #fff;
+}
+.filterWithIcon svg:hover{
+    color: #2962ff;
+}
+.row>div:first-child span{
+    padding: 0px;
+}
+.filterWithIcon{
+    display: flex;
+    align-items: center;
+    gap: 1px;
+}
+.decreaseWrap{
+    display: flex;
+    align-items: center;
+}
+.quoteVolume{
+    min-width: 230px;
+}
+@media(max-width:1480px){
+    .quoteVolume{
+        min-width: 208px;
+    }
+}
+@media(max-width:1400px){
+    .quoteVolume{
+        min-width: 152px;
+    }
+}

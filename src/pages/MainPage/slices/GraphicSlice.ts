@@ -1,17 +1,26 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { CheckPriority } from '../helpers/CheckPriority';
 export interface IGraphic{
-    id:number, distance:string, drawingElemets:[],choosed:boolean,widescreen:boolean,priority:number
+    id:number, 
+    distance:string, 
+    drawingElemets:[],
+    choosed:boolean,
+    widescreen:boolean,
+    priority:number,
+    coin: string,
+    group:number | null,
+    typeCoin: string
 }
-//1m=1 5m=2 15m=3 30m=4 1h=5 4h=6 1d=7
 const initialState:IGraphic[]=[
-    {id:0,distance: '5m', drawingElemets: [], choosed: true, widescreen: false,priority:2},
-    {id:1,distance: '1h', drawingElemets: [], choosed: false, widescreen: false,priority:5},
-    {id:2,distance: '5m', drawingElemets: [], choosed: false, widescreen: false,priority:2},
-    {id:3,distance: '1d', drawingElemets: [], choosed: false, widescreen: false,priority:7},
-    {id:4,distance: '4h', drawingElemets: [], choosed: false, widescreen: false,priority:6},
-    {id:5,distance: '1h', drawingElemets: [], choosed: false, widescreen: false,priority:5},
-    {id:6,distance: '5m', drawingElemets: [], choosed: false, widescreen: false,priority:2},
+    {id:0,distance: '0', drawingElemets: [], choosed: true, widescreen: false,priority:2, coin: '',group: null, typeCoin: ''},
+    {id:1,distance: '0', drawingElemets: [], choosed: false, widescreen: false,priority:5, coin: '',group: null, typeCoin: ''},
+    {id:2,distance: '0', drawingElemets: [], choosed: false, widescreen: false,priority:2, coin: '',group: null, typeCoin: ''},
+    {id:3,distance: '0', drawingElemets: [], choosed: false, widescreen: false,priority:2, coin: '',group: null, typeCoin: ''},
+    {id:4,distance: '0', drawingElemets: [], choosed: false, widescreen: false,priority:2, coin: '',group: null, typeCoin: ''},
+    {id:5,distance: '0', drawingElemets: [], choosed: false, widescreen: false,priority:2, coin: '',group: null, typeCoin: ''},
+    {id:6,distance: '0', drawingElemets: [], choosed: false, widescreen: false,priority:7, coin: '',group: null, typeCoin: ''},
+    {id:7,distance: '0', drawingElemets: [], choosed: false, widescreen: false,priority:6, coin: '',group: null, typeCoin: ''},
+    {id:8,distance: '0', drawingElemets: [], choosed: false, widescreen: false,priority:5, coin: '',group: null, typeCoin: ''},
+    {id:9,distance: '0', drawingElemets: [], choosed: false, widescreen: false,priority:2, coin: '',group: null, typeCoin: ''},
 ]
 const GraphicModeSlice = createSlice({
     name: 'graphics',
@@ -20,8 +29,6 @@ const GraphicModeSlice = createSlice({
         setGraphicDistance(state, action){
             const graphic=state.find(item=>item.choosed===true)
             if(!graphic) return;
-            const prior=CheckPriority(action.payload)
-            graphic.priority=prior
             graphic.distance=action.payload
         },
         setChoosedGraphic(state, action){
@@ -35,7 +42,7 @@ const GraphicModeSlice = createSlice({
             graphic.choosed=true
         },
         setGraphicsOnTwoMode(state){
-            const fourGraphic=state.slice(3,7)
+            const fourGraphic=state.slice(6,10)
             const copyarr=fourGraphic.sort((a, b) => a.priority - b.priority);
             state[1].distance=copyarr[1].distance
             state[2].distance=copyarr[0].distance
@@ -51,10 +58,51 @@ const GraphicModeSlice = createSlice({
         },
         setGraphicsPreset(state,action){
             return action.payload
+        },
+        setGraphicCoin(state, action){
+            const graphic=state.find(item=>item.id===action.payload.id)
+            if(!graphic){return;}
+            if(graphic.group){
+                state.map(item=>{
+                    if(item.group===graphic.group){
+                        item.coin=action.payload.coin
+                        item.typeCoin=action.payload.type
+                    }
+                })
+            }
+            graphic.coin=action.payload.coin
+            graphic.typeCoin=action.payload.type
+        },
+        setGraphicGroup(state, action){
+            const graphic=state.find(item=>item.choosed===true)
+            if(!graphic) return;
+            const theSameGraphic=state.find(item=>item.group===action.payload)
+            if(theSameGraphic){
+                graphic.coin=theSameGraphic.coin
+                graphic.typeCoin=theSameGraphic.typeCoin
+                if(graphic.distance==='0'){
+                    graphic.distance='Д'
+                }
+            }
+            graphic.group=action.payload
+        },
+        unTieGraphicGroup(state){
+            const graphic=state.find(item=>item.choosed===true)
+            if(!graphic) return
+            graphic.group=null
+        },
+        setGlobalCoin(state, action){
+            state.map(graphic=>{
+                if(graphic.distance=='0'){
+                    graphic.distance='Д'
+                }
+                graphic.coin=action.payload.coin
+                graphic.typeCoin=action.payload.type
+            })
         }
     },
 });
 
-export const {setGraphicDistance, setChoosedGraphic, setGraphicsOnTwoMode,setWideScreen,clearWideScreen, setGraphicsPreset} = GraphicModeSlice.actions;
+export const {setGraphicDistance, setChoosedGraphic, setGraphicsOnTwoMode,setWideScreen,clearWideScreen, setGraphicsPreset, setGraphicCoin, setGraphicGroup, unTieGraphicGroup, setGlobalCoin} = GraphicModeSlice.actions;
 
 export default GraphicModeSlice.reducer;

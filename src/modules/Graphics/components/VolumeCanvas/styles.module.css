@@ -1,0 +1,16 @@
+.wrap{
+    margin: 0px;
+    padding: 0px;
+    position: absolute;
+    bottom: 32px;
+    overflow: hidden;
+    box-sizing: border-box;
+    left: 0px;
+}
+.canvas{
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    z-index: 2;
+    box-sizing: border-box;
+}

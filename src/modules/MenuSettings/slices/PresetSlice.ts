@@ -4,7 +4,8 @@ interface IPreset{
     id: number,
     name: string,
     settings: IGraphic[],
-    mode: string
+    mode: string,
+    coin:string
 }
 const initialState: IPreset[]=[]
 const PresetSlice = createSlice({
@@ -13,13 +14,12 @@ const PresetSlice = createSlice({
     reducers: {
         addPreset(state, action){
             if(state.length===0){
-                state.unshift({id: 1, name: action.payload.name, settings: action.payload.settings, mode: action.payload.mode})
+                state.unshift({id: 1, name: action.payload.name, settings: action.payload.settings, mode: action.payload.mode,coin:action.payload.coin})
             }else{
-                state.unshift({id: state[0].id+1, name: action.payload.name,settings: action.payload.settings, mode: action.payload.mode})
+                state.unshift({id: state[0].id+1, name: action.payload.name,settings: action.payload.settings, mode: action.payload.mode,coin:action.payload.coin})
             }
         },
         deletePreset(state,action){
-            console.log(action.payload)
             return state.filter(item=>item.id!==action.payload)
         }
     },

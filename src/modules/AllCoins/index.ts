@@ -1,0 +1,1 @@
+export {CoinList} from './components/CoinList/CoinList'
