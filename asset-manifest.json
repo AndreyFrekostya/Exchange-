@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/Exchange-/static/css/main.6f12f864.css",
-    "main.js": "/Exchange-/static/js/main.ac3c3b37.js",
+    "main.css": "/Exchange-/static/css/main.6d4f9973.css",
+    "main.js": "/Exchange-/static/js/main.7bb3d570.js",
     "static/media/preset.svg": "/Exchange-/static/media/preset.960a1db366cc19300364e5a1149d7851.svg",
     "static/media/profile ob.svg": "/Exchange-/static/media/profile ob.90b44c62139e373fe17dee01fd99b912.svg",
     "index.html": "/Exchange-/index.html",
@@ -30,11 +30,11 @@
     "static/media/gorizontal.svg": "/Exchange-/static/media/gorizontal.4b7de311dcad4e9424d96a2a6edde228.svg",
     "static/media/gr luch.svg": "/Exchange-/static/media/gr luch.48358cbd49d987a6ca2bc484ca5966e2.svg",
     "static/media/text.svg": "/Exchange-/static/media/text.4e65000a0fcb1ca0e0cd5393796d6a56.svg",
-    "main.6f12f864.css.map": "/Exchange-/static/css/main.6f12f864.css.map",
-    "main.ac3c3b37.js.map": "/Exchange-/static/js/main.ac3c3b37.js.map"
+    "main.6d4f9973.css.map": "/Exchange-/static/css/main.6d4f9973.css.map",
+    "main.7bb3d570.js.map": "/Exchange-/static/js/main.7bb3d570.js.map"
   },
   "entrypoints": [
-    "static/css/main.6f12f864.css",
-    "static/js/main.ac3c3b37.js"
+    "static/css/main.6d4f9973.css",
+    "static/js/main.7bb3d570.js"
   ]
 }
