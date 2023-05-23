@@ -1,16 +1,16 @@
 import React, { RefObject, useEffect, useRef, useState } from 'react'
 import styles from './styles.module.css'
-import { CanvasStart } from '../../helpers/CanvasStart'
+import { CanvasGraphicStart } from '../../helpers/CanvasGraphicStart'
 interface IPriceCanvas{
   graphicRef:RefObject<HTMLDivElement>,
 }
 const PriceCanvas:React.FC<IPriceCanvas> = ({graphicRef}) => {
-  const [height, setHeight]=useState<number | undefined>(graphicRef.current?.clientHeight ? graphicRef.current?.clientHeight-102 : undefined)
+  const [height, setHeight]=useState<number | undefined>(graphicRef.current?.clientHeight ? graphicRef.current?.clientHeight-100 : undefined)
   const refCanvas=useRef<HTMLCanvasElement>(null)
   const resizeHandler = () => {
       const { clientHeight} = graphicRef.current || {};
       if(clientHeight){
-        setHeight(clientHeight-102)
+        setHeight(clientHeight-100)
       }
     };
   useEffect(() => {

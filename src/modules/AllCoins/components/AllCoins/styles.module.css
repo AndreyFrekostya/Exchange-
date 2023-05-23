@@ -3,6 +3,7 @@
     /* overflow-y: scroll; */
     text-align: center;
     height: --var(height);
+    z-index: 20;
 }
 .coins div:first-child{
     border-top: none;

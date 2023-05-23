@@ -13,6 +13,7 @@ import PriceCanvas from '../PriceCanvas/PriceCanvas';
 import DateCanvas from '../DateCanvas/DateCanvas';
 import VolumeCanvas from '../VolumeCanvas/VolumeCanvas';
 import { TransformDistance } from '../../helpers/TransformDistance';
+import CrossHairCanvas from '../CrossHairCanvas/CrossHairCanvas';
 interface IGraphicComponent{
   graphic: IGraphic,
   onClick: ()=>void,
@@ -26,6 +27,7 @@ const Graphic:React.FC<IGraphicComponent> = ({graphic, onClick, one,wideS}) => {
   const dispatch=useAppDispatch()
   const [getKlinesSymbol,{data=[],isLoading}]=useLazyGetKlinesSymbolQuery()
   const distance=useAppSelector(state=>state.distance)
+  const [scrollLeft, setScrollLeft]=useState<number>(0)
   const lastMode=useAppSelector(state=>state.lastMode)
   const graphicRef=useRef<HTMLDivElement | null>(null)
   const [activeCoin, setActiveCoin]=useState<boolean>(false)
@@ -62,7 +64,6 @@ const Graphic:React.FC<IGraphicComponent> = ({graphic, onClick, one,wideS}) => {
     if(graphic.coin!=='' && graphic.distance!==''){
       const timeframe=TransformDistance(graphic.distance)
       if(timeframe!==undefined){
-        console.log('getData')
         getKlinesSymbol({symbol:graphic.coin,interval:timeframe,type:graphic.typeCoin})
       }
     }
@@ -70,15 +71,10 @@ const Graphic:React.FC<IGraphicComponent> = ({graphic, onClick, one,wideS}) => {
   return (
     <div  ref={graphicRef} className={graphic.choosed ? styles.wrapActive : styles.wrap} onClick={onClick}>
       <HeaderGraphic wideS={wideS} one={one} setActiveCoin={setActiveCoin} activeCoin={activeCoin} graphic={graphic} graphicRef={graphicRef}/>
-      <div className={styles.info}> 
-        <p>O: 0.00000135</p>
-        <p>C: 0.00000135</p>
-        <p>H: 0.00000135</p>
-        <p>L: 0.00000135</p>
-      </div>
-      <MainCanvas  graphicRef={graphicRef} data={data} graphic={graphic}/>
-      <VolumeCanvas graphicRef={graphicRef}/>
-      <DateCanvas graphicRef={graphicRef}/>
+      
+      <MainCanvas  graphicRef={graphicRef} data={data} setScrollLeft={setScrollLeft}/>
+      <VolumeCanvas graphicRef={graphicRef} data={data}  scrollLeft={scrollLeft}/>
+      <DateCanvas graphicRef={graphicRef} data={data}/>
       <PriceCanvas graphicRef={graphicRef}/>
       <>
         {graphic.coin==='' ? (

@@ -7,7 +7,7 @@
     align-items: center;
     position: relative;
     cursor: default;
-    z-index: 6;
+    z-index: 20;
 }
 .headerGraph svg{
     font-size: 18px;

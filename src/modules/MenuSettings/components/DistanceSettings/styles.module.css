@@ -1,6 +1,6 @@
 .wrap{
     display: flex;
-    gap: 7px;
+    
     align-items: center;
     padding: 0px 10px 0px 25px;
     font-size: 14px;
@@ -15,7 +15,7 @@
     max-height: 28px;
     color:#2962ff;
     cursor: default;
-    padding: 2px;
+    padding: 2px 7px;
 }
 .activeWrap:hover{
     background-color: #2a2e39;
@@ -30,7 +30,7 @@
     max-height: 28px;
     color: #d1d4dc;
     cursor: pointer;
-    padding: 2px;
+    padding: 2px 7px;
     border-radius: 5px;
 }
 .disabledWrap:hover{

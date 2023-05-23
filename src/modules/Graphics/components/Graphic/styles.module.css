@@ -49,10 +49,12 @@
 .graphicAdd{
     display: flex;
     flex-basis: 100%;
+    margin-top: -95px;
+    margin-left: -64px;
     align-items: center;
     justify-content: center;
     flex-direction: column;
-    z-index: 3;
+    z-index: 9;
 }
 .graphicAdd svg{
     font-size: 35px;

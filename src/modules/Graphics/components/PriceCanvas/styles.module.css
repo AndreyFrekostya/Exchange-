@@ -6,11 +6,12 @@
     overflow: hidden;
     box-sizing: border-box;
     right: 0px;
+    border-left: #2a2e39 1px solid;
 }
 .canvas{
     position: absolute;
     top: 0px;
-    left: 0px;
+    right: 0px;
     z-index: 2;
     box-sizing: border-box;
 }

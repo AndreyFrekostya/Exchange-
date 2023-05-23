@@ -2,15 +2,38 @@
     margin: 0px;
     padding: 0px;
     position: absolute;
-    bottom: 32px;
+    bottom: 30px;
     overflow: hidden;
     box-sizing: border-box;
-    left: 0px;
+    border-top: #2a2e39 1px solid;
+    overflow: auto;
+    overflow-y: hidden;
+    right: 64px;
+}
+.wrap::-webkit-scrollbar {
+    width: 0;
+    height: 0;
 }
 .canvas{
     position: absolute;
     top: 0px;
     left: 0px;
-    z-index: 2;
+    z-index: 3;
     box-sizing: border-box;
+}
+.canvas2{
+    position: absolute;
+    bottom: 25px;
+    right: 0px;
+    z-index: 3;
+    box-sizing: border-box;
+    border-left: #2a2e39 1px solid;
+    border-top: #2a2e39 1px solid;
+}
+.canvas3{
+    position: absolute;
+    left: 0px;
+    z-index: 3;
+    box-sizing: border-box;
+    bottom: 29px;
 }
