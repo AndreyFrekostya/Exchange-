@@ -30,7 +30,7 @@ export function DrawVolume(ctx:CanvasRenderingContext2D,canvas:HTMLCanvasElement
         ctx.fillRect(x, ctx.canvas.height - height, candleWidth, height);
 
         // Обновление координат для следующей свечи
-        x += candleWidth + candleSpacing+10;
+        x += candleWidth + candleSpacing;
     })
 }
 
