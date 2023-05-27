@@ -38,18 +38,22 @@ const HeaderGraphic:React.FC<HeaderGraphic> = ({one,setActiveCoin,activeCoin,gra
         <div className={styles.headerGraph}>
           <CoinList graphicRef={graphicRef} id={graphic.id} active={activeCoin} setActive={setActiveCoin}/>
           <div className={styles.groups}>
+          <Groups group={graphic.group}/>
           {graphic.coin!=='' ? (<p onClick={()=>setActiveCoin(!activeCoin)} className={styles.coin}>{graphic.coin} <span className={graphic.typeCoin==='f' || graphic.typeCoin==='d'  ? styles.futures : styles.spot}>{graphic.typeCoin!=='' ? 'futures' : 'spot'}</span></p>) : (null)}
           </div>
         </div>
 
       ) : (
-      <div className={styles.headerGraph} style={{marginLeft:'3px'}}> 
-        {graphic.coin!=='' ? (<p onClick={()=>setActiveCoin(!activeCoin)} className={styles.coin}>{graphic.coin} <span className={graphic.typeCoin==='f' || graphic.typeCoin==='d'  ? styles.futures : styles.spot}>{graphic.typeCoin!=='' ? 'futures' : 'spot'}</span></p>) : (null)}
+      <div className={styles.headerGraph} style={{marginLeft:'2px'}}> 
+        <div style={{display: 'flex', alignItems: 'center'}}>
+          <div className={styles.groups}><Groups group={graphic.group}/></div>
+          {graphic.coin!=='' ? (<p onClick={()=>setActiveCoin(!activeCoin)} className={styles.coin}>{graphic.coin} <span className={graphic.typeCoin==='f' || graphic.typeCoin==='d'  ? styles.futures : styles.spot}>{graphic.typeCoin!=='' ? 'futures' : 'spot'}</span></p>) : (null)}
+        </div>
       </div>
       ) : (
         <div className={styles.headerGraph}>
           <div className={styles.groups}>
-            {one ?(null) : (<Groups group={graphic.group}/>)}
+            <Groups group={graphic.group}/>
             {graphic.coin!=='' ? (<p onClick={()=>setActiveCoin(!activeCoin)} className={styles.coin}>{graphic.coin} <span className={graphic.typeCoin==='f' || graphic.typeCoin==='d'  ? styles.futures : styles.spot}>{graphic.typeCoin!=='' ? 'futures' : 'spot'}</span></p>) : (null)}
           </div>
           <div className={styles.leftHand}>

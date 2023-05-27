@@ -19,6 +19,7 @@ export function DrawMaxAndMinVolume(ctx:CanvasRenderingContext2D,canvas:HTMLCanv
     const heightScale = (ctx.canvas.height-15)  / maxVolume;
 
     const heightMax = maxVolume * heightScale;
+    
     const heightMin=minVolume*heightScale
         // Рисование прямоугольника для графика объема
     
@@ -27,16 +28,16 @@ export function DrawMaxAndMinVolume(ctx:CanvasRenderingContext2D,canvas:HTMLCanv
     ctx.font = "11px Tahoma";
     ctx.fillStyle = "#aaaebf";
     //max
-    ctx.moveTo(0.5, ctx.canvas.height - heightMax);
-	ctx.lineTo(5.5,ctx.canvas.height - heightMax);
+    ctx.moveTo(0.5, 16);
+	ctx.lineTo(5.5,16);
 	ctx.strokeStyle = '#82848c';
 	ctx.stroke();
-    ctx.fillText(String(max),8, 15)
+    ctx.fillText(String(max),8, 20)
 
     //min
-    ctx.moveTo(0.5, ctx.canvas.height - heightMin);
-	ctx.lineTo(5.5,ctx.canvas.height - heightMin);
+    ctx.moveTo(0.5, 55);
+	ctx.lineTo(5.5,55);
 	ctx.strokeStyle = '#82848c';
 	ctx.stroke();
-    ctx.fillText(String(min), 8, 64);
+    ctx.fillText(String(min), 8, 59);
 }

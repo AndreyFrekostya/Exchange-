@@ -27,12 +27,16 @@ const Graphic:React.FC<IGraphicComponent> = ({graphic, onClick, one,wideS}) => {
   const dispatch=useAppDispatch()
   const [getKlinesSymbol,{data=[],isLoading}]=useLazyGetKlinesSymbolQuery()
   const distance=useAppSelector(state=>state.distance)
-  const [scrollLeft, setScrollLeft]=useState<number>(0)
   const lastMode=useAppSelector(state=>state.lastMode)
   const graphicRef=useRef<HTMLDivElement | null>(null)
   const [activeCoin, setActiveCoin]=useState<boolean>(false)
   const mode=useAppSelector(state=>state.modeGraphic.find(m=>m.choosed===true)?.name)
   const choosedGraphic=useAppSelector(state=>state.graphics.find(item=>item.choosed===true))
+  const [howCandleInRange, setHowCandleInRange]=useState<number>(0)
+  const [candleWidth, setCandleWidth]=useState<number>(3)
+  const [candleSpacing, setCandleSpacing]=useState<number>(2)
+  const [xLeft, setXLeft]=useState<number>(0)
+  const [startCandle, setStartCandle]=useState<number>(0)
   const closeFromPress=(e:KeyboardEvent)=>{
     if(graphic.widescreen){
       if(e.code==="Escape" || e.code==='KeyF'){
@@ -53,6 +57,7 @@ const Graphic:React.FC<IGraphicComponent> = ({graphic, onClick, one,wideS}) => {
     }
   }
   useEffect(()=>{
+    
       document.addEventListener('keydown', closeFromPress)
       document.addEventListener('keydown', openFromPress)
     return () => {
@@ -69,11 +74,37 @@ const Graphic:React.FC<IGraphicComponent> = ({graphic, onClick, one,wideS}) => {
     }
   },[graphic.coin,graphic.distance])
   return (
-    <div  ref={graphicRef} className={graphic.choosed ? styles.wrapActive : styles.wrap} onClick={onClick}>
+    <div  ref={graphicRef} className={graphic.choosed ? styles.wrapActive : styles.wrap} onMouseDown={onClick}>
       <HeaderGraphic wideS={wideS} one={one} setActiveCoin={setActiveCoin} activeCoin={activeCoin} graphic={graphic} graphicRef={graphicRef}/>
       
-      <MainCanvas  graphicRef={graphicRef} data={data} setScrollLeft={setScrollLeft}/>
-      <VolumeCanvas graphicRef={graphicRef} data={data}  scrollLeft={scrollLeft}/>
+      <MainCanvas  
+        graphicRef={graphicRef}
+        data={data} 
+        howCandleInRange={howCandleInRange}
+        setHowCandleInRange={setHowCandleInRange} 
+        candleWidth={candleWidth} 
+        setCandleWidth={setCandleWidth}
+        xLeft={xLeft} 
+        setXLeft={setXLeft}
+        startCandle={startCandle}
+        setStartCandle={setStartCandle}
+        setCandleSpacing={setCandleSpacing}
+        candleSpacing={candleSpacing}
+      />
+      <VolumeCanvas 
+        graphicRef={graphicRef} 
+        data={data}
+        howCandleInRange={howCandleInRange}
+        setHowCandleInRange={setHowCandleInRange} 
+        candleWidth={candleWidth} 
+        setCandleWidth={setCandleWidth}
+        xLeft={xLeft} 
+        setXLeft={setXLeft}
+        startCandle={startCandle}
+        setStartCandle={setStartCandle}
+        setCandleSpacing={setCandleSpacing}
+        candleSpacing={candleSpacing}
+      />
       <DateCanvas graphicRef={graphicRef} data={data}/>
       <PriceCanvas graphicRef={graphicRef}/>
       <>

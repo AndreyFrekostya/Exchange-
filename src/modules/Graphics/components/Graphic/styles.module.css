@@ -18,7 +18,6 @@
     color: #fff;
     overflow: hidden;
     padding: 0px 3px 3px 0px;
-    cursor: crosshair;
     display: flex;
     flex-direction: column;
     background-color: #161a25;
@@ -49,8 +48,7 @@
 .graphicAdd{
     display: flex;
     flex-basis: 100%;
-    margin-top: -95px;
-    margin-left: -64px;
+    margin-top: -55px;
     align-items: center;
     justify-content: center;
     flex-direction: column;

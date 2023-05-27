@@ -23,9 +23,10 @@ interface ICanvasGraphicStart {
         xStartLeft:number, 
         setXStart:(arg:number)=>void,
         howCandleInRange:number,
-        startCandle:number
+        startCandle:number,
+        scrolledCandle:number
 }
-export function CanvasGraphicStart({ctx,canvas,ctx2,canvas2, data, refContainer,maxPrice,minPrice,candleWidth,candleSpacing,xStartLeft, setXStart, howCandleInRange, startCandle}:ICanvasGraphicStart):void{
+export function CanvasGraphicStart({ctx,canvas,ctx2,canvas2, data, refContainer,maxPrice,minPrice,candleWidth,candleSpacing,xStartLeft, setXStart, howCandleInRange, startCandle,scrolledCandle}:ICanvasGraphicStart):void{
         const candlestiks=data
         let container=refContainer.current
         const marginRight=30
@@ -38,9 +39,6 @@ export function CanvasGraphicStart({ctx,canvas,ctx2,canvas2, data, refContainer,
         let b_drawMouseOverlay=false
         const priceRange = maxPrice - minPrice;
         DrawCandleFunc(ctx,candlestiks,width,candleWidth,maxPrice,priceRange,height,candleSpacing, howCandleInRange, startCandle, xStartLeft)
-        if(container){
-                container.scrollLeft=container.scrollWidth
-        }
         
         //при движении мыши
         canvas2?.addEventListener('mousemove',function(e){
@@ -70,20 +68,28 @@ export function CanvasGraphicStart({ctx,canvas,ctx2,canvas2, data, refContainer,
                         ctx2.strokeStyle='#425382'
                         ctx2.stroke();
                         
+                        const neededCandle=candlestiks[Math.round((Math.abs(scrolledCandle)+e.clientX)/(candleWidth+candleSpacing))]
                         
-
                         // yMouseHover = yToValueCoords(minPrice,height,marginBottom, mousePosition.y,priceRange,yPixelRange );
                         // xMouseHover = xToValueCoords(Number(candlestiks[0][0]),Number(candlestiks[0][0])-Number(candlestiks[candlestiks.length-1][0]), mousePosition.x,xPixelRange );
                         // let candlestickDelta = Number(candlestiks[0][0])-Number(candlestiks[candlestiks.length-1][0]);
                         // hoveredCandlestickID = Math.floor((xMouseHover-Number(candlestiks[0][0]))/candlestickDelta);
                         // xMouseHover = Math.floor(xMouseHover/candlestickDelta)*candlestickDelta;
                         // // mousePosition.x = xToPixelCoords((Number(candlestiks[0][0])),candlestiks.slice(scrollCandle,scrollCandle+howCandleInRange),width,candleWidth );
-                        // ctx2.fillStyle = "#737478";
-                        // ctx2.font = "11px Tahoma";
-                        // ctx2.fillText( "O: "+candlestiks[hoveredCandlestickID][1] ,5,30, );
-                        // ctx2.fillText( "C: "+candlestiks[hoveredCandlestickID][4] ,75,30, );
-                        // ctx2.fillText( "H: "+candlestiks[hoveredCandlestickID][2] ,145,30, );
-                        // ctx2.fillText( "L: "+candlestiks[hoveredCandlestickID][4] ,215,30, );
+                        if(neededCandle){
+                                let color = neededCandle[4] > neededCandle[1]  ? greenColor : redColor;
+                                ctx2.font = "11px Verdana";
+                                ctx2.fillStyle = "#aaaebf";
+                                ctx2.fillText( "O: ",5,30,);
+                                ctx2.fillText( "C: ",85,30,);
+                                ctx2.fillText( "H: ",165,30,);
+                                ctx2.fillText( "L: ",245,30,);
+                                ctx2.fillStyle = color;
+                                ctx2.fillText(neededCandle[1],20,30,);
+                                ctx2.fillText(neededCandle[4],100,30,);
+                                ctx2.fillText(neededCandle[2],180,30,);
+                                ctx2.fillText(neededCandle[4],260,30,);
+                        }
                         
                 }else{
                         ctx2.clearRect(0, 0, canvas2.width, canvas2.height);

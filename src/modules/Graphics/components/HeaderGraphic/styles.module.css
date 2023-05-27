@@ -15,7 +15,6 @@
 .groups{
     display: flex;
     align-items: center;
-    gap: 3px;
 }
 .groups svg{
     font-size: 14px;
