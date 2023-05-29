@@ -1,12 +1,11 @@
 import { RefObject } from "react";
-import { xToPixelCoords } from "../../../helpers/xToPixelCoords";
 import { yToPixelCoords } from "../../../helpers/yToPixelCoords";
 
 export function DrawVolume(ctx:CanvasRenderingContext2D,canvas:HTMLCanvasElement,container:HTMLDivElement, data: string[][], maxVolume:number,xLeft:number,candleWidth:number, candleSpacing:number){
     const chartHeight=canvas.height
     const chartWidth=canvas.width
-    const redColor='#ef5350'
-    const greenColor='#26a69a'
+    const redColor='#EB602F'
+    const greenColor='#37DBBA'
     let x0=xLeft
     const heightScale = (ctx.canvas.height-15) / maxVolume;
     // Рисование графика объема для каждой свечи

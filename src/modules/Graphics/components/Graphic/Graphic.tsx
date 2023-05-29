@@ -26,17 +26,22 @@ interface KeyboardEvent {
 const Graphic:React.FC<IGraphicComponent> = ({graphic, onClick, one,wideS}) => {
   const dispatch=useAppDispatch()
   const [getKlinesSymbol,{data=[],isLoading}]=useLazyGetKlinesSymbolQuery()
-  const distance=useAppSelector(state=>state.distance)
-  const lastMode=useAppSelector(state=>state.lastMode)
-  const graphicRef=useRef<HTMLDivElement | null>(null)
   const [activeCoin, setActiveCoin]=useState<boolean>(false)
-  const mode=useAppSelector(state=>state.modeGraphic.find(m=>m.choosed===true)?.name)
-  const choosedGraphic=useAppSelector(state=>state.graphics.find(item=>item.choosed===true))
   const [howCandleInRange, setHowCandleInRange]=useState<number>(0)
+  const [isMouseOnGraphic, setIsMouseOnGraphic]=useState<{x:number, q:boolean}>({x:0, q:false})
   const [candleWidth, setCandleWidth]=useState<number>(3)
   const [candleSpacing, setCandleSpacing]=useState<number>(2)
   const [xLeft, setXLeft]=useState<number>(0)
   const [startCandle, setStartCandle]=useState<number>(0)
+  const distance=useAppSelector(state=>state.distance)
+  const lastMode=useAppSelector(state=>state.lastMode)
+  const graphicRef=useRef<HTMLDivElement | null>(null)
+  const [heightM, setHeightM]=useState<number | undefined>(graphicRef.current?.clientHeight ? graphicRef.current?.clientHeight-142 : undefined)
+  const mainCanvasRef=useRef<HTMLCanvasElement | null>(null)
+  const volumeRef=useRef<HTMLCanvasElement | null>(null)
+  const choosedGraphic=useAppSelector(state=>state.graphics.find(item=>item.choosed===true))
+  const mode=useAppSelector(state=>state.modeGraphic.find(m=>m.choosed===true)?.name)
+  const propsToCanvas={graphicRef,data,howCandleInRange,setHowCandleInRange,candleWidth,setCandleWidth,xLeft,setXLeft, startCandle,setStartCandle,candleSpacing,setCandleSpacing,setIsMouseOnGraphic,isMouseOnGraphic,fulfieldGraphicRefAndVolume,heightM, setHeightM}
   const closeFromPress=(e:KeyboardEvent)=>{
     if(graphic.widescreen){
       if(e.code==="Escape" || e.code==='KeyF'){
@@ -57,7 +62,6 @@ const Graphic:React.FC<IGraphicComponent> = ({graphic, onClick, one,wideS}) => {
     }
   }
   useEffect(()=>{
-    
       document.addEventListener('keydown', closeFromPress)
       document.addEventListener('keydown', openFromPress)
     return () => {
@@ -73,38 +77,19 @@ const Graphic:React.FC<IGraphicComponent> = ({graphic, onClick, one,wideS}) => {
       }
     }
   },[graphic.coin,graphic.distance])
+  function fulfieldGraphicRefAndVolume(grRef:HTMLCanvasElement | null | undefined, voRef:HTMLCanvasElement | null | undefined){
+    if(grRef){
+      mainCanvasRef.current=grRef
+    }
+    if(voRef){
+      volumeRef.current=voRef
+    }
+  }
   return (
     <div  ref={graphicRef} className={graphic.choosed ? styles.wrapActive : styles.wrap} onMouseDown={onClick}>
       <HeaderGraphic wideS={wideS} one={one} setActiveCoin={setActiveCoin} activeCoin={activeCoin} graphic={graphic} graphicRef={graphicRef}/>
-      
-      <MainCanvas  
-        graphicRef={graphicRef}
-        data={data} 
-        howCandleInRange={howCandleInRange}
-        setHowCandleInRange={setHowCandleInRange} 
-        candleWidth={candleWidth} 
-        setCandleWidth={setCandleWidth}
-        xLeft={xLeft} 
-        setXLeft={setXLeft}
-        startCandle={startCandle}
-        setStartCandle={setStartCandle}
-        setCandleSpacing={setCandleSpacing}
-        candleSpacing={candleSpacing}
-      />
-      <VolumeCanvas 
-        graphicRef={graphicRef} 
-        data={data}
-        howCandleInRange={howCandleInRange}
-        setHowCandleInRange={setHowCandleInRange} 
-        candleWidth={candleWidth} 
-        setCandleWidth={setCandleWidth}
-        xLeft={xLeft} 
-        setXLeft={setXLeft}
-        startCandle={startCandle}
-        setStartCandle={setStartCandle}
-        setCandleSpacing={setCandleSpacing}
-        candleSpacing={candleSpacing}
-      />
+      <MainCanvas  {...propsToCanvas} voRef={volumeRef}/>
+      <VolumeCanvas {...propsToCanvas} grRef={mainCanvasRef} />
       <DateCanvas graphicRef={graphicRef} data={data}/>
       <PriceCanvas graphicRef={graphicRef}/>
       <>

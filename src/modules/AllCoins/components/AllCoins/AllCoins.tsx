@@ -11,9 +11,10 @@ interface AllCoins{
     data:ICoin[] | undefined,
     text: string,
     id: number,
-    visibleRows: number
+    visibleRows: number,
+    onClose:()=>void
 }
-const AllCoins:React.FC<AllCoins> = ({graphicRef,requestingSymbols,data,text,id,visibleRows }) => {
+const AllCoins:React.FC<AllCoins> = ({graphicRef,requestingSymbols,data,text,id,visibleRows,onClose }) => {
     const graphic=useAppSelector(state=>state.graphics.find(item=>item.id===id))
     const dispatch=useAppDispatch()
     const rootRef = useRef<HTMLDivElement | null>(null);
@@ -24,6 +25,7 @@ const AllCoins:React.FC<AllCoins> = ({graphicRef,requestingSymbols,data,text,id,
             dispatch(setGraphicDistance('Д'))
         }
         dispatch(setGraphicCoin({id:id,coin:coin, type: type}))
+        onClose()
     }
     useEffect(()=>{
         setStart(0)

@@ -126,7 +126,7 @@ export const CoinList:React.FC<ICoinList> = ({setActive, active,id, graphicRef})
                 })}</p>
             </div>
         </div>
-        <AllCoins requestingSymbols={requestingSymbols} visibleRows={visibleRows} graphicRef={graphicRef} data={coins}  text={text} id={id}/>
+        <AllCoins requestingSymbols={requestingSymbols} visibleRows={visibleRows} graphicRef={graphicRef} data={coins} onClose={onClose}  text={text} id={id}/>
     </div>
   )
 }
