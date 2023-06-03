@@ -2,15 +2,15 @@
     margin: 0px;
     padding: 0px;
     position: absolute;
-    top: 0px;
     overflow: hidden;
     box-sizing: border-box;
     right: 0px;
     border-left: #2a2e39 1px solid;
+    
 }
 .canvas{
     position: absolute;
-    top: 0px;
+    top: 20px;
     right: 0px;
     z-index: 2;
     box-sizing: border-box;

@@ -1,7 +1,7 @@
 import { RefObject } from "react";
 import { yToPixelCoords } from "../../../helpers/yToPixelCoords";
 
-export function DrawVolume(ctx:CanvasRenderingContext2D,canvas:HTMLCanvasElement,container:HTMLDivElement, data: string[][], maxVolume:number,xLeft:number,candleWidth:number, candleSpacing:number){
+export function DrawVolume(ctx:CanvasRenderingContext2D,canvas:HTMLCanvasElement, data: string[][], maxVolume:number,xLeft:number,candleWidth:number, candleSpacing:number){
     const chartHeight=canvas.height
     const chartWidth=canvas.width
     const redColor='#EB602F'

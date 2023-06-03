@@ -17,9 +17,12 @@ export function DrawMaxAndMinVolume(ctx:CanvasRenderingContext2D,canvas:HTMLCanv
     const max=nFormatter(Number(maxVolume))
     const min=nFormatter(Number(minVolume))
     const heightScale = (ctx.canvas.height-15)  / maxVolume;
-
+    //75
     const heightMax = maxVolume * heightScale;
-    
+    const rangeMaxMin=canvas.height-16-19
+    const range=39
+    let howLines=Math.round(rangeMaxMin/range)+1
+    let coordsArr=[16,56]
     const heightMin=minVolume*heightScale
         // Рисование прямоугольника для графика объема
     
@@ -35,9 +38,15 @@ export function DrawMaxAndMinVolume(ctx:CanvasRenderingContext2D,canvas:HTMLCanv
     ctx.fillText(String(max),8, 20)
 
     //min
-    ctx.moveTo(0.5, 55);
-	ctx.lineTo(5.5,55);
+    ctx.moveTo(0.5, canvas.height-19);
+	ctx.lineTo(5.5,canvas.height-19);
 	ctx.strokeStyle = '#82848c';
 	ctx.stroke();
-    ctx.fillText(String(min), 8, 59);
+    ctx.fillText(String(min), 8, canvas.height-16);
+    // for (let i=0; i<coordsArr.length; i++){
+    //     let merge=coordsArr[i]+coordsArr[i+1]/2
+    //     coordsArr.push(merge)
+    //     coordsArr.sort((a, b) => a - b)
+    // }
+    // console.log(coordsArr)
 }

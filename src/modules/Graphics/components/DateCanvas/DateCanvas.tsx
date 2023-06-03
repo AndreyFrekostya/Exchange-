@@ -26,7 +26,7 @@ const DateCanvas:React.FC<IDateCanvas> = ({graphicRef, data}) => {
         if(refCanvas.current){
             const ctx=refCanvas.current.getContext('2d')
             if(ctx){
-                 DateCanvasStart(ctx,refCanvas.current, data)
+                DateCanvasStart(ctx,refCanvas.current, data)
             }
         }
     },[width])

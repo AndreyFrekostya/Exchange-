@@ -12,21 +12,23 @@ export interface IMainCanvas{
     candleWidth:number, 
     setCandleWidth:(arg:number)=>void,
     xLeft:number ,
-    setXLeft:(arg:number)=>void,
+    setXLeft:React.Dispatch<React.SetStateAction<number>>,
     startCandle:number ,
     setStartCandle:(arg:number)=>void,
     candleSpacing:number,
     setCandleSpacing:(arg:number)=>void,
-    setIsMouseOnGraphic:Dispatch<SetStateAction<{ x: number; q: boolean; }>>,
-    isMouseOnGraphic:{x:number, q:boolean},
+    setIsMouseOnGraphic:Dispatch<SetStateAction<{ x: number;y:number; q: boolean; }>>,
+    isMouseOnGraphic:{x:number,y:number, q:boolean},
     voRef?:MutableRefObject<HTMLCanvasElement | null>,
     grRef?:MutableRefObject<HTMLCanvasElement | null>,
     fulfieldGraphicRefAndVolume:(grRef:HTMLCanvasElement | null | undefined, voRef:HTMLCanvasElement | null | undefined)=>void,
     heightM:number | undefined,
-    setHeightM:(atg:number)=>void
+    setHeightM:React.Dispatch<React.SetStateAction<number | undefined>>,
+    heightV:number,
+    setHeightV:React.Dispatch<React.SetStateAction<number>>
 }
 
-const MainCanvas:React.FC<IMainCanvas> = ({graphicRef,data,howCandleInRange,setHowCandleInRange,candleWidth,setCandleWidth,xLeft,setXLeft, startCandle,setStartCandle,candleSpacing,setCandleSpacing,setIsMouseOnGraphic,isMouseOnGraphic,voRef,fulfieldGraphicRefAndVolume,heightM, setHeightM}) => {
+const MainCanvas:React.FC<IMainCanvas> = ({graphicRef,data,howCandleInRange,setHowCandleInRange,candleWidth,setCandleWidth,xLeft,setXLeft, startCandle,setStartCandle,candleSpacing,setCandleSpacing,setIsMouseOnGraphic,isMouseOnGraphic,voRef,fulfieldGraphicRefAndVolume,heightM, setHeightM, heightV}) => {
     const [width, setWidth]=useState<number | undefined>(graphicRef.current?.clientWidth? graphicRef.current?.clientWidth-64 : undefined)
     const [maxPrice, setMaxPrice]=useState<number>(0)
     const [minPrice, setMinPrice]=useState<number>(0)
@@ -34,6 +36,9 @@ const MainCanvas:React.FC<IMainCanvas> = ({graphicRef,data,howCandleInRange,setH
     const [startX, setStartX]=useState<number>(0)
     const [isPressed, setIsPressed]=useState<boolean>(false)
     const [ifPlus, setIfPlus]=useState<boolean>(false)
+    const [pressedCandle, setPressedCandle]=useState<string[] | undefined>([])
+    const [eMouseMove, setEMouseMove]=useState<{c:number,x:number,y:number}>({c:0,x:0,y:0})
+    const [b_drawMouseOverlay, setB_drawMouseOverlay]=useState<boolean>(false)
     const refCanvas=useRef<HTMLCanvasElement>(null)
     const refContainer=useRef<HTMLDivElement>(null)
     const container=refContainer.current
@@ -46,8 +51,17 @@ const MainCanvas:React.FC<IMainCanvas> = ({graphicRef,data,howCandleInRange,setH
       e.preventDefault();
       if(crosshairContainer){
         crosshairContainer.style.cursor='pointer';
-      }     
-      setIsPressed(true)
+      }    
+      if(refCanvasCrossHair.current){
+        let allLeft=Math.abs(xLeft)+(eMouseMove.c-refCanvasCrossHair.current.getBoundingClientRect().left)
+        let neededCandle=data[Math.floor(allLeft/(candleWidth+candleSpacing))]
+        if(xLeft!<0){
+          setPressedCandle(()=>neededCandle)
+        }else{
+          setPressedCandle(()=>undefined)
+        }
+      } 
+      setIsPressed(()=>true)
       setStartX((prev)=>e.clientX)
     }
     const  handleMouseMove=(event:MouseEvent)=> {
@@ -57,8 +71,12 @@ const MainCanvas:React.FC<IMainCanvas> = ({graphicRef,data,howCandleInRange,setH
           setMouseX((prev)=>mouseX)
         }
         if(container && isPressed){
+          const deltaX = startX-event.clientX;
+          let newX=xLeft-deltaX
+          if(newX<0.2){
+            setXLeft(()=>newX)
+          }
           setStartX((prev)=>event.clientX)
-          handleScrolling(event.clientX)
         }
     }
     const handleMouseUp=(event:MouseEvent) =>{
@@ -73,7 +91,7 @@ const MainCanvas:React.FC<IMainCanvas> = ({graphicRef,data,howCandleInRange,setH
       let candleWidthPrev:number=candleWidth
       let candleSpacingPrev:number=candleSpacing
       if (e.deltaY < 0) {
-        if(candleWidth+1!==31 && candleSpacing+0.2!==4){
+        if(candleWidth+1!==41 && candleSpacing+0.2!==4){
           setCandleWidth(candleWidthPrev+1)
           setCandleSpacing(candleSpacingPrev+0.2)
           setIfPlus(true)
@@ -93,40 +111,48 @@ const MainCanvas:React.FC<IMainCanvas> = ({graphicRef,data,howCandleInRange,setH
         setHowCandleInRange(candles)
         let scrollCandle=0
         let allPrevCandle=0
+        let newX=0
         if(ifPlus){
           scrollCandle=Math.abs(xLeft/((candleWidth-1)+(candleSpacing-0.2)))
-          allPrevCandle=scrollCandle+(mouseX/((candleWidth-1)+(candleSpacing-0.2)))
-
-          
+          allPrevCandle=scrollCandle+(mouseX/((candleWidth-1)+(candleSpacing-0.2))) 
         }else{
           scrollCandle=Math.abs(xLeft/((candleWidth+1)+(candleSpacing+0.2)))
           allPrevCandle=scrollCandle+(mouseX/((candleWidth+1)+(candleSpacing+0.2)))
         }
-        let newX=-((allPrevCandle*(candleWidth+candleSpacing))-mouseX)
+        newX=-((allPrevCandle*(candleWidth+candleSpacing))-mouseX)
+        if(xLeft>-4 && !ifPlus || newX>0){
+          scrollCandle=0
+          allPrevCandle=0
+          newX=0
+        }
         scrollCandle=Math.abs(newX/(candleWidth+candleSpacing))
-        setXLeft(newX)
+        setXLeft(()=>newX)
         let thatMinPrice=Math.min(...data.slice(scrollCandle,scrollCandle+candles).map((d)=>Number(d[3])));
         let thatMaxPrice=Math.max(...data.slice(scrollCandle,scrollCandle+candles).map((d)=>Number(d[2])));
         setStartCandle(scrollCandle)
         setMaxPrice(()=>thatMaxPrice)
         setMinPrice(()=>thatMinPrice)
         requestAnimationFrame(() => {
-          if(refCanvas.current){
+          if(refCanvas.current && refCanvasCrossHair.current){
             ctx.clearRect( container.scrollLeft-container.clientWidth , 0 , container.clientWidth*2, refCanvas.current.height  );
             DrawCandleFunc(ctx,data,refCanvas.current.width,candleWidth,thatMaxPrice,thatMaxPrice-thatMinPrice,refCanvas.current.height-40,candleSpacing,data.length, 0,newX)
+            
           }
         });
-        
+        let allLeft=Math.abs(newX)+(eMouseMove.c-refCanvasCrossHair.current.getBoundingClientRect().left)
+        let neededCandle=data[Math.floor(allLeft/(candleWidth+candleSpacing))]
+        let x=(data.indexOf(neededCandle)-scrollCandle)*(candleWidth+candleSpacing)+candleWidth/2
+        DrawCrosshairCanvas(ctx2,refCanvasCrossHair.current,data,candleWidth,candleSpacing,Math.abs(xLeft/(candleSpacing+candleWidth)),isMouseOnGraphic.x, isMouseOnGraphic.q,voRef,isPressed,eMouseMove.c,eMouseMove.y,b_drawMouseOverlay, xLeft, eMouseMove.x, x)
       }
     },[candleWidth, candleSpacing, ifPlus])
     const resizeHandler = () => {
         const { clientHeight, clientWidth } = graphicRef.current || {};
-        if(clientHeight && clientWidth){
-          setHeightM(clientHeight-142)
+        if(clientHeight && clientWidth ){
+          setHeightM(clientHeight-heightV-72)
           setWidth(clientWidth-64)
-        }
+        
       };
-      
+    }
     useEffect(() => {
         window.addEventListener("resize", resizeHandler);
         resizeHandler();
@@ -140,9 +166,8 @@ const MainCanvas:React.FC<IMainCanvas> = ({graphicRef,data,howCandleInRange,setH
             document.removeEventListener('mouseup', handleMouseUp as  any)
           }
         };
-      }, [crosshairContainer,data]);
+      }, [crosshairContainer,data,heightV]);
       useEffect(()=>{
-        
         if(refCanvas.current && refCanvasCrossHair.current){
           if(ctx && data.length!==0 && ctx2 && container){
               let candles=Math.round(container.clientWidth/(candleWidth+candleSpacing))
@@ -154,78 +179,91 @@ const MainCanvas:React.FC<IMainCanvas> = ({graphicRef,data,howCandleInRange,setH
               }
               let newX=-(candleWidth+candleSpacing)*data.length+candles*(candleWidth+candleSpacing)
               let NewStartCandle=data.length-candles
-              
-              setXLeft(newX)
+              if(xLeft==0){
+                setXLeft(()=>newX)
+              }else{
+                newX=xLeft
+                NewStartCandle=startCandle
+              }
+              let thatMinPrice=Math.min(...data.slice(NewStartCandle,NewStartCandle+candles).map((d)=>Number(d[3])));
+              let thatMaxPrice=Math.max(...data.slice(NewStartCandle,NewStartCandle+candles).map((d)=>Number(d[2])));
+              ctx.clearRect( 0 , 0 , refCanvas.current.width , refCanvas.current.height  );
+              DrawCandleFunc(ctx,data,refCanvas.current.width,candleWidth,thatMaxPrice,thatMaxPrice-thatMinPrice,refCanvas.current.height-40,candleSpacing,data.length, 0,newX)
+              ctx2.clearRect( 0 , 0 , refCanvasCrossHair.current.width , refCanvasCrossHair.current.height  );
               setStartCandle(NewStartCandle)
-              let thatMinPrice=Math.min(...data.slice(data.length-candles,data.length).map((d)=>Number(d[3])));
-              let thatMaxPrice=Math.max(...data.slice(data.length-candles,data.length).map((d)=>Number(d[2])));
               setMaxPrice(()=>thatMaxPrice)
               setMinPrice(()=>thatMinPrice)
-              ctx.clearRect( 0 , 0 , refCanvas.current.width , refCanvas.current.height  );
-              
-              CanvasGraphicStart({ctx,canvas:refCanvas.current,data,refContainer, maxPrice:thatMaxPrice, minPrice:thatMinPrice,candleWidth,candleSpacing,xStartLeft:newX,setXStart:setXLeft,howCandleInRange:data.length, startCandle:0,scrolledCandle:Math.abs(newX+container.clientWidth/(candleSpacing+candleWidth))})
-              ctx2.clearRect( 0 , 0 , refCanvasCrossHair.current.width , refCanvasCrossHair.current.height  );
-              DrawCrosshairCanvas(ctx2,refCanvasCrossHair.current,data,candleWidth,candleSpacing,Math.abs(newX/(candleSpacing+candleWidth)),isMouseOnGraphic.x, isMouseOnGraphic.q,voRef)
             }
       }
       },[heightM, width,data,voRef])
-
-      const handleScrolling=useCallback((newStart:number)=>{
-        const deltaX = startX-newStart;
-        if(container && isPressed && refCanvasCrossHair.current && ctx2){
-          let newX=xLeft-deltaX
+      useEffect(()=>{
+        if(container && refCanvasCrossHair.current && ctx2){
           const nextStart=startCandle-1
-          let scrollCandle=Math.abs(newX/(candleWidth+candleSpacing))
-          DrawCrosshairCanvas(ctx2,refCanvasCrossHair.current,data,candleWidth,candleSpacing,scrollCandle,isMouseOnGraphic.x, isMouseOnGraphic.q,voRef)
+          let scrollCandle=Math.abs(xLeft/(candleWidth+candleSpacing))
           setStartCandle(scrollCandle)
-          if(newX<2){
-            setXLeft(newX)
+          
             if(nextStart>0){
               let thatMinPrice=Math.min(...data.slice(scrollCandle,scrollCandle+howCandleInRange).map((d)=>Number(d[3])));
               let thatMaxPrice=Math.max(...data.slice(scrollCandle,scrollCandle+howCandleInRange).map((d)=>Number(d[2])));
               let priceRange = thatMaxPrice - thatMinPrice;
               if(ctx && refCanvas.current){
-                ctx.clearRect( 0 , 0 , refCanvas.current.width , refCanvas.current.height  );
+                requestAnimationFrame(() => {
                   if(refCanvas.current){
-                    requestAnimationFrame(() => {
-                      if(refCanvas.current){
-                        ctx.clearRect( 0 , 0 , refCanvas.current.width , refCanvas.current.height  );
-                        DrawCandleFunc(ctx,data,refCanvas.current.width,candleWidth,thatMaxPrice,priceRange,refCanvas.current.height-40,candleSpacing,data.length, 0,xLeft)
-                      }
-                    });
-                    ctx.clearRect(refCanvas.current.width, 0,refCanvas.current.width, refCanvas.current.height)
+                    ctx.clearRect( 0 , 0 , refCanvas.current.width , refCanvas.current.height  );
+                    
+                    DrawCandleFunc(ctx,data,refCanvas.current.width,candleWidth,thatMaxPrice,priceRange,refCanvas.current.height-40,candleSpacing,data.length, 0,xLeft)
                   }
+                });
+                ctx.clearRect(refCanvas.current.width, 0,refCanvas.current.width, refCanvas.current.height) 
+                ctx.clearRect(-refCanvas.current.width,0,refCanvas.current.width, refCanvas.current.height)
                 setMaxPrice(()=>thatMaxPrice)
                 setMinPrice(()=>thatMinPrice)
               }
             }
-            if(ctx && refCanvas.current){
-                    if(refCanvas.current && startCandle>0){
-                      requestAnimationFrame(() => {
-                        if(refCanvas.current){
-                          ctx.clearRect( 0 , 0 , refCanvas.current.width , refCanvas.current.height  );
-                          DrawCandleFunc(ctx,data,refCanvas.current.width,candleWidth,maxPrice,maxPrice-minPrice,refCanvas.current.height-40,candleSpacing,data.length, 0,xLeft)
-                        }
-                      });
-                      ctx.clearRect(refCanvas.current.width, 0,refCanvas.current.width, refCanvas.current.height)
-                    }
-          }              
+          if(ctx && refCanvas.current){
+            if(refCanvas.current && startCandle>0){
+              requestAnimationFrame(() => {
+                if(refCanvas.current){
+                  ctx.clearRect( 0 , 0 , refCanvas.current.width , refCanvas.current.height  );
+                  DrawCandleFunc(ctx,data,refCanvas.current.width,candleWidth,maxPrice,maxPrice-minPrice,refCanvas.current.height-40,candleSpacing,data.length, 0,xLeft)
+                }
+              });
+              ctx.clearRect(refCanvas.current.width, 0,refCanvas.current.width, refCanvas.current.height)
+              ctx.clearRect(-refCanvas.current.width,0,refCanvas.current.width, refCanvas.current.height)
+            }            
         }
       }
-      },[startX, isPressed])
-      const handleCrosshairMove=()=>{
-        if(ctx2 && refCanvasCrossHair.current && data.length!==0){
-          DrawCrosshairCanvas(ctx2,refCanvasCrossHair.current,data,candleWidth,candleSpacing,Math.abs(xLeft/(candleSpacing+candleWidth)),isMouseOnGraphic.x, isMouseOnGraphic.q,voRef)
+      },[xLeft])
+      const handleCrosshair=(e:any)=>{
+        setEMouseMove({c:e.clientX, x:e.offsetX, y:e.offsetY})
+        setB_drawMouseOverlay(true)
+        if(ctx2 && refCanvasCrossHair.current && refCanvas.current){
+          let y=e.clientY-refCanvas.current.getBoundingClientRect().top
+          setIsMouseOnGraphic({...isMouseOnGraphic,y:y,q:true})
+          DrawCrosshairCanvas(ctx2,refCanvasCrossHair.current,data,candleWidth,candleSpacing,Math.abs(xLeft/(candleSpacing+candleWidth)),isMouseOnGraphic.x, isMouseOnGraphic.q,voRef,isPressed,e.clientX,e.offsetY,b_drawMouseOverlay, xLeft, e.offsetX,undefined, pressedCandle)
+        }
+      }
+      const handleCrosshairLeave=()=>{
+        setB_drawMouseOverlay(false)
+        if(refCanvasCrossHair.current){
+          ctx2?.clearRect(0,0,refCanvasCrossHair.current.width,refCanvasCrossHair.current.height)
+          const volumeCanvas=voRef?.current
+          const ctxV=volumeCanvas?.getContext('2d')
+          setIsMouseOnGraphic({...isMouseOnGraphic,q:false})
+          if(ctxV && volumeCanvas){
+            ctxV?.clearRect(0,0,volumeCanvas.width,volumeCanvas.height)
+          }
         }
       }
       useEffect(()=>{
-        crosshairContainer?.addEventListener('mousemove', handleCrosshairMove as any)
-        return () => {
-          if(crosshairContainer){
-            crosshairContainer.removeEventListener('mousemove', handleCrosshairMove as  any) 
-          }
-        };
-      },[data,candleWidth,candleSpacing,startCandle, xLeft])
+        crosshairContainer?.addEventListener('mousemove', handleCrosshair)
+        crosshairContainer?.addEventListener('mouseleave', handleCrosshairLeave)
+        return ()=>{
+          crosshairContainer?.removeEventListener('mousemove', handleCrosshair)
+          crosshairContainer?.removeEventListener('mouseleave', handleCrosshairLeave)
+        }
+
+      },[xLeft, isPressed])
   return (
     <>  
       <canvas onMouseDown={(e:MouseEvent)=>handleMouseDown(e)}
