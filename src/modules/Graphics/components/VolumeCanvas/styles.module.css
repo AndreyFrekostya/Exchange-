@@ -46,3 +46,10 @@
     background-color: transparent;
     cursor: row-resize;
 }
+.canvas4{
+    position: absolute;
+    bottom: 29px;
+    right: 0px;
+    z-index: 4;
+    box-sizing: border-box;
+}

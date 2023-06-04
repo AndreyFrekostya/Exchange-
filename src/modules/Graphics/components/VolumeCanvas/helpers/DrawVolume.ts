@@ -7,7 +7,7 @@ export function DrawVolume(ctx:CanvasRenderingContext2D,canvas:HTMLCanvasElement
     const redColor='#EB602F'
     const greenColor='#37DBBA'
     let x0=xLeft
-    const heightScale = (ctx.canvas.height-15) / maxVolume;
+    const heightScale = (ctx.canvas.height-14) / maxVolume;
     // Рисование графика объема для каждой свечи
     data.forEach((candle)=>{
         const volume = Number(candle[5]);

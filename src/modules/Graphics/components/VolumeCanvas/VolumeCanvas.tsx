@@ -6,6 +6,7 @@ import { DrawVolumeFunc } from './helpers/DrawVolumeFunc'
 import { DrawMaxAndMinVolume } from './helpers/DrawMaxAndMinVolume'
 import { IMainCanvas } from '../MainCanvas/MainCanvas'
 import { DrawCrosshairVolume } from './helpers/DrawCrosshairVolume'
+import { DrawInfoVolume } from './helpers/DrawInfoVolume'
 
 const VolumeCanvas:React.FC<IMainCanvas> = ({graphicRef,data,howCandleInRange,setHowCandleInRange,candleWidth,setCandleWidth,xLeft,setXLeft, startCandle,setStartCandle,candleSpacing,setCandleSpacing,setIsMouseOnGraphic,isMouseOnGraphic, grRef,fulfieldGraphicRefAndVolume, setHeightM, heightM, heightV, setHeightV}) => {
     const [maxVolume, setMaxVolume]=useState<number>(0)
@@ -13,14 +14,17 @@ const VolumeCanvas:React.FC<IMainCanvas> = ({graphicRef,data,howCandleInRange,se
     const refTop=useRef<HTMLDivElement | null>(null)
     const [width, setWidth]=useState<number | undefined>(graphicRef.current?.clientWidth? graphicRef.current?.clientWidth : undefined)
     const [b_drawMouseOverlay, setB_drawMouseOverlay]=useState<boolean>(false)
+    const [yMouse, setYMouse]=useState<number>(0) 
     const refCanvas=useRef<HTMLCanvasElement>(null)
     const refCanvas2=useRef<HTMLCanvasElement>(null)
     const refCanvas3=useRef<HTMLCanvasElement>(null)
+    const refCanvas4=useRef<HTMLCanvasElement>(null)
     const refContainer=useRef<HTMLDivElement>(null)
     const container=refContainer.current
     const ctx=refCanvas.current?.getContext('2d')
     const ctx2=refCanvas2.current?.getContext('2d')
     const ctx3=refCanvas3.current?.getContext('2d')
+    const ctx4=refCanvas4.current?.getContext('2d')
     const resizeHandler = () => {
         const {clientWidth } = graphicRef.current || {};
         if(clientWidth){
@@ -39,7 +43,7 @@ const VolumeCanvas:React.FC<IMainCanvas> = ({graphicRef,data,howCandleInRange,se
     }, [ctx3, refCanvas3.current,grRef,data,xLeft]);
 
   useEffect(()=>{
-    if(container){
+    if(container && data.length!==0){
       let thatMaxVolume=Math.max(...data.slice(startCandle,startCandle+howCandleInRange).map((d)=>Number(d[5])));
       let thatMinVolume=Math.min(...data.slice(startCandle,startCandle+howCandleInRange).map((d)=>Number(d[5])));
       setMaxVolume(()=>thatMaxVolume)
@@ -64,21 +68,25 @@ const VolumeCanvas:React.FC<IMainCanvas> = ({graphicRef,data,howCandleInRange,se
           const dy = event.clientY - y;
           heightd = heightd - dy;
           y = event.clientY;
+          let range=0
+          if(graphicRef.current?.clientHeight){
+            range=graphicRef.current?.clientHeight-180<70 ? 70 : 0
+          }
           if(refCanvas.current && refCanvas2.current && refCanvas3.current &&refContainer.current && refTop.current && graphicRef.current ){
-              if(heightd-1<30){
+              if(heightd-1<42){
                 setHeightV(() => {
-                  return 30
+                  return 42
                 });
-                refTop.current.style.top = `${graphicRef.current.clientHeight-60}px`;
-              }else if(heightd+1>graphicRef.current?.clientHeight-180){
+                refTop.current.style.top = `${graphicRef.current.clientHeight-77}px`;
+              }else if(heightd+1>graphicRef.current?.clientHeight-180+range){
                 setHeightV(()=>{
                   if(graphicRef.current?.clientHeight!==undefined){
-                    return graphicRef.current?.clientHeight-180
+                    return graphicRef.current?.clientHeight-180+range
                   }else{
                     return 0
                   }
                 })
-                refTop.current.style.top = `${graphicRef.current.clientHeight-(graphicRef.current.clientHeight-145)}px`;
+                refTop.current.style.top = `${graphicRef.current.clientHeight-(graphicRef.current.clientHeight-145+range)}px`;
               }else{
                 setHeightV(()=>heightd)
                 setHeightM(()=>{
@@ -112,17 +120,23 @@ const VolumeCanvas:React.FC<IMainCanvas> = ({graphicRef,data,howCandleInRange,se
             }
         };
     }
-  }, []);
+  }, [heightV]);
   const handleCrosshair=(e:any)=>{
     setB_drawMouseOverlay(true)
-    if(ctx3 && refCanvas3.current){
+    setIsMouseOnGraphic({...isMouseOnGraphic, x:e.clientX})
+    if(ctx3 && refCanvas3.current && ctx4 &&  refCanvas4.current){
+      let y=e.clientY-refCanvas3.current.getBoundingClientRect().top
       DrawCrosshairVolume(ctx3,refCanvas3.current,data,candleWidth,candleSpacing,Math.abs(xLeft/(candleSpacing+candleWidth)),isMouseOnGraphic.x,isMouseOnGraphic.q,grRef,e.clientX,e.offsetY,xLeft, e.offsetX)
+      DrawInfoVolume(ctx4,refCanvas4.current,y, maxVolume)
+      setYMouse(()=>y)
     }
   }
   const handleCrosshairLeave=()=>{
     setB_drawMouseOverlay(false)
-    if(refCanvas3.current){
+    setIsMouseOnGraphic({...isMouseOnGraphic, x:-200, y:-200})
+    if(refCanvas3.current && refCanvas4.current){
       ctx3?.clearRect(0,0,refCanvas3.current.width,refCanvas3.current.height)
+      ctx4?.clearRect(0,0,refCanvas4.current.width,refCanvas4.current.height)
     }
   }
   useEffect(()=>{
@@ -133,7 +147,7 @@ const VolumeCanvas:React.FC<IMainCanvas> = ({graphicRef,data,howCandleInRange,se
       refCanvas3.current?.removeEventListener('mouseleave', handleCrosshairLeave)
     }
 
-  },[xLeft, candleSpacing, candleWidth])
+  },[xLeft, candleSpacing, candleWidth, maxVolume])
   return (
     <>
       <div className={styles.resizer} ref={refTop}></div>
@@ -142,6 +156,7 @@ const VolumeCanvas:React.FC<IMainCanvas> = ({graphicRef,data,howCandleInRange,se
           <canvas width={ width ? width-66 : undefined} height={heightV} ref={refCanvas} className={styles.canvas} id='main_canvas'></canvas>
       </div>
       <canvas ref={refCanvas2} width='63px' height={heightV+4}  className={styles.canvas2} id='dop_canvas'></canvas>
+      <canvas  ref={refCanvas4} className={styles.canvas4} width='63px'  height={heightV}></canvas>
     </>
   )
 }

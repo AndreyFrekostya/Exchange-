@@ -28,11 +28,12 @@ const Graphic:React.FC<IGraphicComponent> = ({graphic, onClick, one,wideS}) => {
   const [getKlinesSymbol,{data=[],isLoading}]=useLazyGetKlinesSymbolQuery()
   const [activeCoin, setActiveCoin]=useState<boolean>(false)
   const [howCandleInRange, setHowCandleInRange]=useState<number>(0)
-  const [isMouseOnGraphic, setIsMouseOnGraphic]=useState<{x:number,y:number, q:boolean}>({x:0,y:0, q:false})
+  const [isMouseOnGraphic, setIsMouseOnGraphic]=useState<{x:number,y:number, q:boolean}>({x:-200,y:0, q:false})
   const [candleWidth, setCandleWidth]=useState<number>(3)
   const [candleSpacing, setCandleSpacing]=useState<number>(2)
   const [heightV, setHeightV]=useState<number>(70)
   const [xLeft, setXLeft]=useState<number>(0)
+  const [pressedCandle, setPressedCandle]=useState<string[] | undefined>([])
   const [startCandle, setStartCandle]=useState<number>(0)
   const distance=useAppSelector(state=>state.distance)
   const lastMode=useAppSelector(state=>state.lastMode)
@@ -42,7 +43,7 @@ const Graphic:React.FC<IGraphicComponent> = ({graphic, onClick, one,wideS}) => {
   const volumeRef=useRef<HTMLCanvasElement | null>(null)
   const choosedGraphic=useAppSelector(state=>state.graphics.find(item=>item.choosed===true))
   const mode=useAppSelector(state=>state.modeGraphic.find(m=>m.choosed===true)?.name)
-  const propsToCanvas={graphicRef,data,howCandleInRange,setHowCandleInRange,candleWidth,setCandleWidth,xLeft,setXLeft, startCandle,setStartCandle,candleSpacing,setCandleSpacing,setIsMouseOnGraphic,isMouseOnGraphic,fulfieldGraphicRefAndVolume,heightM, setHeightM,heightV,setHeightV}
+  const propsToCanvas={graphicRef,data,howCandleInRange,setHowCandleInRange,candleWidth,setCandleWidth,xLeft,setXLeft, startCandle,setStartCandle,candleSpacing,setCandleSpacing,setIsMouseOnGraphic,isMouseOnGraphic,fulfieldGraphicRefAndVolume,heightM, setHeightM,heightV,setHeightV,pressedCandle,setPressedCandle}
   const closeFromPress=(e:KeyboardEvent)=>{
     if(graphic.widescreen){
       if(e.code==="Escape" || e.code==='KeyF'){
@@ -92,7 +93,7 @@ const Graphic:React.FC<IGraphicComponent> = ({graphic, onClick, one,wideS}) => {
       <HeaderGraphic wideS={wideS} one={one} setActiveCoin={setActiveCoin} activeCoin={activeCoin} graphic={graphic} graphicRef={graphicRef}/>
       <MainCanvas  {...propsToCanvas} voRef={volumeRef}/>
       <VolumeCanvas {...propsToCanvas} grRef={mainCanvasRef} />
-      <DateCanvas graphicRef={graphicRef} data={data}/>
+      <DateCanvas graphicRef={graphicRef} data={data} xLeft={xLeft} scrolledCandle={startCandle} candleWidth={candleWidth} candleSpacing={candleSpacing} x={isMouseOnGraphic.x} pressedCandle={pressedCandle}/>
       <PriceCanvas graphicRef={graphicRef} data={data} xLeft={xLeft} howCandleInRange={howCandleInRange} startCandle={startCandle} heightM={heightM} setHeightM={setHeightM} yMouse={isMouseOnGraphic.y} candleWidth={candleWidth} candleSpacing={candleSpacing} q={isMouseOnGraphic.q}/>
       <>
         {graphic.coin==='' ? (

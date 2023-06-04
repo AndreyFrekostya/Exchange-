@@ -8,13 +8,11 @@ export function DrawCrosshairCanvas(
     candleWidth:number, 
     candleSpacing:number,
     scrolledCandle:number,
-    xMouse:number,
     q:boolean, 
     voRef:MutableRefObject<HTMLCanvasElement | null> | undefined, 
     isPressed:boolean, 
     eClientX:number,
     eOffsetY:number,
-    b_drawMouseOverlay:boolean,
     xLeft:number,
     eOffsetX:number,
     xZoom?:number |undefined,
@@ -32,13 +30,7 @@ export function DrawCrosshairCanvas(
         // очищаем холст
         ctx2.clearRect(0, 0, canvas2.width, canvas2.height);
         ctxV.clearRect(0, 0, volumeCanvas.width, volumeCanvas.height);
-        //formula of calculating candle!!!
-        // let initialScrolled=scrolledCandle
-        // let roundedScrolled=Math.round(scrolledCandle)
-        // let range=Math.abs(roundedScrolled-initialScrolled)*(candleWidth+candleSpacing)
-        // const neededCandle=candlestiks[Math.round(scrolledCandle)+Math.round((Math.round((eClientX-range-rect.left))/((candleWidth*1)+candleSpacing)))]
-        // let x=0
-        // x=(candlestiks.indexOf(neededCandle)-scrolledCandle)*(candleWidth+candleSpacing)+candleWidth/2
+        //formula of calculating candle
         let allLeft=Math.abs(xLeft)+(eClientX-rect.left)
         let neededCandle=candlestiks[Math.floor(allLeft/(candleWidth+candleSpacing))]
         let x=(candlestiks.indexOf(neededCandle)-scrolledCandle)*(candleWidth+candleSpacing)+candleWidth/2
@@ -50,6 +42,7 @@ export function DrawCrosshairCanvas(
         }
         if(pressedCandle && isPressed){
             x=(candlestiks.indexOf(pressedCandle)-scrolledCandle)*(candleWidth+candleSpacing)+candleWidth/2
+            neededCandle=pressedCandle
         }
         // рисуем перекрестие
         if(q){
@@ -104,12 +97,5 @@ export function DrawCrosshairCanvas(
                 ctx2.fillText(String((neededCandle[3]).slice(0,7)),290,30,);
                 DrawVolumeTextOneCandle(ctxV,volumeCanvas,color,neededCandle[5]) 
         }
-    } 
-    // canvas2.addEventListener('mouseleave',function(){
-    //         b_drawMouseOverlay=false
-    //         ctx2.clearRect(0, 0, canvas2.width, canvas2.height);
-    //         if(ctxV && volumeCanvas){
-    //             ctxV.clearRect(0, 0, volumeCanvas.width, volumeCanvas.height);
-    //         }
-    // })    
+    }  
 }
