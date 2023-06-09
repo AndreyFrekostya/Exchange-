@@ -1,6 +1,5 @@
 import React, { RefObject, useEffect, useRef, useState } from 'react'
 import styles from './styles.module.css'
-import { CanvasGraphicStart } from '../../helpers/CanvasGraphicStart'
 import { DrawPrice } from './helpers/DrawPrice'
 import { DrawInfoPrice } from './helpers/DrawInfoPrice'
 interface IPriceCanvas{
@@ -40,9 +39,11 @@ const PriceCanvas:React.FC<IPriceCanvas> = ({graphicRef, data, xLeft, howCandleI
       if(ctx && refCanvas.current && data.length!==0){
         let thatMinPrice=Math.min(...data.slice(startCandle,startCandle+howCandleInRange).map((d)=>Number(d[3])));
         let thatMaxPrice=Math.max(...data.slice(startCandle,startCandle+howCandleInRange).map((d)=>Number(d[2])));
-        DrawPrice(ctx, refCanvas.current, data, xLeft, startCandle, howCandleInRange, thatMaxPrice, thatMinPrice, candleWidth, candleSpacing)
-        setMaxPrice(()=>thatMaxPrice)
-        setMinPrice(()=>thatMinPrice)
+        if(thatMaxPrice!==maxPrice || thatMinPrice!==thatMinPrice){
+          DrawPrice(ctx, refCanvas.current, data, xLeft, startCandle, howCandleInRange, thatMaxPrice, thatMinPrice, candleWidth, candleSpacing)
+          setMaxPrice(()=>thatMaxPrice)
+          setMinPrice(()=>thatMinPrice)
+        }
       }
     },[heightM,data, xLeft, howCandleInRange, startCandle])
   
@@ -50,7 +51,7 @@ const PriceCanvas:React.FC<IPriceCanvas> = ({graphicRef, data, xLeft, howCandleI
       if(ctx2 && refCanvas2.current){
         DrawInfoPrice(ctx2, refCanvas2.current, howCandleInRange,maxPrice,minPrice,yMouse,candleWidth,candleSpacing,q)
       }
-    },[yMouse,maxPrice,minPrice,q, xLeft, candleWidth, candleSpacing, heightM])
+    },[yMouse,maxPrice,minPrice, xLeft, candleWidth, candleSpacing, heightM,q])
   return (
     <div className={styles.wrap} style={{width: '64px', height:heightM? heightM+43 : undefined}}>
         <canvas ref={refCanvas}className={styles.canvas} height={heightM ? heightM+21 : undefined} width='64px'></canvas>

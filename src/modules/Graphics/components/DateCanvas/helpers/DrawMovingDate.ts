@@ -12,7 +12,7 @@ export function DrawMovingDate(ctx:CanvasRenderingContext2D,canvas:HTMLCanvasEle
         const hour = String(date.getHours()).padStart(2, '0');
         const minutes = String(date.getMinutes()).padStart(2, '0');
         // Формируем строку с датой и временем
-        const formattedDateTime = `${year}.${month}.${day}, ${hour}:${minutes}`;
+        const formattedDateTime = `${day}.${month}.${year}, ${hour}:${minutes}`;
         
         return formattedDateTime;
       }
@@ -29,14 +29,24 @@ export function DrawMovingDate(ctx:CanvasRenderingContext2D,canvas:HTMLCanvasEle
     if(x-65<0 && eClientX!==-200){
         x=65
     }
-    if(neededCandle!==undefined){
-        ctx.clearRect(0,0,canvas.width, canvas.height)
-        ctx.beginPath();
-        ctx.fillStyle='#26304a'
-        ctx.fillRect( x-65 , 2 , 130 , 20 );
-        ctx.beginPath()
-        ctx.fillStyle = '#aaaebf';
-        ctx.font = "11px Tahoma";
-        ctx.fillText(formatDateTime(neededCandle[0]),x-45, 15)
+    if(x!==-200){
+        if(neededCandle!==undefined){
+            ctx.clearRect(0,0,canvas.width, canvas.height)
+            ctx.beginPath();
+            ctx.lineWidth = 0.1;
+            ctx.fillStyle='#26304a'
+            ctx.fillRect( Math.round(x-65) , 2 , 130 , 20 );
+            ctx.strokeStyle='#26304a'
+            ctx.lineWidth=0.1
+            ctx.strokeRect(Math.round(x-65) , 2 , 130 , 20)
+            ctx.beginPath()
+            ctx.fillStyle = '#aaaebf';
+            ctx.font = "11px Tahoma";
+            ctx.fillText(formatDateTime(neededCandle[0]),x-45.5, 15.5)
+        }else{
+            ctx.clearRect(0,0,canvas.width,canvas.height) 
+        }
+    }else{
+        ctx.clearRect(0,0,canvas.width,canvas.height)
     }
 }

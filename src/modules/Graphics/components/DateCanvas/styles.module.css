@@ -15,3 +15,6 @@
     z-index: 3;
     box-sizing: border-box;
 }
+.canvas:hover{
+    cursor: ew-resize;
+}

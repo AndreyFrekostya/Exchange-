@@ -1,5 +1,4 @@
 import React, { RefObject, useEffect, useRef, useState } from 'react'
-import { CanvasGraphicStart } from '../../helpers/CanvasGraphicStart'
 import styles from './styles.module.css'
 import { DrawVolume } from './helpers/DrawVolume'
 import { DrawVolumeFunc } from './helpers/DrawVolumeFunc'
@@ -123,7 +122,7 @@ const VolumeCanvas:React.FC<IMainCanvas> = ({graphicRef,data,howCandleInRange,se
   }, [heightV]);
   const handleCrosshair=(e:any)=>{
     setB_drawMouseOverlay(true)
-    setIsMouseOnGraphic({...isMouseOnGraphic, x:e.clientX})
+    setIsMouseOnGraphic({...isMouseOnGraphic, x:e.clientX,q:false})
     if(ctx3 && refCanvas3.current && ctx4 &&  refCanvas4.current){
       let y=e.clientY-refCanvas3.current.getBoundingClientRect().top
       DrawCrosshairVolume(ctx3,refCanvas3.current,data,candleWidth,candleSpacing,Math.abs(xLeft/(candleSpacing+candleWidth)),isMouseOnGraphic.x,isMouseOnGraphic.q,grRef,e.clientX,e.offsetY,xLeft, e.offsetX)
@@ -133,7 +132,7 @@ const VolumeCanvas:React.FC<IMainCanvas> = ({graphicRef,data,howCandleInRange,se
   }
   const handleCrosshairLeave=()=>{
     setB_drawMouseOverlay(false)
-    setIsMouseOnGraphic({...isMouseOnGraphic, x:-200, y:-200})
+    setIsMouseOnGraphic({...isMouseOnGraphic, x:-200, y:-200, q:false})
     if(refCanvas3.current && refCanvas4.current){
       ctx3?.clearRect(0,0,refCanvas3.current.width,refCanvas3.current.height)
       ctx4?.clearRect(0,0,refCanvas4.current.width,refCanvas4.current.height)

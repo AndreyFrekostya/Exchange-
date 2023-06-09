@@ -45,28 +45,10 @@ export function DrawMaxAndMinVolume(ctx:CanvasRenderingContext2D,canvas:HTMLCanv
     ctx.font = "11px Tahoma";
     ctx.fillStyle = "#aaaebf";
     for (let i=0; i<newArr.length; i++){
-        ctx.moveTo(0.5, newArr[i]);
-        ctx.lineTo(5.5,newArr[i]);
+        ctx.moveTo(1, newArr[i]+0.5);
+        ctx.lineTo(5.5,newArr[i]+0.5);
         ctx.strokeStyle = '#82848c';
         ctx.stroke();
-        ctx.fillText(String(nFormatter(volumeArr[i])),8, newArr[i]+4)
+        ctx.fillText(String(nFormatter(volumeArr[i])),8, newArr[i]+4+0.5)
     }
-
-
-
-
-
-    //max
-    // ctx.moveTo(0.5, 16);
-	// ctx.lineTo(5.5,16);
-	// ctx.strokeStyle = '#82848c';
-	// ctx.stroke();
-    // ctx.fillText(String(max),8, 20)
-
-    //min
-    // ctx.moveTo(0.5, canvas.height-19);
-	// ctx.lineTo(5.5,canvas.height-19);
-	// ctx.strokeStyle = '#82848c';
-	// ctx.stroke();
-    // ctx.fillText(String(min), 8, canvas.height-16);
 }

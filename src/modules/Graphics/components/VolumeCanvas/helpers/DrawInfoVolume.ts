@@ -15,10 +15,13 @@ export function DrawInfoVolume(ctx:CanvasRenderingContext2D,canvas:HTMLCanvasEle
     let volume=(canvas.height-y)/heightScale
     ctx.clearRect(0,0,canvas.width, canvas.height)
     ctx.beginPath();
+    ctx.lineWidth = 0.1;
     ctx.fillStyle='#26304a'
-    ctx.fillRect( 2 , y-10 , 59 , 20 );
+    ctx.fillRect( 2 , Math.round(y-10) , 59 , 20 );
+    ctx.strokeStyle='#26304a'
+    ctx.strokeRect( 2 , Math.round(y-10) , 59 , 20 );
     ctx.beginPath()
     ctx.fillStyle = '#aaaebf';
     ctx.font = "11px Tahoma";
-    ctx.fillText(nFormatter(volume ),8, y+4)
+    ctx.fillText(nFormatter(volume ),8.5, y+4.5)
 }

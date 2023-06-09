@@ -19,8 +19,8 @@ export function DrawCrosshairCanvas(
     pressedCandle?:string[]
     ){
     const candlestiks=data
-    const redColor='#ef5350'
-    const greenColor='#26a69a'
+    const redColor='#EB602F'
+    const greenColor='#37DBBA'
     const volumeCanvas=voRef?.current
     const ctxV=volumeCanvas?.getContext('2d')
     let rect = canvas2.getBoundingClientRect();
@@ -34,6 +34,7 @@ export function DrawCrosshairCanvas(
         let allLeft=Math.abs(xLeft)+(eClientX-rect.left)
         let neededCandle=candlestiks[Math.floor(allLeft/(candleWidth+candleSpacing))]
         let x=(candlestiks.indexOf(neededCandle)-scrolledCandle)*(candleWidth+candleSpacing)+candleWidth/2
+        
         if(!neededCandle){
             x=eOffsetX
         }
@@ -44,13 +45,14 @@ export function DrawCrosshairCanvas(
             x=(candlestiks.indexOf(pressedCandle)-scrolledCandle)*(candleWidth+candleSpacing)+candleWidth/2
             neededCandle=pressedCandle
         }
+        let ranger=String(candleWidth/2).includes('.') ? 0 : 0.5
         // рисуем перекрестие
         if(q){
             ctx2.beginPath();
-            ctx2.lineWidth=0.5
+            ctx2.lineWidth=1
             ctx2.setLineDash([4,4])
-            ctx2.moveTo(x, 0);
-            ctx2.lineTo(x, canvas2.height);
+            ctx2.moveTo(x+ranger, 0);
+            ctx2.lineTo(x+ranger, canvas2.height);
             ctx2.moveTo(0, crosshairY);
             ctx2.lineTo(canvas2.width, crosshairY);
             ctx2.strokeStyle='#a9b3cf'
@@ -59,24 +61,24 @@ export function DrawCrosshairCanvas(
             ctxV.beginPath();
             ctxV.lineWidth=0.5
             ctxV.setLineDash([4,4])
-            ctxV.moveTo(x, 0);
-            ctxV.lineTo(x, volumeCanvas.height);
+            ctxV.moveTo(x+ranger-0.2, 0);
+            ctxV.lineTo(x+ranger-0.2, volumeCanvas.height);
             ctxV.strokeStyle='#a9b3cf'
             ctxV.stroke()
         }else{
             ctx2.beginPath();
             ctx2.lineWidth=0.5
             ctx2.setLineDash([4,4])
-            ctx2.moveTo(x, 0);
-            ctx2.lineTo(x, canvas2.height);
+            ctx2.moveTo(x+ranger, 0);
+            ctx2.lineTo(x+ranger, canvas2.height);
             ctx2.strokeStyle='#a9b3cf'
             ctx2.stroke();
             //volume
             ctxV.beginPath();
             ctxV.lineWidth=0.5
             ctxV.setLineDash([4,4])
-            ctxV.moveTo(x, 0);
-            ctxV.lineTo(x, volumeCanvas.height);
+            ctxV.moveTo(x+ranger-0.2, 0);
+            ctxV.lineTo(x+ranger-0.2, volumeCanvas.height);
             ctxV.moveTo(0, crosshairY);
             ctxV.lineTo(volumeCanvas.width, crosshairY);
             ctxV.strokeStyle='#a9b3cf'
@@ -84,17 +86,19 @@ export function DrawCrosshairCanvas(
         }
         if(neededCandle){
                 let color = neededCandle[4] > neededCandle[1]  ? greenColor : redColor;
-                ctx2.font = "11px Verdana";
+                ctx2.lineWidth=0.5
+                ctx2.imageSmoothingEnabled = false;
+                ctx2.font = "100 10.5px Verdana";
                 ctx2.fillStyle = "#aaaebf";
-                ctx2.fillText( "O: ",5,30,);
-                ctx2.fillText( "C: ",95,30,);
-                ctx2.fillText( "H: ",185,30,);
-                ctx2.fillText( "L: ",275,30,);
+                ctx2.fillText( "O: ",5.5,30.5,);
+                ctx2.fillText( "C: ",95.5,30.5,);
+                ctx2.fillText( "H: ",185.5,30.5,);
+                ctx2.fillText( "L: ",275.5,30.5,);
                 ctx2.fillStyle = color;
-                ctx2.fillText(String((neededCandle[1]).slice(0,7)),20,30,);
-                ctx2.fillText(String((neededCandle[4]).slice(0,7)),110,30,);
-                ctx2.fillText(String((neededCandle[2]).slice(0,7)),200,30,);
-                ctx2.fillText(String((neededCandle[3]).slice(0,7)),290,30,);
+                ctx2.fillText(String((neededCandle[1]).slice(0,7)),20.5,30.5,);
+                ctx2.fillText(String((neededCandle[4]).slice(0,7)),110.5,30.5,);
+                ctx2.fillText(String((neededCandle[2]).slice(0,7)),200.5,30.5,);
+                ctx2.fillText(String((neededCandle[3]).slice(0,7)),290.5,30.5,);
                 DrawVolumeTextOneCandle(ctxV,volumeCanvas,color,neededCandle[5]) 
         }
     }  

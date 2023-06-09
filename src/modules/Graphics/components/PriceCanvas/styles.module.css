@@ -5,8 +5,7 @@
     overflow: hidden;
     box-sizing: border-box;
     right: 0px;
-    border-left: #2a2e39 1px solid;
-    
+    border-left: #2a2e39 1px solid;  
 }
 .canvas{
     position: absolute;
@@ -14,4 +13,7 @@
     right: 0px;
     z-index: 2;
     box-sizing: border-box;
+}
+.canvas:hover{
+    cursor: ns-resize;
 }

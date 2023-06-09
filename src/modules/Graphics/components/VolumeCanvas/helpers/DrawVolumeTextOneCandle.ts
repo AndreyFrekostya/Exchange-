@@ -12,10 +12,12 @@ export function DrawVolumeTextOneCandle(ctx:CanvasRenderingContext2D,canvas:HTML
         return num;
     }
     ctx.beginPath()
+    ctx.lineWidth=0.5
+    ctx.imageSmoothingEnabled = false;
     ctx.fillStyle = color;
     ctx.fillStyle = '#aaaebf';
     ctx.font = "11px Tahoma";
-    ctx.fillText(`VOLUME:`,8, 15)
+    ctx.fillText(`VOLUME:`,8.5, 15.5)
     ctx.fillStyle = color;
-    ctx.fillText(String(nFormatter(Math.round(Number(volume)))),60,15)
+    ctx.fillText(String(nFormatter(Math.round(Number(volume)))),60.5,15.5)
 }
