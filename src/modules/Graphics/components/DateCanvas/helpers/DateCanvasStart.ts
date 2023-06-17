@@ -1,20 +1,19 @@
 export function DateCanvasStart(ctx:CanvasRenderingContext2D,canvas:HTMLCanvasElement, data: string[][], xLeft:number,candleWidth:number,candleSpacing:number, scrollCandle:number, distance:string){
     let range = Math.floor(150/(candleWidth+candleSpacing))
-    let kolCandlesInRange=Math.floor(range*candleWidth+candleSpacing)
     let coord=xLeft+candleWidth/2
     let maxXLeft=data.length*(candleWidth+candleSpacing)+xLeft
     function formatDateTime(timestamp:string, lastTimestamp:string) {
         let obj={year:0,month:'',day:'',hour:'',minutes:''}
         let obj2={year:0,month:'',day:'',hour:'',minutes:''}
         for(let i=0; i<3; i++){
-            const date = new Date(i==1 ?timestamp : lastTimestamp);
+            const date = new Date(i===1 ?timestamp : lastTimestamp);
             // Получаем значения года, месяца, дня и часа
             const year = date.getFullYear();
             const month = String(date.getMonth() + 1).padStart(2, '0');
             const day = String(date.getDate()).padStart(2, '0');
             const hour = String(date.getHours()).padStart(2, '0');
             const minutes = String(date.getMinutes()).padStart(2, '0');
-            if(i==1){
+            if(i===1){
                 obj.year=year
                 obj.month=month
                 obj.day=day
@@ -28,7 +27,7 @@ export function DateCanvasStart(ctx:CanvasRenderingContext2D,canvas:HTMLCanvasEl
                 obj2.minutes=minutes
             } 
         }
-        if(distance.slice(-1)=='М' || distance.slice(-1)=='Ч'){
+        if(distance.slice(-1)==='М' || distance.slice(-1)==='Ч'){
             if(obj.day!==obj2.day){
                 return `${obj.day}-${obj.month}`
             }else{
@@ -40,9 +39,7 @@ export function DateCanvasStart(ctx:CanvasRenderingContext2D,canvas:HTMLCanvasEl
             }else{
                 return `${obj.day}-${obj.month}`
             }
-            
         }
-        return ''
     }
     ctx.clearRect( 0 , 0 , canvas.width , canvas.height  );
     ctx.font = "11px Tahoma";

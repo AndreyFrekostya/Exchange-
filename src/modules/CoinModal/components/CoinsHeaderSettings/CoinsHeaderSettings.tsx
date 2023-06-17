@@ -1,11 +1,8 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import styles from './styles.module.css'
-import { Checkbox } from '@mui/material'
 import PopUpByName from '../../../../components/PopUpsSettingsInModal/PopUpByName/PopUpByName'
-import { ICoin } from '../../../../pages/MainPage/api/CoinApi'
 import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
-import { useAppSelector } from '../../../../hooks/redux-hooks'
 import FilterAltIcon from '@mui/icons-material/FilterAlt';
 import PopUpMarket from '../../../../components/PopUpsSettingsInModal/PopUpMarket/PopUpMarket'
 import PopUpPercent from '../../../../components/PopUpsSettingsInModal/PopUpPercent/PopUpPercent'
@@ -19,8 +16,8 @@ const CoinsHeaderSettings:React.FC = () => {
   const {filterByBaseV,setFilterByBaseV}=useContextFilter()
   const [isOpenChangePercent, setIsOpenChangePercent]=useState<boolean>(false)
   const [decreasingVolume, setDecreasingVolume]=useState<boolean>(false)
-  const colorForVolumeFilterIcon=filterByV==0 ? '#5e5d5d' : decreasingVolume ? '#2962ff' : '#fff'
-  const colorForPercentFilterIcon=filterByChangePercent==0 ? '#5e5d5d' : isOpenChangePercent ? '#2962ff' : '#fff'
+  const colorForVolumeFilterIcon=filterByV===0 ? '#5e5d5d' : decreasingVolume ? '#2962ff' : '#fff'
+  const colorForPercentFilterIcon=filterByChangePercent===0 ? '#5e5d5d' : isOpenChangePercent ? '#2962ff' : '#fff'
   const setFilterBase=()=>{
     setFilterByBaseV(!filterByBaseV)
     setFilterByAtoZ(null)

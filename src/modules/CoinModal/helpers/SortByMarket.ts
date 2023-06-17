@@ -1,13 +1,13 @@
 import { ICoin } from "../../../pages/MainPage/api/CoinApi"
 
 export const sortByMarket=(market:string | null, sorted:ICoin[])=>{
-        if(market=='spot'){
+        if(market==='spot'){
             const allSpot=sorted.filter(item=>item.permissions!==undefined)
             return allSpot
-        }else if(market=='futures'){
-            const allFutures=sorted.filter(item=>item.permissions==undefined)
+        }else if(market==='futures'){
+            const allFutures=sorted.filter(item=>item.permissions===undefined)
             return allFutures
-        }else if(market=='spot_with_f'){
+        }else if(market==='spot_with_f'){
             let result: ICoin[]=[]
             let map=new Map()
             for(let i=0; i<sorted.length; i++){
@@ -20,7 +20,7 @@ export const sortByMarket=(market:string | null, sorted:ICoin[])=>{
             }
             const merge:ICoin[]=[]
             result.forEach((item)=>{
-                let newCoin=sorted.find(item_inner=>item_inner.symbol==item.symbol && item_inner.permissions!==undefined)
+                let newCoin=sorted.find(item_inner=>item_inner.symbol===item.symbol && item_inner.permissions!==undefined)
                 if(newCoin){
                     merge.push(newCoin)
                 }

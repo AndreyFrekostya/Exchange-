@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect,FC } from 'react'
+import React, { useRef, useState, useEffect } from 'react'
 import styles from './styles.module.css'
 import panel from './../../../../images/other/panel.svg'
 import { IDataPanelB } from '../../../../pages/MainPage/components/MainPage/MainPage'
@@ -52,7 +52,7 @@ export const PanelBottom: React.FC<IPanelBottom> = ({changeDataPanelB, dataPanel
         if(!isFull && activeTab!==0){
             setisFull(true)
         }
-        if(isFull && height==45){
+        if(isFull && height===45){
             setisFull(false)
             setActiveTab(0)
         }
@@ -69,7 +69,6 @@ export const PanelBottom: React.FC<IPanelBottom> = ({changeDataPanelB, dataPanel
         if(ref.current!==null && refTop.current!==null){
             const resizeableEle = ref.current;
             const styles = window.getComputedStyle(resizeableEle);
-            let width = parseInt(styles.width, 10);
             let heightd = parseInt(styles.height, 10);
             let y = 0;
             let fullWindow=window.innerHeight-77

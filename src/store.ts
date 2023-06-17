@@ -3,12 +3,6 @@ import { configureStore, combineReducers } from '@reduxjs/toolkit';
 import { 
   persistStore,
   persistReducer,
-  FLUSH,
-  REHYDRATE,
-  PAUSE,
-  PERSIST,
-  PURGE,
-  REGISTER,
 } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
 import GraphicModeReducer from './modules/MenuSettings/slices/GraphicModeSlice';
@@ -24,6 +18,7 @@ import CoinChoosedListReducer from './pages/MainPage/slices/CoinChoosedListSlice
 import { CoinInListApi } from './pages/MainPage/api/CoinInListApi';
 import AllCoinsInListReducer from './pages/MainPage/slices/AllCoinsInListSlice';
 import { klinesSymbolApi } from './modules/Graphics/api/KlinesSymbolApi';
+import { candleUpdateApi } from './pages/MainPage/api/CandleUpdateApi';
 const rootReducer = combineReducers({
     modeGraphic: GraphicModeReducer,
     graphics: GraphicReducer,
@@ -37,12 +32,20 @@ const rootReducer = combineReducers({
     [CoinApi.reducerPath]:CoinApi.reducer,
     [CoinInListApi.reducerPath]:CoinInListApi.reducer,
     coinsInListInGraphics:AllCoinsInListReducer,
-    [klinesSymbolApi.reducerPath]:klinesSymbolApi.reducer
+    [klinesSymbolApi.reducerPath]:klinesSymbolApi.reducer,
+    [candleUpdateApi.reducerPath]:candleUpdateApi.reducer
 });
 const persistConfig = {
   key: 'root',
   storage,
-  blacklist:[CoinApi.reducerPath, 'coins', CoinInListApi.reducerPath,'coinsInListInGraphics','coinInList',klinesSymbolApi.reducerPath]
+  blacklist:[
+    CoinApi.reducerPath, 'coins',
+    CoinInListApi.reducerPath,
+    'coinsInListInGraphics',
+    'coinInList',
+    klinesSymbolApi.reducerPath,
+    candleUpdateApi.reducerPath
+  ]
 }
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 const store = configureStore({
@@ -51,7 +54,7 @@ const store = configureStore({
     getDefaultMiddleware({
       serializableCheck: false,
       immutableCheck:false,
-    })).concat(CoinApi.middleware).concat(CoinInListApi.middleware).concat(klinesSymbolApi.middleware)
+    })).concat(CoinApi.middleware).concat(CoinInListApi.middleware).concat(klinesSymbolApi.middleware).concat(candleUpdateApi.middleware)
 });
 
 export const persistor = persistStore(store);

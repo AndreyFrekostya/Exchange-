@@ -1,4 +1,4 @@
-import React,{useEffect, useRef} from 'react'
+import React,{ useRef} from 'react'
 import styles from './styles.module.css'
 import one from './../../../../images/graphic/one.svg'
 import four_g_2 from './../../../../images/graphic/four g 2.svg'

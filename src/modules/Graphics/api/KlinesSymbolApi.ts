@@ -1,33 +1,42 @@
-import { FetchBaseQueryError, createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
+import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 interface IKlinesSymbol{
     symbol:string,
     interval:string,
     type:string
 }
+interface IKlinesMutation{
+    settings:{
+        symbol:string,
+        interval:string,
+        type:string
+    },
+    body:string[]
+}
+type KlinesRespones=string[][]
 export const klinesSymbolApi=createApi({
     reducerPath: 'klinesSymbolApi',
+    tagTypes: ['Klines'],
     baseQuery: fetchBaseQuery({baseUrl:'https:'}),
     endpoints: (build) => ({
-        getKlinesSymbol: build.query<void,IKlinesSymbol>({
-            query:({symbol,interval,type})=>`//${type}api.binance.com/${type}api/v${type=='' ? '3' : '1'}/klines?symbol=${symbol.toUpperCase()}&interval=${interval}&limit=${type=='' ? 500 : 1500}`
+        getKlinesSymbol: build.query<KlinesRespones,IKlinesSymbol>({
+            query:({symbol,interval,type})=>`//${type}api.binance.com/${type}api/v${type==='' ? '3' : '1'}/klines?symbol=${symbol.toUpperCase()}&interval=${interval}&limit=${type==='' ? 500 : 1500}`,
+            providesTags: (result) =>
+            result
+              ? [
+                  ...result.map(() => ({ type: 'Klines' as const,  })),
+                  { type: 'Klines', id: 'LIST' },
+                ]
+              : [{ type: 'Klines', id: 'LIST' }],
+        }),
+        addKline: build.mutation<void, IKlinesMutation>({
+            query: ({settings,body}) => ({
+                url: `https://${settings.type}api.binance.com/${settings.type}api/v${settings.type==='' ? '3' : '1'}/klines?symbol=${settings.symbol.toUpperCase()}&interval=${settings.interval}&limit=${settings.type==='' ? 500 : 1500}`,
+                method: 'POST',
+                body,
+            }),
+            invalidatesTags: [{type: 'Klines', id: 'LIST'}]
         }),
     })
 })
 
-export const {useGetKlinesSymbolQuery,useLazyGetKlinesSymbolQuery}=klinesSymbolApi
-// async queryFn(_arg, _queryApi, _extraOptions, fetchWithBQ) {
-//     const KlinesResponse = await fetchWithBQ(`${_arg.type}api.binance.com/${_arg.type}api/v${_arg.type=='' ? '3' : '1'}/klines?symbol=${_arg.symbol.toUpperCase()}&interval=${_arg.interval}&limit=500`)
-//     const point:string[][]=[[''],['']]
-//     if(_arg.symbol!=='' && _arg.interval!==''){
-//         const arr:string[][]=[[''],['']]
-//         return arr
-//         ? { data: arr as string[][] }
-//         : { error: KlinesResponse.error as FetchBaseQueryError }
-//     }
-//     return point as string[][]
-//     ? { data: point as string[][] }
-//     : { error: KlinesResponse.error as FetchBaseQueryError }
-//  }
-
-
-//${type}api.binance.com/${type}api/v${type=='' ? '3' : '1'}/klines?symbol=${symbol.toUpperCase()}&interval=${interval}&limit=500
+export const {useLazyGetKlinesSymbolQuery,useAddKlineMutation}=klinesSymbolApi

@@ -1,4 +1,4 @@
-export function DrawMaxAndMinVolume(ctx:CanvasRenderingContext2D,canvas:HTMLCanvasElement, maxVolume:number, minVolume:number){
+export function DrawMaxAndMinVolume(ctx:any,canvas:HTMLCanvasElement, maxVolume:number, minVolume:number,width:number){
     function nFormatter(num:number) {
         if (num >= 1000000000) {
         return (num / 1000000000).toFixed(1).replace(/.0$/, '') + 'B';
@@ -11,19 +11,12 @@ export function DrawMaxAndMinVolume(ctx:CanvasRenderingContext2D,canvas:HTMLCanv
         }
         return num.toFixed(0);
     }
-    const FixNumber=(num:number)=>{
-        return num.toFixed(4)
-    }
-    const max=nFormatter(Number(maxVolume))
-    const min=nFormatter(Number(minVolume))
     const heightScale = (ctx.canvas.height-15)  / maxVolume;
-    //75
     const rangeMaxMin=canvas.height-16-19
     const range=90
     let howLines=Math.round(rangeMaxMin/range)
     let newArr=[16,canvas.height-16]
     let volumeArr: number[]=[maxVolume,minVolume]
-    let length=newArr.length
     for (let i=0; i<howLines-2; i++){
         addValue(newArr)
     }
@@ -42,13 +35,18 @@ export function DrawMaxAndMinVolume(ctx:CanvasRenderingContext2D,canvas:HTMLCanv
     
     ctx.beginPath();
     // to get a crisp 1 pixel wide line, we need to add 0.5 to the coords
-    ctx.font = "11px Tahoma";
-    ctx.fillStyle = "#aaaebf";
+    ctx.imageSmoothingEnabled = false;
+    ctx.font = "100 10.5px Helvetica ";
+    ctx.textRendering = "optimizeLegibility";
+    ctx.fontStretch =  "ultra-expanded";
+    ctx.fontKerning = "normal";
+    ctx.letterSpacing = "0.5px";
+    ctx.fillStyle = "#d1d4dc";
     for (let i=0; i<newArr.length; i++){
-        ctx.moveTo(1, newArr[i]+0.5);
-        ctx.lineTo(5.5,newArr[i]+0.5);
+        let length=ctx.measureText(String(nFormatter(volumeArr[i]))).width
+        let x=(width-length)/2
         ctx.strokeStyle = '#82848c';
         ctx.stroke();
-        ctx.fillText(String(nFormatter(volumeArr[i])),8, newArr[i]+4+0.5)
+        ctx.fillText(String(nFormatter(volumeArr[i])),x, newArr[i]+4+0.5)
     }
 }

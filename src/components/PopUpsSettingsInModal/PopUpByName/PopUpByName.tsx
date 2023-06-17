@@ -2,9 +2,6 @@ import React, { useRef } from 'react'
 import styles from './styles.module.css'
 import useOutsideClick from '../../../hooks/useOutClick'
 import { useAppSelector } from '../../../hooks/redux-hooks'
-import { ICoin } from '../../../pages/MainPage/api/CoinApi'
-import { sortByInclude } from '../../../modules/CoinModal/helpers/SortByInclude'
-import { sortByNameAndInt } from '../../../modules/CoinModal/helpers/SortByNameAndInt'
 import { useContextFilter } from '../../../modules/CoinModal/helpers/ContextFilter'
 interface IPopUpByName{
     isOpenAlphabetically: boolean,
@@ -13,7 +10,6 @@ interface IPopUpByName{
 const PopUpByName: React.FC<IPopUpByName> = ({isOpenAlphabetically, setIsOpenAlphabetically}) => {
     const ref=useRef<HTMLDivElement>(null)
     const {filterByAtoZ, setFilterByAtoZ, setFilterByBaseV}=useContextFilter()
-    const coins=useAppSelector(state=>state.coins)
     const onClose=()=>{
         setIsOpenAlphabetically(false)
     }
@@ -25,13 +21,13 @@ const PopUpByName: React.FC<IPopUpByName> = ({isOpenAlphabetically, setIsOpenAlp
     if(!isOpenAlphabetically)return null;
   return (
     <div ref={ref} className={styles.wrap}>
-        <div onClick={()=>setFilter(false)} style={{backgroundColor: filterByAtoZ==false ? '#2b395f' : ''}}>
+        <div onClick={()=>setFilter(false)} style={{backgroundColor: filterByAtoZ===false ? '#2b395f' : ''}}>
             От A до Z
         </div>
-        <div onClick={()=>setFilter(true)} style={{backgroundColor: filterByAtoZ==true ? '#2b395f' : ''}}>
+        <div onClick={()=>setFilter(true)} style={{backgroundColor: filterByAtoZ===true ? '#2b395f' : ''}}>
             От Z до A
         </div>
-        <div onClick={()=>setFilter('added')} style={{backgroundColor: filterByAtoZ=='added' ? '#2b395f' : ''}}>
+        <div onClick={()=>setFilter('added')} style={{backgroundColor: filterByAtoZ==='added' ? '#2b395f' : ''}}>
             Только выделенные
         </div>
     </div>

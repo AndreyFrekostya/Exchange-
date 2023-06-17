@@ -1,10 +1,8 @@
-import React,{RefObject, useEffect, useRef, useState} from 'react'
+import React,{ useEffect, useRef, useState} from 'react'
 import { ICoin } from '../../../../pages/MainPage/api/CoinApi'
 import styles from './styles.module.css'
-import { Checkbox } from '@mui/material'
-import { useAppDispatch, useAppSelector } from '../../../../hooks/redux-hooks'
+import { useAppDispatch } from '../../../../hooks/redux-hooks'
 import { addCoinList } from '../../../../pages/MainPage/slices/CoinChoosedListSlice'
-import { addCoin } from '../../../../pages/MainPage/slices/AllCoinsSlice'
 interface ICoinModal{
     sym: ICoin,
     requestingSymbols: ICoin[],
@@ -15,16 +13,15 @@ export default React.memo(function CoinInModal({sym, requestingSymbols, coinsInL
         const thisCoinName=coinsInList.find(item=>item.symbol===sym.symbol)
         if(thisCoinName){
             const type=sym.permissions!==undefined ? 'spot' : 'futures'
-            if(thisCoinName.permissions==undefined && type=='futures'){
+            if(thisCoinName.permissions===undefined && type==='futures'){
                 return true
             }
-            if(thisCoinName.permissions!==undefined && type=='spot'){
+            if(thisCoinName.permissions!==undefined && type==='spot'){
                 return true
             }
         }
         return false
     }
-    const refCheckbox=useRef<HTMLDivElement>(null)
     const dispatch=useAppDispatch()
     const [isAdded, setIsAdded]=useState<boolean>(getIsAdded())
     const addCoinToList=(symbol:string, type: string)=>{
@@ -55,13 +52,13 @@ export default React.memo(function CoinInModal({sym, requestingSymbols, coinsInL
         setIsAdded(flag)
     },[])
   return (
-    <div onClick={()=>addCoinToList(sym.symbol, sym.permissions==undefined ? 'futures' : 'spot')}>
+    <div onClick={()=>addCoinToList(sym.symbol, sym.permissions===undefined ? 'futures' : 'spot')}>
         <div className={styles.symbolWrap} style={{backgroundColor: isAdded ? '#2b395f' : ''}} >
             <div className={styles.symbol}>
                 <p>{sym.symbol}</p>
             </div>
             <div>Binance</div>
-            <div><p className={sym.permissions==undefined ? styles.futures : styles.spot}>{ sym.permissions==undefined ? 'futures' : 'spot'}</p></div>
+            <div><p className={sym.permissions===undefined ? styles.futures : styles.spot}>{ sym.permissions===undefined ? 'futures' : 'spot'}</p></div>
             <div  style={{paddingLeft:'13px'}}>{FixNumber(sym.lastPrice)}</div>
             <div>{sym.priceChangePercent}</div>
             <div className={styles.quoteVolume}>{nFormatter(sym.quoteVolume)} </div>

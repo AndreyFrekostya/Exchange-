@@ -25,7 +25,7 @@ const CoinName = () => {
       }, 1000)
     }
     const closeActive=(e:KeyboardEvent)=>{
-      if(e.code=='Escape' && active){
+      if(e.code==='Escape' && active){
         setActive(false)
       }
     }
@@ -37,7 +37,7 @@ const CoinName = () => {
     },[active])
   return (
     <div className={styles.wrap}>
-      {coin.coin=='' ? (
+      {coin.coin==='' ? (
         <div className={styles.container}  onClick={()=>setActive(!active)}> 
           <div className={styles.obv}>
             <p className={active ? styles.activeChooseCoin :styles.chooseCoin}>Выберите монету</p>

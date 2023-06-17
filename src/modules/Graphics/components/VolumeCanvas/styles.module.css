@@ -2,12 +2,19 @@
     margin: 0px;
     padding: 0px;
     position: absolute;
+    overflow: hidden;
+    box-sizing: border-box;
+    left: 0;
+}
+.wrapVolume{
+    border-top: #2a2e39 1px solid;
+    margin: 0px;
+    padding: 0px;
+    position: absolute;
     bottom: 30px;
     overflow: hidden;
     box-sizing: border-box;
-    border-top: #2a2e39 1px solid;
-
-    right: 64px;
+    left: 0;
 }
 .wrap::-webkit-scrollbar {
     width: 0;
@@ -22,13 +29,9 @@
 }
 .canvas2{
     position: absolute;
-    bottom: 25px;
     right: 0px;
     z-index: 3;
-    width: 64px;
     box-sizing: border-box;
-    border-left: #2a2e39 1px solid;
-    border-top: #2a2e39 1px solid;
 }
 .canvas4:hover{
     cursor: ns-resize;
@@ -51,7 +54,6 @@
 }
 .canvas4{
     position: absolute;
-    bottom: 29px;
     right: 0px;
     z-index: 4;
     box-sizing: border-box;

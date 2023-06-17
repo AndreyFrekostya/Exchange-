@@ -2,10 +2,8 @@
     margin: 0px;
     padding: 0px;
     position: absolute;
-    overflow: hidden;
     box-sizing: border-box;
     right: 0px;
-    border-left: #2a2e39 1px solid;  
 }
 .canvas{
     position: absolute;

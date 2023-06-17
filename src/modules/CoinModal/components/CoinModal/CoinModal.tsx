@@ -1,10 +1,8 @@
 import React,{useRef, useState, useEffect, useContext} from 'react'
 import styles from './styles.module.css'
-import useOutsideClick from '../../../../hooks/useOutClick'
 import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
-import { useGetCoinQuery, useLazyGetCoinQuery } from '../../../../pages/MainPage/api/CoinApi';
-import CoinSetting from '../../../MenuSettings/components/CoinSetting/CoinSetting';
-import { ICoin, ICoinQuery } from '../../../../pages/MainPage/api/CoinApi'
+import { useLazyGetCoinQuery } from '../../../../pages/MainPage/api/CoinApi';
+import { ICoin } from '../../../../pages/MainPage/api/CoinApi'
 import Loader from '../../../../components/Loading/Loader';
 import CoinModalFooter from '../CoinModalFooter/CoinModalFooter';
 import { useAppDispatch, useAppSelector } from '../../../../hooks/redux-hooks';
@@ -24,7 +22,7 @@ interface ICoinModal{
 
 export const CoinModal:React.FC<ICoinModal> = ({setActive, active}) => {
   const coins=useAppSelector(state=>state.coins)
-  const [getCoin, {isFetching,error, data}]=useLazyGetCoinQuery()
+  const [getCoin, {isFetching, data}]=useLazyGetCoinQuery()
   const dispatch=useAppDispatch()
   const isLoadingDataFirst=useContext(ContextIsLoadingDataModal)
   const coinsInList=useAppSelector(state=>state.coinInList)

@@ -1,5 +1,4 @@
 export function DrawLine(ctx:CanvasRenderingContext2D,xStart:number , yStart:number , xEnd:number , yEnd:number,candleWidth:number , color:string ){
-	let ranger=String(xStart+candleWidth/2).includes('.') ? 0 : 0.5
 	ctx.beginPath();
 	ctx.setLineDash([]);
 	ctx.lineWidth = 0.75;

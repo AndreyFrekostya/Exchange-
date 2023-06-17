@@ -42,7 +42,7 @@ export const CoinApi=createApi({
           const usdMTicker=usdMTickerResponse.data as ICoinTickerFUTURES[]
           const merge=[]
           for(let i=0; i<usdM.symbols.length; i++){
-            let ticker=usdMTicker.find(item=>item.symbol==usdM.symbols[i].symbol)
+            let ticker=usdMTicker.find(item=>item.symbol===usdM.symbols[i].symbol)
             merge.push({
               symbol:usdM.symbols[i].symbol,
               status:usdM.symbols[i].status,
@@ -59,10 +59,9 @@ export const CoinApi=createApi({
           const coinM:ICoinQuery=coinMResponse.data as ICoinQuery
           const coinMTickerResponse=await fetchWithBQ('https://dapi.binance.com/dapi/v1/ticker/24hr')
           const coinMTicker=coinMTickerResponse.data as ICoinTickerCoinM[]
-          const coinMTickerFiltered=coinMTicker.filter(item=>item.lastId!==-1 && item.lastPrice!=='0.00000000')
           const mergeCoinM=[]
           for(let i=0; i<coinM.symbols.length; i++){
-            let ticker=coinMTicker.find(item=>item.symbol==coinM.symbols[i].symbol)
+            let ticker=coinMTicker.find(item=>item.symbol===coinM.symbols[i].symbol)
             mergeCoinM.push({
               symbol:coinM.symbols[i].symbol,
               status:coinM.symbols[i].status,
@@ -83,7 +82,7 @@ export const CoinApi=createApi({
           const coinSpotTickerFilter=coinSpotTicker.filter(item=>item.lastId!==-1 && item.lastPrice!=='0.00000000')
           const mergeCoinSpot:any=[]
           for(let i=0; i<coinSpotFiltered.length; i++){
-            let ticker=coinSpotTickerFilter.find(item=>item.symbol==coinSpotFiltered[i].symbol)
+            let ticker=coinSpotTickerFilter.find(item=>item.symbol===coinSpotFiltered[i].symbol)
             mergeCoinSpot.push({
               symbol:coinSpotFiltered[i].symbol,
               status:coinSpotFiltered[i].status,

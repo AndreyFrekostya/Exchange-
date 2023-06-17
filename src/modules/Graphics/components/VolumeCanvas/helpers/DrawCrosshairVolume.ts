@@ -15,10 +15,9 @@ export function DrawCrosshairVolume(
     eOffsetY:number,
     xLeft:number,
     eOffsetX:number){
-    let b_drawMouseOverlay=false
     const candlestiks=data
     const GraphicCanvas=grRef?.current
-    const grCtx=GraphicCanvas?.getContext('2d')
+    const grCtx=GraphicCanvas?.getContext('2d') as any
     const redColor='#EB602F'
     const greenColor='#37DBBA'
     let rect = canvas.getBoundingClientRect();
@@ -38,7 +37,7 @@ export function DrawCrosshairVolume(
         let ranger=String(candleWidth/2).includes('.') ? 0 : 0.5
         if(!q){
             ctx.beginPath();
-            ctx.lineWidth=0.5
+            ctx.lineWidth=1
             ctx.setLineDash([4,4])
             ctx.moveTo(x+ranger, 0);
             ctx.lineTo(x+ranger, canvas.height);
@@ -46,17 +45,20 @@ export function DrawCrosshairVolume(
             ctx.lineTo(canvas.width, crosshairY);
             ctx.strokeStyle='#a9b3cf'
             ctx.stroke();
+            ctx.closePath()
             //volume
             grCtx.beginPath();
-            grCtx.lineWidth=0.5
+            grCtx.lineWidth=1
             grCtx.setLineDash([4,4])
             grCtx.moveTo(x+ranger, 0);
             grCtx.lineTo(x+ranger, GraphicCanvas.height);
             grCtx.strokeStyle='#a9b3cf'
             grCtx.stroke()
+            grCtx.closePath()
+            //plus
         }else{
             ctx.beginPath();
-            ctx.lineWidth=0.5
+            ctx.lineWidth=1
             ctx.setLineDash([4,4])
             ctx.moveTo(x+ranger, 0);
             ctx.lineTo(x+ranger, canvas.height);
@@ -64,7 +66,7 @@ export function DrawCrosshairVolume(
             ctx.stroke();
             //volume
             grCtx.beginPath();
-            grCtx.lineWidth=0.5
+            grCtx.lineWidth=1
             grCtx.setLineDash([4,4])
             grCtx.moveTo(x+ranger, 0);
             grCtx.lineTo(x+ranger, GraphicCanvas.height);
@@ -76,24 +78,27 @@ export function DrawCrosshairVolume(
         if(neededCandle){
             let color = neededCandle[4] > neededCandle[1]  ? greenColor : redColor;
             DrawVolumeTextOneCandle(ctx,canvas,color,neededCandle[5]) 
-            grCtx.lineWidth=0.5
+            grCtx.lineWidth=1
             grCtx.imageSmoothingEnabled = false;
-            grCtx.font = "100 10.5px Verdana";
-            grCtx.fillStyle = "#aaaebf";
+            grCtx.font = "100 10.5px Helvetica ";
+            grCtx.textRendering = "optimizeLegibility";
+            grCtx.fontStretch =  "ultra-expanded";
+            grCtx.fontKerning = "normal";
+            grCtx.letterSpacing = "0.5px";
+            grCtx.fillStyle = "#969ea9";
             grCtx.fillText( "O: ",5.5,30.5,);
             grCtx.fillText( "C: ",95.5,30.5,);
             grCtx.fillText( "H: ",185.5,30.5,);
             grCtx.fillText( "L: ",275.5,30.5,);
             grCtx.fillStyle = color;
-            grCtx.fillText(String((neededCandle[1]).slice(0,7)),20.5,30.5,);
-            grCtx.fillText(String((neededCandle[4]).slice(0,7)),110.5,30.5,);
-            grCtx.fillText(String((neededCandle[2]).slice(0,7)),200.5,30.5,);
-            grCtx.fillText(String((neededCandle[3]).slice(0,7)),290.5,30.5,);
+            grCtx.fillText(String(parseFloat(neededCandle[1])),20.5,30.5,);
+            grCtx.fillText(String(parseFloat(neededCandle[4])),110.5,30.5,);
+            grCtx.fillText(String(parseFloat(neededCandle[2])),200.5,30.5,);
+            grCtx.fillText(String(parseFloat(neededCandle[3])),290.5,30.5,);
         
         }
     }       
     canvas.addEventListener('mouseleave',function(){
-            b_drawMouseOverlay=false
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             if(grCtx && GraphicCanvas){
                 grCtx.clearRect(0, 0, GraphicCanvas.width, GraphicCanvas.height);

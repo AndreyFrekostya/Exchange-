@@ -13,7 +13,7 @@ export function sortByNameAndInt(field: string, reverse: boolean | null | string
         const reverseNum:number = !reverse ? 1 : -1;
       
         return function(a:ICoin, b:ICoin) {
-          return a = key(a), b = key(b), reverseNum * (Number((a > b)) - Number((b > a)));
+          return a = key(a), b = key(b), reverseNum * (Number((a > b)) - Number((b > a)))
         }
       }
 }

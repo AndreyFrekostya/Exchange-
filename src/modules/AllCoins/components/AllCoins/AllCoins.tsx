@@ -3,8 +3,7 @@ import styles from './styles.module.css'
 import { useAppDispatch, useAppSelector } from '../../../../hooks/redux-hooks';
 import { setGraphicCoin, setGraphicDistance } from '../../../../pages/MainPage/slices/GraphicSlice';
 import { changeDistance } from '../../../MenuSettings/slices/DistanceSetSlice';
-import { ICoin, ICoinQuery } from '../../../../pages/MainPage/api/CoinApi'
-import Loader from '../../../../components/Loading/Loader';
+import { ICoin} from '../../../../pages/MainPage/api/CoinApi'
 interface AllCoins{
     graphicRef: RefObject<HTMLDivElement>,
     requestingSymbols: ICoin[],
@@ -75,12 +74,12 @@ const AllCoins:React.FC<AllCoins> = ({graphicRef,requestingSymbols,data,text,id,
                     {requestingSymbols?.slice(start, start + visibleRows + 1).map((sym:ICoin,index:number)=>(
                         <div key={start + index} className={styles.symbol} onClick={()=>chooseCoin(id,sym.symbol, sym.t)}>
                             <p>{sym.symbol}</p>
-                            <p className={sym.permissions==undefined ? styles.futures : styles.spot}>{ sym.permissions==undefined ? 'futures' : 'spot'}</p>
+                            <p className={sym.permissions===undefined ? styles.futures : styles.spot}>{ sym.permissions===undefined ? 'futures' : 'spot'}</p>
                         </div>
                     ))}
                     <div style={{ height: getBottomHeight() }} />  
                     </div>
-                {text.length!==0 && requestingSymbols.length==0 && <p className={styles.nothing}>Ничего не найдено!</p>}
+                {text.length!==0 && requestingSymbols.length===0 && <p className={styles.nothing}>Ничего не найдено!</p>}
              </div>
         </div>
   )

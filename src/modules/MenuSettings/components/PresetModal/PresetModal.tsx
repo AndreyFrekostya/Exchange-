@@ -1,5 +1,4 @@
 import React,{useState, useRef, useEffect, memo} from 'react'
-import {FieldValues, SubmitHandler, UseFormHandleSubmit, useForm} from 'react-hook-form'
 import styles from './styles.module.css'
 import { addPreset, deletePreset } from '../../slices/PresetSlice';
 import CheckIcon from '@mui/icons-material/Check';
@@ -26,7 +25,7 @@ const PresetModal:React.FC<IModalPreset>= memo(({active, setIsActive}) => {
     const mode=useAppSelector(state=>state.modeGraphic.find(graphic=>graphic.choosed===true))
     const addPresetFunc=(e:React.KeyboardEvent<HTMLDivElement> | null)=>{
       if(e!==null){
-        if(e.code=='Enter'){
+        if(e.code==='Enter'){
           if(text){
             setPresetError(false)
             dispatch(addPreset({name: text, settings: graphics, mode: mode?.name, coin: coin}))

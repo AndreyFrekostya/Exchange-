@@ -1,5 +1,4 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { type } from 'os';
 interface IChoosedCoin{
     coin: string,
     type:string

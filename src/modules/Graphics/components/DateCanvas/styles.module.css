@@ -6,7 +6,6 @@
     overflow: hidden;
     box-sizing: border-box;
     left: 0px;
-    border-top: #2a2e39 2px solid;
 }
 .canvas{
     position: absolute;

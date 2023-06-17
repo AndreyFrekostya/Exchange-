@@ -1,7 +1,5 @@
 import React,{useState} from 'react'
 import styles from './styles.module.css'
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
-import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import preset from './../../../../images/other/preset.svg'
 import PresetModal from '../PresetModal/PresetModal';
 const PresetSetting = () => {

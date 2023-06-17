@@ -8,14 +8,14 @@ interface IPopUpVolume{
 }
 const PopUpVolume:React.FC<IPopUpVolume> = ({isOpen, setIsOpen}) => {
     const [value, setValue]=useState<string>('')
-    const {filterByV, setFilterByV}=useContextFilter()
+    const {setFilterByV}=useContextFilter()
     const ref=useRef<HTMLDivElement>(null)
     const onClose=()=>{
         setIsOpen(false)
     }
     useEffect(()=>{setFilterByV(Number(value))},[value])
     const closeActive=(e:KeyboardEvent)=>{
-      if(e.code=='Enter' && isOpen){
+      if(e.code==='Enter' && isOpen){
         setIsOpen(false)
       }
     }

@@ -1,4 +1,4 @@
-import React,{useState,useEffect, useRef} from 'react'
+import React,{useState,useEffect} from 'react'
 import { Glass } from '../../../Glass'
 import { Order } from '../../../Order'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
@@ -16,7 +16,7 @@ export const PanelRight:React.FC<IPanelRight> = ({dataPanelB,changeDataPanelR}) 
     const [active, setActive]=useState<boolean>(false)
     const openPanel=(e:KeyboardEvent)=>{
         const input=document.getElementById('preset_input')
-        if(e.code=='KeyE' && input!==document.activeElement){
+        if(e.code==='KeyE' && input!==document.activeElement){
             setActive(!active)
         }
     }

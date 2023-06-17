@@ -9,13 +9,13 @@ const AllCoinsSlice = createSlice({
         return action.payload 
        },
        addCoin(state, action){
-        if(action.payload.type=='f'){
-            const coin=state.find(item=>item.symbol==action.payload.symbol &&  item.permissions==undefined)
+        if(action.payload.type==='f'){
+            const coin=state.find(item=>item.symbol===action.payload.symbol &&  item.permissions===undefined)
             if(coin){
                 coin.isAdded=!coin.isAdded
             }
         }else{
-            const coin=state.find(item=>item.symbol==action.payload.symbol &&  item.permissions!==undefined)
+            const coin=state.find(item=>item.symbol===action.payload.symbol &&  item.permissions!==undefined)
             if(coin){
                 coin.isAdded=!coin.isAdded
             }

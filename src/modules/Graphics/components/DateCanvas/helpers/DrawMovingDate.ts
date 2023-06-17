@@ -2,7 +2,6 @@ export function DrawMovingDate(ctx:CanvasRenderingContext2D,canvas:HTMLCanvasEle
     let rect=canvas.getBoundingClientRect()
     let allLeft=Math.abs(xLeft)+(eClientX-rect.left)
     let neededCandle=data[Math.floor(allLeft/(candleWidth+candleSpacing))]
-    let date='0'
     function formatDateTime(timestamp:string) {
         const date = new Date(timestamp);
         // Получаем значения года, месяца, дня и часа

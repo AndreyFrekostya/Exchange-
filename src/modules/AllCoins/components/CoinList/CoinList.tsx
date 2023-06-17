@@ -1,10 +1,9 @@
-import React, { ChangeEvent, useEffect, useState, useRef,FC, RefObject } from 'react'
+import React, { ChangeEvent, useEffect, useState, useRef, RefObject } from 'react'
 import styles from './styles.module.css'
-import { ICoin, useGetCoinQuery } from '../../../../pages/MainPage/api/CoinApi';
-import { useAppDispatch, useAppSelector } from '../../../../hooks/redux-hooks';
+import { ICoin} from '../../../../pages/MainPage/api/CoinApi';
+import { useAppSelector } from '../../../../hooks/redux-hooks';
 import useOutsideClick from '../../../../hooks/useOutClick';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
-import { type } from 'os';
 import AllCoins from '../AllCoins/AllCoins';
 interface ICoinList{
     active: boolean,
@@ -14,7 +13,6 @@ interface ICoinList{
 }
 export const CoinList:React.FC<ICoinList> = ({setActive, active,id, graphicRef}) => {
     const filterSettings:string[]=['all', 'f', 's']
-    const dispatch=useAppDispatch()
     const coins=useAppSelector(state=>state.coinsInListInGraphics)
     const [visibleRows, setVisibleRows]=useState<number>(30)
     const ref=useRef<HTMLDivElement | null>(null)
@@ -31,7 +29,7 @@ export const CoinList:React.FC<ICoinList> = ({setActive, active,id, graphicRef})
             const copyarr:ICoin[]=[]
             coins?.forEach((symbol)=>{
                 if(filteredBy==='f'){
-                    if(symbol.symbol.includes(text.toUpperCase()) && symbol.permissions==undefined){
+                    if(symbol.symbol.includes(text.toUpperCase()) && symbol.permissions===undefined){
                         copyarr.push(symbol)
                     }
                 }else if(filteredBy==='s'){
@@ -53,12 +51,12 @@ export const CoinList:React.FC<ICoinList> = ({setActive, active,id, graphicRef})
     const setFilter=()=>{
         let i=filterSettings.indexOf(filteredBy)
         const nextSet=filterSettings[i+1]
-        if(i==2){
+        if(i===2){
             setFilteredBy( 'all' )
             setRequestingSymbols(coins)
         }else{
             setFilteredBy(filterSettings[i+1])
-            if(nextSet=='s'){
+            if(nextSet==='s'){
                 const copyarr: ICoin[]=[]
                 coins?.forEach((symbol)=>{
 
@@ -67,18 +65,14 @@ export const CoinList:React.FC<ICoinList> = ({setActive, active,id, graphicRef})
                     }
                     
                 })
-                const newSymbols=coins.filter(item=>item.permissions!==undefined)
                 setRequestingSymbols(copyarr)
-            }else if(nextSet=='f'){
+            }else if(nextSet==='f'){
                 const copyarr: ICoin[]=[]
                 coins?.forEach((symbol)=>{
-                   
-                        if(symbol.symbol.includes(text.toUpperCase()) && symbol.permissions==undefined){
+                        if(symbol.symbol.includes(text.toUpperCase()) && symbol.permissions===undefined){
                             copyarr.push(symbol)
                         }
-                    
                 })
-                const newSymbols=coins.filter(item=>item.permissions!==undefined)
                 setRequestingSymbols(copyarr)
             }
         }
@@ -89,7 +83,7 @@ export const CoinList:React.FC<ICoinList> = ({setActive, active,id, graphicRef})
         }
     }
     useEffect(()=>{
-        if(text.length==0 && filteredBy=='all'){
+        if(text.length===0 && filteredBy==='all'){
             setRequestingSymbols(coins)
         }
         setRows()
@@ -114,9 +108,9 @@ export const CoinList:React.FC<ICoinList> = ({setActive, active,id, graphicRef})
                 <p className={isFutures ? styles.futures : isSpot ? styles.spot  : ''}>{filteredBy}</p>
                 <KeyboardArrowRightIcon/>
                 <p className={isFuturesNext ? styles.futures : isSpotNext ? styles.spot  : ''}>{filterSettings.map(item=>{
-                    if(item==filteredBy){
+                    if(item===filteredBy){
                         let i=filterSettings.indexOf(item)  
-                        if(i==2){
+                        if(i===2){
                             return 'all'
                         }
                         return filterSettings[i+1]

@@ -1,17 +1,9 @@
-import React, { RefObject, useContext, useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import styles from './styles.module.css'
 import { ICoin } from '../../../../pages/MainPage/api/CoinApi'
-import CoinSetting from '../../../MenuSettings/components/CoinSetting/CoinSetting'
 import { useAppDispatch, useAppSelector } from '../../../../hooks/redux-hooks'
-import { setGlobalCoin } from '../../../../pages/MainPage/slices/GraphicSlice'
-import { changeCoin } from '../../../MenuSettings/slices/CoinSlice'
-import { changeDistance } from '../../../MenuSettings/slices/DistanceSetSlice'
-import { Checkbox } from '@mui/material'
-import { addCoinList } from '../../../../pages/MainPage/slices/CoinChoosedListSlice'
-import activeContext, { Context, useActiveContext } from './../../../MenuSettings/components/CoinName/CoinName'
+import { useActiveContext } from './../../../MenuSettings/components/CoinName/CoinName'
 import CoinInModal from '../CoinInModal/CoinInModal'
-import { ChangeEvent } from 'react'
-import { FormEvent } from 'react'
 interface ICoinModalList{
     data: ICoin[],
     requestingSymbols: ICoin[],
@@ -21,9 +13,6 @@ interface ICoinModalList{
 const CoinModalList:React.FC<ICoinModalList>= ({data, requestingSymbols, text, visibleRows}) => {
     const [start, setStart] = useState<number>(0);
     const coinsInList=useAppSelector(state=>state.coinInList)
-    const graphic=useAppSelector(state=>state.graphics.find(item=>item.choosed))
-    const {active, setActive}=useActiveContext()
-    const dispatch=useAppDispatch()
     const rootRef = useRef<HTMLDivElement | null>(null);
     function getTopHeight() {
         return 31 * start;
@@ -72,7 +61,7 @@ const CoinModalList:React.FC<ICoinModalList>= ({data, requestingSymbols, text, v
             ))}
             <div style={{ height: getBottomHeight() }} />  
         </div>
-        {text.length!==0 && requestingSymbols.length==0 && <p className={styles.nothing}>Ничего не найдено!</p>}
+        {text.length!==0 && requestingSymbols.length===0 && <p className={styles.nothing}>Ничего не найдено!</p>}
     </div>
   )
 }

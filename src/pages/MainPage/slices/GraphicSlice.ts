@@ -8,19 +8,20 @@ export interface IGraphic{
     priority:number,
     coin: string,
     group:number | null,
-    typeCoin: string
+    typeCoin: string,
+    priceWidth:number
 }
 const initialState:IGraphic[]=[
-    {id:0,distance: '0', drawingElemets: [], choosed: true, widescreen: false,priority:2, coin: '',group: null, typeCoin: ''},
-    {id:1,distance: '0', drawingElemets: [], choosed: false, widescreen: false,priority:5, coin: '',group: null, typeCoin: ''},
-    {id:2,distance: '0', drawingElemets: [], choosed: false, widescreen: false,priority:2, coin: '',group: null, typeCoin: ''},
-    {id:3,distance: '0', drawingElemets: [], choosed: false, widescreen: false,priority:2, coin: '',group: null, typeCoin: ''},
-    {id:4,distance: '0', drawingElemets: [], choosed: false, widescreen: false,priority:2, coin: '',group: null, typeCoin: ''},
-    {id:5,distance: '0', drawingElemets: [], choosed: false, widescreen: false,priority:2, coin: '',group: null, typeCoin: ''},
-    {id:6,distance: '0', drawingElemets: [], choosed: false, widescreen: false,priority:7, coin: '',group: null, typeCoin: ''},
-    {id:7,distance: '0', drawingElemets: [], choosed: false, widescreen: false,priority:6, coin: '',group: null, typeCoin: ''},
-    {id:8,distance: '0', drawingElemets: [], choosed: false, widescreen: false,priority:5, coin: '',group: null, typeCoin: ''},
-    {id:9,distance: '0', drawingElemets: [], choosed: false, widescreen: false,priority:2, coin: '',group: null, typeCoin: ''},
+    {id:0,distance: '0', drawingElemets: [], choosed: true, widescreen: false,priority:2, coin: '',group: null, typeCoin: '',priceWidth:0},
+    {id:1,distance: '0', drawingElemets: [], choosed: false, widescreen: false,priority:5, coin: '',group: null, typeCoin: '',priceWidth:0},
+    {id:2,distance: '0', drawingElemets: [], choosed: false, widescreen: false,priority:2, coin: '',group: null, typeCoin: '',priceWidth:0},
+    {id:3,distance: '0', drawingElemets: [], choosed: false, widescreen: false,priority:2, coin: '',group: null, typeCoin: '',priceWidth:0},
+    {id:4,distance: '0', drawingElemets: [], choosed: false, widescreen: false,priority:2, coin: '',group: null, typeCoin: '',priceWidth:0},
+    {id:5,distance: '0', drawingElemets: [], choosed: false, widescreen: false,priority:2, coin: '',group: null, typeCoin: '',priceWidth:0},
+    {id:6,distance: '0', drawingElemets: [], choosed: false, widescreen: false,priority:7, coin: '',group: null, typeCoin: '',priceWidth:0},
+    {id:7,distance: '0', drawingElemets: [], choosed: false, widescreen: false,priority:6, coin: '',group: null, typeCoin: '',priceWidth:0},
+    {id:8,distance: '0', drawingElemets: [], choosed: false, widescreen: false,priority:5, coin: '',group: null, typeCoin: '',priceWidth:0},
+    {id:9,distance: '0', drawingElemets: [], choosed: false, widescreen: false,priority:2, coin: '',group: null, typeCoin: '',priceWidth:0},
 ]
 const GraphicModeSlice = createSlice({
     name: 'graphics',
@@ -99,10 +100,15 @@ const GraphicModeSlice = createSlice({
                 graphic.coin=action.payload.coin
                 graphic.typeCoin=action.payload.type
             })
+        },
+        setPriceWidth(state, action){
+            const neededGraph=state.find(i=>i.id=action.payload.id)
+            if(!neededGraph)return
+            neededGraph.priceWidth=action.payload.width
         }
     },
 });
 
-export const {setGraphicDistance, setChoosedGraphic, setGraphicsOnTwoMode,setWideScreen,clearWideScreen, setGraphicsPreset, setGraphicCoin, setGraphicGroup, unTieGraphicGroup, setGlobalCoin} = GraphicModeSlice.actions;
+export const {setGraphicDistance, setChoosedGraphic, setGraphicsOnTwoMode,setWideScreen,clearWideScreen, setGraphicsPreset, setGraphicCoin, setGraphicGroup, unTieGraphicGroup, setGlobalCoin,setPriceWidth} = GraphicModeSlice.actions;
 
 export default GraphicModeSlice.reducer;

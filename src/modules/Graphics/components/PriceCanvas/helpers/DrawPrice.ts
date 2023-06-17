@@ -1,66 +1,71 @@
+import { Dispatch, SetStateAction } from "react";
 import { yToPixelCoords } from "../../../helpers/yToPixelCoords";
 import { getTransformedNumber } from "./getTransformedNumber";
+import { getTransformedNumberWithFloat } from "./getTrasnformedNumerWithFloat";
 
-export function DrawPrice (ctx:CanvasRenderingContext2D,canvas:HTMLCanvasElement, data: string[][],xLeft:number,startCandle:number, howCandleInRange:number, maxPrice:number, minPrice:number,candleWidth:number, candleSpacing:number){
+export function DrawPrice (ctx:any,canvas:HTMLCanvasElement, data: string[][],xLeft:number,startCandle:number, howCandleInRange:number, maxPrice:number, minPrice:number,candleWidth:number, candleSpacing:number,  setWidth:Dispatch<SetStateAction<number>>,width:number,setInterval:Dispatch<SetStateAction<number>>){
     let range=maxPrice-minPrice
-    let numberLines=20
-    const maxLabels = Math.floor(canvas.height / (30 + 5)); // Максимальное количество меток, учитывая высоту шкалы и размер шрифта
-    const interval = getTransformedNumber(Math.round(range / (maxLabels - 1)));
-    const numLabels = Math.min(maxLabels, Math.ceil(range / interval) + 1);
-    let firstPrice=Math.round((maxPrice+1* interval)/1000)*1000;
-    // Отрисовка меток цены и горизонтальных линий
+    const height=canvas.height
+    const labelsRange=height+21<120 ? 15 : 30
+    const maxLabels = Math.round(height / (labelsRange + 5));
+    let interval = 0
+    let maxArr=String(maxPrice).split('.')
+    let minArr=String(minPrice).split('.')
+    let maxrounded=0
+    let minrounded=0
+    if(maxArr[0]==='0' || minArr[0]==='0'){
+        maxrounded=Number(getTransformedNumberWithFloat(Number(maxPrice),Math.ceil))
+        minrounded=Number(getTransformedNumberWithFloat(Number(minPrice),Math.floor))
+        interval=Number(getTransformedNumberWithFloat(Number(range / (maxLabels - 1)),Math.floor))
+    }else{
+        interval=range / (maxLabels - 1) > 0.50 && range / (maxLabels - 1)<1  ? Number(getTransformedNumberWithFloat(Math.ceil(range / (maxLabels - 1)))) : Number(getTransformedNumberWithFloat(range / (maxLabels - 1)))
+        maxrounded=getTransformedNumber(Math.ceil(maxPrice),undefined,Math.ceil);
+        minrounded=getTransformedNumber(Math.floor(minPrice),undefined,Math.floor);
+        minrounded=minrounded-interval*2
+    }
+    //adaeth
+    //Helvetica  
+    //Tahoma
+    //calibri 11.5px
+    //Verdana
+    setInterval(interval)
     ctx.clearRect(0,0,canvas.width,canvas.height)
-    canvas.width=canvas.width
-    for (let i = 0; i < numLabels*3; i++) {
-        const price = firstPrice-interval;
-        firstPrice=price
-        
-        // const y = canvas.height - i * (canvas.height / (numLabels - 1));
-        const y=Math.round(yToPixelCoords(maxPrice,price,range,canvas.height))
-        let ranger=String(y).includes('.') ? 0 : 0.5
-        // Отрисовка горизонтальной линии
-        // Отрисовка текста метки цены
-        ctx.lineWidth=1
-        ctx.moveTo(1, y+ranger);
-        ctx.lineTo(5.5,y+ranger);
-        ctx.strokeStyle = '#82848c';
-        ctx.stroke();
-            
-        ctx.font = "11px Tahoma";
-        ctx.fillStyle = "#aaaebf";
-        ctx.fillText(String(price.toLocaleString()), 9, y+3+ranger);
+    window.devicePixelRatio=2; 
+    while(minrounded<maxPrice+5*interval) {
+        let price:number | string = minrounded+interval;
+        minrounded=minrounded+interval
+        const y=Math.round(yToPixelCoords(maxPrice,price,range,height+21))
+        ctx.imageSmoothingEnabled = false;
+        ctx.font = "100 10.5px Helvetica ";
+        ctx.textRendering = "optimizeLegibility";
+        ctx.fontStretch =  "ultra-expanded";
+        ctx.fontKerning = "normal";
+        ctx.letterSpacing = "0.5px";
+        ctx.fillStyle = "#d1d4dc";
+        if(maxArr[0]==='0'){
+            let sI=String(interval)
+            if(sI.split('.')[1]!==undefined){
+                let sIArrLengthT=sI.split('.')[1].length
+                if(sI.includes('-')){
+                    let slicedBy=Number(sI[sI.length-1])
+                    price=Number(price.toFixed(slicedBy+2))
+                }else{
+                    price=price.toFixed(sIArrLengthT+1)
+                }
+            }else if(sI.includes('e')){
+                price=price.toFixed(Number(sI[sI.length-1]))
+            }
+        }else{
+            price=String(new Intl.NumberFormat('ru-RU').format(price))
+            if(price.includes(',')){
+                price=price.replace(',','.')+'0'
+            }else{
+                price=price+'.0'
+            }
+        }
+        let priceLength=ctx.measureText(price).width
+        let x=(width-priceLength)/2
+        ctx.fillText(String(price), x, y);
     }
 }
-// let allWidth=candleWidth+candleSpacing
-// let round = (a:number, b:number) => Math.round(a/b)*b
-// let getDivider=(a:number)=>{
-//     let newA=String(a)
-//     let number='1'
-//     for (let i=0; i<newA.length-1; i++){
-//         number=number+'0'
-//     }
-//     return Number(number)
-// }
-//end - high
-//start - low
-// let roundedMaxPrice=round(maxPrice, getDivider(maxPrice))
-// let roundedMinPrice=round(minPrice, getDivider(maxPrice))
-// let yMax=yToPixelCoords(maxPrice,roundedMaxPrice,maxPrice-minPrice,canvas.height)
-// let yMin=yToPixelCoords(maxPrice,roundedMinPrice,maxPrice-minPrice,canvas.height)
-// ctx.clearRect(0,0,canvas.width,canvas.height)
-// ctx.beginPath();
-// ctx.font = "11px Tahoma";
-// ctx.fillStyle = "#aaaebf";
-// //max
-
-// ctx.lineTo(5.5,yMax);
-// ctx.strokeStyle = '#82848c';
-// ctx.stroke();
-// ctx.fillText(String(roundedMaxPrice),8, yMax+5)
-
-// //min
-// ctx.moveTo(0.5, yMin);
-// ctx.lineTo(5.5,yMin);
-// ctx.strokeStyle = '#82848c';
-// ctx.stroke();
-// ctx.fillText(String(roundedMinPrice), 8, yMin);
+//496 517

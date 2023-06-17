@@ -1,4 +1,4 @@
-import { RefObject, useEffect, useRef, useState } from "react";
+import { RefObject, useEffect } from "react";
 import { useLatest } from "./useLatest";
 function useOutsideClick(elementRef:RefObject<HTMLDivElement>, handler:()=>void, attached:boolean=true) {
     const latestHandler = useLatest(handler);

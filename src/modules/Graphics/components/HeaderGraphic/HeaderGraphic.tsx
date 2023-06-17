@@ -10,7 +10,7 @@ import { useAppDispatch, useAppSelector } from '../../../../hooks/redux-hooks';
 import { rememberMode } from '../../../MenuSettings/slices/GraphicRememberLastMode';
 import { changeDistance } from '../../../MenuSettings/slices/DistanceSetSlice';
 import { changeGraphicMode } from '../../../MenuSettings/slices/GraphicModeSlice';
-interface HeaderGraphic{
+interface IHeaderGraphic{
     one:boolean | undefined,
     setActiveCoin:(arg:boolean)=>void,
     activeCoin:boolean,
@@ -18,7 +18,7 @@ interface HeaderGraphic{
     graphicRef:RefObject<HTMLDivElement>,
     wideS:boolean | undefined
 }
-const HeaderGraphic:React.FC<HeaderGraphic> = ({one,setActiveCoin,activeCoin,graphic,graphicRef,wideS}) => {
+const HeaderGraphic:React.FC<IHeaderGraphic> = ({one,setActiveCoin,activeCoin,graphic,graphicRef,wideS}) => {
     const dispatch=useAppDispatch()
     const mode=useAppSelector(state=>state.modeGraphic.find(m=>m.choosed===true)?.name)
     const lastMode=useAppSelector(state=>state.lastMode)

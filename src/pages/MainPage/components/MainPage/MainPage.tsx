@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useEffect, useState } from 'react'
+import React, { createContext, useEffect, useState } from 'react'
 import styles from './styles.module.css'
 import Header from '../Header/Header'
 import {Graphics} from '../../../../modules/Graphics/components/Graphics/Graphics'

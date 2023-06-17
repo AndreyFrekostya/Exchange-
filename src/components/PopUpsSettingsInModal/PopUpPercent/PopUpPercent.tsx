@@ -8,7 +8,7 @@ interface IPopUpPercent{
 }
 const PopUpPercent: React.FC<IPopUpPercent> = ({isOpen, setIsOpen}) => {
   const [value, setValue]=useState('')
-  const {filterByChangePercent, setFilterByChangePercent}=useContextFilter()
+  const { setFilterByChangePercent}=useContextFilter()
   const ref=useRef<HTMLDivElement>(null)
   const onClose=()=>{
     setIsOpen(false)

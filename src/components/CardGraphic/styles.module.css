@@ -1,0 +1,24 @@
+.wrap{
+    background-color: #1e222d;
+    box-shadow: 0 2px 4px #0006;
+    position: absolute;
+    padding: 6px 0px;
+    z-index: 100;
+    width: max-content;
+    color: #d1d4dc;
+    font-size: 14px;
+    border-radius: 4px;
+    overflow-y: scroll;
+}
+.item{
+    padding: 5px 8px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.item svg{
+    font-size: 19px;
+}
+.item:hover{
+    background-color: #2a2e39;
+}
