@@ -3,7 +3,7 @@ import { yToPixelCoords } from "../../../helpers/yToPixelCoords";
 import { getTransformedNumber } from "./getTransformedNumber";
 import { getTransformedNumberWithFloat } from "./getTrasnformedNumerWithFloat";
 
-export function DrawPrice (ctx:any,canvas:HTMLCanvasElement, data: string[][],xLeft:number,startCandle:number, howCandleInRange:number, maxPrice:number, minPrice:number,candleWidth:number, candleSpacing:number,  setWidth:Dispatch<SetStateAction<number>>,width:number,setInterval:Dispatch<SetStateAction<number>>){
+export function DrawPrice (ctx:any,canvas:HTMLCanvasElement, data: string[][],xLeft:number,startCandle:number, howCandleInRange:number, maxPrice:number, minPrice:number,candleWidth:number, candleSpacing:number,  setWidth:Dispatch<SetStateAction<number>>,width:number,setInterval:Dispatch<SetStateAction<number>>,fixedNumber:number){
     let range=maxPrice-minPrice
     const height=canvas.height
     const labelsRange=height+21<120 ? 15 : 30
@@ -29,12 +29,10 @@ export function DrawPrice (ctx:any,canvas:HTMLCanvasElement, data: string[][],xL
     //calibri 11.5px
     //Verdana
     setInterval(interval)
-    ctx.clearRect(0,0,canvas.width,canvas.height)
-    window.devicePixelRatio=2; 
     while(minrounded<maxPrice+5*interval) {
         let price:number | string = minrounded+interval;
         minrounded=minrounded+interval
-        const y=Math.round(yToPixelCoords(maxPrice,price,range,height+21))
+        const y=yToPixelCoords(maxPrice,price,range,height)
         ctx.imageSmoothingEnabled = false;
         ctx.font = "100 10.5px Helvetica ";
         ctx.textRendering = "optimizeLegibility";
@@ -57,15 +55,17 @@ export function DrawPrice (ctx:any,canvas:HTMLCanvasElement, data: string[][],xL
             }
         }else{
             price=String(new Intl.NumberFormat('ru-RU').format(price))
+            let end=''.padEnd(fixedNumber,'0')
             if(price.includes(',')){
-                price=price.replace(',','.')+'0'
+                price=price.replace(',','.')+'.'+end
             }else{
-                price=price+'.0'
+                price=price+'.'+end
             }
         }
+        // console.log(Number(price),price)
+
         let priceLength=ctx.measureText(price).width
         let x=(width-priceLength)/2
         ctx.fillText(String(price), x, y);
     }
 }
-//496 517

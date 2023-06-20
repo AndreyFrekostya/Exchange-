@@ -8,10 +8,10 @@ import AddIcon from '@mui/icons-material/Add';
 import { changeGraphicMode } from '../../../MenuSettings/slices/GraphicModeSlice';
 import { useLazyGetKlinesSymbolQuery } from '../../api/KlinesSymbolApi';
 import HeaderGraphic from '../HeaderGraphic/HeaderGraphic';
-import MainCanvas from '../MainCanvas/MainCanvas';
+import {MainCanvas} from '../../../MainCanvas/components/MainCanvas/MainCanvas';
 import PriceCanvas from '../PriceCanvas/PriceCanvas';
 import DateCanvas from '../DateCanvas/DateCanvas';
-import VolumeCanvas from '../VolumeCanvas/VolumeCanvas';
+import {VolumeCanvas} from '../../../VolumeCanvas/components/VolumeCanvas/VolumeCanvas';
 import { TransformDistance } from '../../helpers/TransformDistance';
 import { useGetUpdatedKlinesQuery } from '../../../../pages/MainPage/api/CandleUpdateApi';
 interface IGraphicComponent{
@@ -37,6 +37,8 @@ const Graphic:React.FC<IGraphicComponent> = ({graphic, onClick, one,wideS}) => {
   const [heightV, setHeightV]=useState<number>(70)
   const [xLeft, setXLeft]=useState<number>(0)
   const [pressedCandle, setPressedCandle]=useState<string[] | undefined>([])
+  const [lastData, setLastData]=useState<string[]>([])
+  const [ifFirst, setIfFirst]=useState<boolean>(false)
   const [startCandle, setStartCandle]=useState<number>(0)
   const distance=useAppSelector(state=>state.distance)
   const lastMode=useAppSelector(state=>state.lastMode)
@@ -79,10 +81,28 @@ const Graphic:React.FC<IGraphicComponent> = ({graphic, onClick, one,wideS}) => {
     if(graphic.coin!=='' && graphic.distance!==''){
       const timeframe=TransformDistance(graphic.distance)
       if(timeframe!==undefined ){
+        setIfFirst(true)
         getKlinesSymbol({symbol:graphic.coin,interval:timeframe,type:graphic.typeCoin})
       }
     }
   },[graphic.coin,graphic.distance])
+  useEffect(()=>{
+    if(data.length!==0){setLastData(()=>data[0])}
+    if(ifFirst && lastData!==data[0] && data.length!==0 && mainCanvasRef.current){
+      let candles=Math.round(mainCanvasRef.current.clientWidth/(candleWidth+candleSpacing))
+      let ranger=0
+      if(data.length<candles){
+        setHowCandleInRange(data.length)
+        candles=data.length
+      }else{
+        setHowCandleInRange(candles+1)
+        ranger=-50
+      }
+      let newX=-(candleWidth+candleSpacing)*data.length+candles*(candleWidth+candleSpacing)+ranger
+      setXLeft(()=>newX)
+      setIfFirst(()=>false)
+    }
+  },[data, ifFirst])
   useEffect(()=>{
     if(dataUpdated && data.length!==0){
       getKlinesSymbol({symbol:graphic.coin,interval:TransformDistance(graphic.distance),type:graphic.typeCoin})
@@ -102,10 +122,10 @@ const Graphic:React.FC<IGraphicComponent> = ({graphic, onClick, one,wideS}) => {
   return (
     <div  ref={graphicRef} className={graphic.choosed ? styles.wrapActive : styles.wrap} onMouseDown={onClick}>
       <HeaderGraphic wideS={wideS} one={one} setActiveCoin={setActiveCoin} activeCoin={activeCoin} graphic={graphic} graphicRef={graphicRef}/>
-      <MainCanvas  {...propsToCanvas} voRef={volumeRef} priceRef={priceRef} fixedNumber={fixedNumber}/>
-      <VolumeCanvas {...propsToCanvas} grRef={mainCanvasRef} />
+      <MainCanvas  {...propsToCanvas} voRef={volumeRef} mainCanvasRef={mainCanvasRef} priceRef={priceRef} fixedNumber={fixedNumber} setIfFirst={setIfFirst} ifFirst={ifFirst} />
+      <VolumeCanvas {...propsToCanvas} grRef={mainCanvasRef} volumeRef={volumeRef} />
       <DateCanvas graphicRef={graphicRef} data={data} xLeft={xLeft} scrolledCandle={startCandle} candleWidth={candleWidth} setCandleWidth={setCandleWidth}  setCandleSpacing={setCandleSpacing} candleSpacing={candleSpacing} howCandleInRange={howCandleInRange} setHowCandleInRange={setHowCandleInRange} x={isMouseOnGraphic.x} pressedCandle={pressedCandle} priceWidth={priceWidth} distance={distance} setXLeft={setXLeft} />
-      <PriceCanvas graphicRef={graphicRef} data={data} xLeft={xLeft} howCandleInRange={howCandleInRange} startCandle={startCandle} heightM={heightM} setHeightM={setHeightM} yMouse={isMouseOnGraphic.y} candleWidth={candleWidth} candleSpacing={candleSpacing} q={isMouseOnGraphic.q} width={priceWidth} setWidth={setPriceWidth}  fulfieldGraphicRefAndVolumeAndPrice={fulfieldGraphicRefAndVolumeAndPrice} setFixedNumber={setFixedNumber}/>
+      <PriceCanvas graphicRef={graphicRef} data={data} xLeft={xLeft} howCandleInRange={howCandleInRange} startCandle={startCandle} heightM={heightM} setHeightM={setHeightM} yMouse={isMouseOnGraphic.y} candleWidth={candleWidth} candleSpacing={candleSpacing} q={isMouseOnGraphic.q} width={priceWidth} setWidth={setPriceWidth}  fulfieldGraphicRefAndVolumeAndPrice={fulfieldGraphicRefAndVolumeAndPrice} setFixedNumber={setFixedNumber} graphic={graphic} fixedNumber={fixedNumber}/>
       <>
         {graphic.coin==='' ? (
           <div className={styles.graphicAdd}>

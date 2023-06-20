@@ -1,5 +1,5 @@
 import { MutableRefObject } from "react"
-import { DrawVolumeTextOneCandle } from "../components/VolumeCanvas/helpers/DrawVolumeTextOneCandle"
+import { DrawVolumeTextOneCandle } from "../../VolumeCanvas/helpers/DrawVolumeTextOneCandle"
 import { DrawPlus } from "./DrawPlus"
 
 export function DrawCrosshairCanvas(
@@ -35,7 +35,6 @@ export function DrawCrosshairCanvas(
         let allLeft=Math.abs(xLeft)+(eClientX-rect.left)
         let neededCandle=candlestiks[Math.floor(allLeft/(candleWidth+candleSpacing))]
         let x=(candlestiks.indexOf(neededCandle)-scrolledCandle)*(candleWidth+candleSpacing)+candleWidth/2
-        
         if(!neededCandle){
             x=eOffsetX
         }

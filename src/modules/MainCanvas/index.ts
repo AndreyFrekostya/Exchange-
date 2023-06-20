@@ -1,0 +1,1 @@
+export {MainCanvas} from './components/MainCanvas/MainCanvas'

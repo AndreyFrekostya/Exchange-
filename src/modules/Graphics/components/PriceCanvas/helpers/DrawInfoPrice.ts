@@ -1,5 +1,5 @@
 export function DrawInfoPrice (ctx:any,canvas:HTMLCanvasElement, howCandleInRange:number,maxPrice:number, minPrice:number,y:number, candleWidth:number, candleSpacing:number,q:boolean,fixedNumber:number,width:number){
-  let price:string | number=minPrice + (canvas.height-y)*(maxPrice-minPrice)/(canvas.height+5);
+  let price:string | number=minPrice + (canvas.height-y-61)*(maxPrice-minPrice)/(canvas.height-61);
     ctx.clearRect(0,0,canvas.width, canvas.height)
     ctx.beginPath();
     ctx.lineWidth = 0.1;
@@ -19,10 +19,11 @@ export function DrawInfoPrice (ctx:any,canvas:HTMLCanvasElement, howCandleInRang
     if(priceArr[0]!=='0'){
       let ended=price.toFixed(1).split('.')[1]
       price=String(new Intl.NumberFormat('ru-RU').format(Number(priceArr[0])))
+      let end=''.padEnd(fixedNumber,'0')
       if(price.includes(',')){
-          price=price.replace(',','.')+ended
+        price=price.replace(',','.')+'.'+end
       }else{
-          price=price+'.'+ended
+        price=price+'.'+end
       }
     }else{
       price=Number(price).toFixed(fixedNumber)

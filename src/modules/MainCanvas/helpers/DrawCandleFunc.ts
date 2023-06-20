@@ -1,6 +1,6 @@
 import { DrawCandle } from "./DrawCandle";
 import { DrawLine } from "./DrawLine";
-import { yToPixelCoords } from "./yToPixelCoords";
+import { yToPixelCoords } from "../../Graphics/helpers/yToPixelCoords";
 //#37dbbba
 export const DrawCandleFunc=(ctx:CanvasRenderingContext2D,candlestiks:string[][],width:number,candleWidth:number,maxPrice:number,priceRange:number,height:number,candleSpacing:number, howCandleInRange:number, startCandle:number,xLeft:number)=>{
     let x0=xLeft
