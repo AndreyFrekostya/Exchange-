@@ -12,6 +12,10 @@ interface IKlinesMutation{
     },
     body:string[]
 }
+interface HistoricaKlines extends IKlinesSymbol{
+    start:number,
+    end:number
+}
 type KlinesRespones=string[][]
 export const klinesSymbolApi=createApi({
     reducerPath: 'klinesSymbolApi',
@@ -36,7 +40,10 @@ export const klinesSymbolApi=createApi({
             }),
             invalidatesTags: [{type: 'Klines', id: 'LIST'}]
         }),
+        getHisoricalKlines:build.query<KlinesRespones, HistoricaKlines>({
+            query:({symbol,interval,type, start, end})=>`//${type}api.binance.com/${type}api/v${type==='' ? '3' : '1'}/klines?symbol=${symbol.toUpperCase()}&interval=${interval}&limit=1500&startTime=${start}&endTime=${end}`,
+        })
     })
 })
 
-export const {useLazyGetKlinesSymbolQuery,useAddKlineMutation}=klinesSymbolApi
+export const {useLazyGetKlinesSymbolQuery,useAddKlineMutation, useLazyGetHisoricalKlinesQuery}=klinesSymbolApi

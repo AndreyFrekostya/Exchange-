@@ -29,6 +29,7 @@ const PriceCanvas:React.FC<IPriceCanvas> = ({graphicRef, data, xLeft, howCandleI
   const refCanvas=useRef<HTMLCanvasElement>(null)
   const ctx=refCanvas.current?.getContext('2d')
   const refCanvas2=useRef<HTMLCanvasElement>(null)
+  const [ifFirst, setIfFirst]=useState<boolean>(true)
   const ctx2=refCanvas2.current?.getContext('2d')
   const [maxPrice, setMaxPrice]=useState<number>(0)
   const [timer, setTimer]=useState<string>('00:00')
@@ -44,7 +45,7 @@ const PriceCanvas:React.FC<IPriceCanvas> = ({graphicRef, data, xLeft, howCandleI
   useEffect(() => {
       window.addEventListener("resize", resizeHandler);
       fulfieldGraphicRefAndVolumeAndPrice(undefined,undefined,refCanvas2.current)
-      resizeHandler();
+      resizeHandler()
       return () => {
         window.removeEventListener("resize", resizeHandler);
       };
@@ -62,7 +63,7 @@ const PriceCanvas:React.FC<IPriceCanvas> = ({graphicRef, data, xLeft, howCandleI
   }
   },[xLeft,width, timer,data, fixedNumber])
   useEffect(()=>{
-      if(ctx && refCanvas.current){
+      if(ctx && refCanvas.current && ifFirst && data.length!==0){
         let thatMaxPrice=Math.max(...data.map((d)=>Number(d[2])));
         let thatMaxPriceSlice=Math.max(...data.slice(startCandle,startCandle+howCandleInRange).map((d)=>Number(d[2])));
         let thatMinPrice=Math.min(...data.slice(startCandle,startCandle+howCandleInRange).map((d)=>Number(d[3])));
@@ -85,8 +86,9 @@ const PriceCanvas:React.FC<IPriceCanvas> = ({graphicRef, data, xLeft, howCandleI
         let maxArr=newI.split('.')[1]
         let fixedNumber=maxArr ? String(newI).split('.')[1].length : graphic.typeCoin==='' ? 2 : 1
         setFixedNumber(fixedNumber)
+        setIfFirst(()=>false)
       }
-  },[data, interval])
+  },[data, interval, ifFirst])
   useEffect(()=>{
     const timerInterval=setInterval(()=>TimeStampToDateTimer(graphic.distance,setTimer), 1000);
     return(()=>{

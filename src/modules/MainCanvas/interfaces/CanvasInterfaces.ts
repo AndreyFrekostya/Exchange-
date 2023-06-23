@@ -23,7 +23,14 @@ export interface ICrosshairCanvasProps{
     priceWidth:number,
     heightM:number | undefined,
     isPressed:boolean,
-    setIsPressed:setState<boolean>
+    setIsPressed:setState<boolean>,
+    ctx:CanvasRenderingContext2D | null | undefined,
+    howCandleInRange:number,
+    mainCanvas:HTMLCanvasElement | null,
+    setMaxPrice:setState<number>,
+    setMinPrice:setState<number>,
+    setStartCandle:setState<number>,
+    
 }
 
 export interface IMainCanvas{
@@ -54,5 +61,11 @@ export interface IMainCanvas{
     mainCanvasRef:MutableRefObject<HTMLCanvasElement | null>,
     ifFirst:boolean, 
     setIfFirst:setState<boolean>,
+    lastData:string[],
+    setLastData:setState<string[]>,
+    dataHistory:string[][],
+    setData:setState<string[][]>,
+    allDataCopy:string[][],
+    setAllDataCopy:setState<string[][]> 
 }
 

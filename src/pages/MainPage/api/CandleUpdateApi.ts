@@ -25,9 +25,9 @@ export const candleUpdateApi = createApi({
         try {
           await cacheDataLoaded
           const listener = (event: MessageEvent) => {
-            const data = JSON.parse(event.data)
+            let data = JSON.parse(event.data)
             updateCachedData((draft) => {
-             return [data.k.t,data.k.o,data.k.h,data.k.l, data.k.c,data.k.v]
+              return [data.k.t,data.k.o,data.k.h,data.k.l, data.k.c,data.k.v]
             })
           }
 

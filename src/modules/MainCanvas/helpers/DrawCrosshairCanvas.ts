@@ -32,7 +32,7 @@ export function DrawCrosshairCanvas(
         ctx2.clearRect(0, 0, canvas2.width, canvas2.height);
         ctxV.clearRect(0, 0, volumeCanvas.width, volumeCanvas.height);
         //formula of calculating candle
-        let allLeft=Math.abs(xLeft)+(eClientX-rect.left)
+        let allLeft=xLeft>=0 ? (eClientX-rect.left)-Math.abs(xLeft) : Math.abs(xLeft)+(eClientX-rect.left)
         let neededCandle=candlestiks[Math.floor(allLeft/(candleWidth+candleSpacing))]
         let x=(candlestiks.indexOf(neededCandle)-scrolledCandle)*(candleWidth+candleSpacing)+candleWidth/2
         if(!neededCandle){

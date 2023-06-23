@@ -1,7 +1,9 @@
 import React, { Dispatch, MouseEvent, MutableRefObject, RefObject, SetStateAction, WheelEvent, forwardRef, useEffect, useState} from 'react'
 import styles from './styles.module.css'
 import { ICrosshairCanvasProps } from '../../interfaces/CanvasInterfaces';
-const CrosshairCanvas = forwardRef<HTMLCanvasElement, ICrosshairCanvasProps>((props, mainCanvasRef) => {
+import { DrawCandleFunc } from '../../helpers/DrawCandleFunc';
+import { DrawUpdatedLinePrice } from '../../helpers/DrawUpdatedLinePrice';
+const CrosshairCanvas = React.memo(forwardRef<HTMLCanvasElement, ICrosshairCanvasProps>((props, mainCanvasRef) => {
   const crosshairContainer = mainCanvasRef && 'current' in mainCanvasRef ? mainCanvasRef.current : null;
   const [startX, setStartX]=useState<number>(0)
   const  handleMouseDown=(e:MouseEvent)=>{
@@ -41,8 +43,34 @@ const CrosshairCanvas = forwardRef<HTMLCanvasElement, ICrosshairCanvasProps>((pr
         const deltaX = startX-event.clientX;
         const newX=props.xLeft-deltaX
         const scrollCandle=Math.floor(newX/(props.candleWidth+props.candleSpacing))
-        if(scrollCandle<0 && Math.abs(scrollCandle)<props.data.length-1){
+        if(Math.abs(scrollCandle)<props.data.length-1){
           props.setXLeft(()=>newX)
+        }
+        // Redraw graph
+        if(crosshairContainer){
+          let scrollCandle=Math.abs(props.xLeft/(props.candleWidth+props.candleSpacing))
+          let copyHowCandleInRange=props.howCandleInRange
+          if(props.xLeft>=0){
+            scrollCandle=0
+            copyHowCandleInRange=(crosshairContainer.clientWidth-props.xLeft)/(props.candleWidth+props.candleSpacing)
+          }
+          let thatMinPrice=Math.min(...props.data.slice(scrollCandle,scrollCandle+copyHowCandleInRange).map((d)=>Number(d[3])));
+          let thatMaxPrice=Math.max(...props.data.slice(scrollCandle,scrollCandle+copyHowCandleInRange).map((d)=>Number(d[2])));
+          let priceRange = thatMaxPrice - thatMinPrice;
+          if(props.ctx && props.mainCanvas){
+            requestAnimationFrame(() => {
+              if(props.mainCanvas && props.ctx){
+                props.ctx.clearRect( 0 , 0 , props.mainCanvas.width ,props.mainCanvas.height  );
+                DrawCandleFunc(props.ctx,props.data,props.mainCanvas.width,props.candleWidth,thatMaxPrice,priceRange,props.mainCanvas.height-40,props.candleSpacing,props.data.length, 0,props.xLeft)
+                DrawUpdatedLinePrice(props.ctx,props.data[props.data.length-1],props.mainCanvas.height-40,thatMaxPrice,thatMaxPrice-thatMinPrice,props.xLeft,props.mainCanvas.width)
+              }
+            });
+            props.ctx.clearRect(props.mainCanvas.width, 0,props.mainCanvas.width, props.mainCanvas.height) 
+            props.ctx.clearRect(props.mainCanvas.width,0,props.mainCanvas.width,props.mainCanvas.height)
+            props.setMaxPrice(()=>thatMaxPrice)
+            props.setMinPrice(()=>thatMinPrice)
+            props.setStartCandle(scrollCandle)
+          }
         }
         setStartX((prev)=>event.clientX)
       }
@@ -103,6 +131,6 @@ const CrosshairCanvas = forwardRef<HTMLCanvasElement, ICrosshairCanvasProps>((pr
       ref={mainCanvasRef} style={{zIndex:'6'}} className={styles.canvas2} width={props.graphicRef.current?.clientWidth ? props.graphicRef.current?.clientWidth-props.priceWidth : undefined} height={props.heightM? props.heightM+41 : undefined}>
     </canvas>
   )
-})
+}))
 
 export default CrosshairCanvas
