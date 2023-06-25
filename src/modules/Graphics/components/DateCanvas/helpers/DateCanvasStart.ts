@@ -46,11 +46,11 @@ export function DateCanvasStart(ctx:CanvasRenderingContext2D,canvas:HTMLCanvasEl
     ctx.fillStyle = "#aaaebf";
     for (let i=0; coord<maxXLeft; i++){
         let x=coord+(candleWidth+candleSpacing)*range
-        let lastAllLeft=Math.abs(xLeft)+coord
+        let lastAllLeft=xLeft>=0 ? coord-Math.abs(xLeft)  : Math.abs(xLeft)+coord
         let lastCandle=data[Math.floor(lastAllLeft/(candleWidth+candleSpacing))]
-        let allLeft=Math.abs(xLeft)+x
+        let allLeft=xLeft>=0 ?  x-Math.abs(xLeft) : Math.abs(xLeft)+x
         let neededCandle=data[Math.floor(allLeft/(candleWidth+candleSpacing))]
-        if(neededCandle){
+        if(neededCandle!==undefined && lastCandle!==undefined){
             ctx.beginPath();
             ctx.setLineDash([])
             ctx.lineWidth=1

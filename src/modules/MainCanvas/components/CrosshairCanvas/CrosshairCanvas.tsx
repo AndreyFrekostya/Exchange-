@@ -3,9 +3,14 @@ import styles from './styles.module.css'
 import { ICrosshairCanvasProps } from '../../interfaces/CanvasInterfaces';
 import { DrawCandleFunc } from '../../helpers/DrawCandleFunc';
 import { DrawUpdatedLinePrice } from '../../helpers/DrawUpdatedLinePrice';
+import { useLazyGetHisoricalKlinesQuery } from '../../../Graphics/api/KlinesSymbolApi';
+import { TransformDistance } from '../../../Graphics/helpers/TransformDistance';
+import { GetFactorDistance } from '../../helpers/GetFactorDistance';
 const CrosshairCanvas = React.memo(forwardRef<HTMLCanvasElement, ICrosshairCanvasProps>((props, mainCanvasRef) => {
   const crosshairContainer = mainCanvasRef && 'current' in mainCanvasRef ? mainCanvasRef.current : null;
   const [startX, setStartX]=useState<number>(0)
+  const [getHistoricalKlines,{data:dataHistory=[]}]=useLazyGetHisoricalKlinesQuery()
+  const [isAdded, setIsAdded]=useState<boolean>(true)
   const  handleMouseDown=(e:MouseEvent)=>{
     e.preventDefault();
     if(crosshairContainer){
@@ -39,11 +44,12 @@ const CrosshairCanvas = React.memo(forwardRef<HTMLCanvasElement, ICrosshairCanva
         }
         props.setMouseX((prev)=>mouseX)
       }
-      if(props.isPressed){
+      if(props.isPressed && crosshairContainer){
         const deltaX = startX-event.clientX;
         const newX=props.xLeft-deltaX
-        const scrollCandle=Math.floor(newX/(props.candleWidth+props.candleSpacing))
-        if(Math.abs(scrollCandle)<props.data.length-1){
+        const scrollCandle=newX>=0 ? 0 : Math.floor(newX/(props.candleWidth+props.candleSpacing))
+        let ifRightGraph=newX>=0 ? Math.floor(Math.abs(newX-crosshairContainer.clientWidth))>Math.floor((props.candleWidth+props.candleSpacing))*2 : true
+        if(Math.abs(scrollCandle)<props.data.length-1 && ifRightGraph){
           props.setXLeft(()=>newX)
         }
         // Redraw graph
@@ -62,7 +68,8 @@ const CrosshairCanvas = React.memo(forwardRef<HTMLCanvasElement, ICrosshairCanva
               if(props.mainCanvas && props.ctx){
                 props.ctx.clearRect( 0 , 0 , props.mainCanvas.width ,props.mainCanvas.height  );
                 DrawCandleFunc(props.ctx,props.data,props.mainCanvas.width,props.candleWidth,thatMaxPrice,priceRange,props.mainCanvas.height-40,props.candleSpacing,props.data.length, 0,props.xLeft)
-                DrawUpdatedLinePrice(props.ctx,props.data[props.data.length-1],props.mainCanvas.height-40,thatMaxPrice,thatMaxPrice-thatMinPrice,props.xLeft,props.mainCanvas.width)
+                console.log(props.data.length, props.allDataCopy.length, newX,props.howCandleInRange, props.candleSpacing, props.candleWidth, scrollCandle)
+                DrawUpdatedLinePrice(props.ctx,props.allDataCopy[props.allDataCopy.length-1],props.mainCanvas.height-40,thatMaxPrice,thatMaxPrice-thatMinPrice,props.xLeft,props.mainCanvas.width)
               }
             });
             props.ctx.clearRect(props.mainCanvas.width, 0,props.mainCanvas.width, props.mainCanvas.height) 
@@ -75,7 +82,7 @@ const CrosshairCanvas = React.memo(forwardRef<HTMLCanvasElement, ICrosshairCanva
         setStartX((prev)=>event.clientX)
       }
   }
-  const handleMouseUp=(event:MouseEvent) =>{
+  const handleMouseUp=async(event:MouseEvent) =>{
     event.preventDefault();
     setStartX((prev)=>0)
     props.setMouseX((prev)=>0)
@@ -88,7 +95,26 @@ const CrosshairCanvas = React.memo(forwardRef<HTMLCanvasElement, ICrosshairCanva
         crosshairContainer.style.cursor='crosshair';
       }
     }
+    if(props.xLeft>0 && isAdded){
+      let pixelInCandle=props.xLeft/(props.candleWidth+props.candleSpacing)
+      let ammountFetching=Math.ceil(pixelInCandle/500)
+      let endTimeStamp=Number(props.data[0][0])
+      let factor=GetFactorDistance(props.graphic.distance)
+      setIsAdded(()=>false)
+      for (let i=0; i<ammountFetching; i++){
+        await  getHistoricalKlines({symbol:props.graphic.coin,interval:TransformDistance(props.graphic.distance),type:props.graphic.typeCoin, end:endTimeStamp, start:endTimeStamp-500*factor*60000})
+        endTimeStamp=endTimeStamp-500*factor*60000
+        if(i==ammountFetching-1){
+          setIsAdded(()=>true)
+        }
+      }
+    }
   }
+  useEffect(()=>{
+    if(dataHistory.length!==0){
+      props.setHistoryData(dataHistory.concat(props.historyData))
+    }
+  },[dataHistory])
   const HandleWheel=(e:WheelEvent<HTMLCanvasElement>)=>{
     let candleWidthPrev:number=props.candleWidth
     let candleSpacingPrev:number=props.candleSpacing
@@ -112,6 +138,11 @@ const CrosshairCanvas = React.memo(forwardRef<HTMLCanvasElement, ICrosshairCanva
         props.setCandleSpacing(candleSpacingPrev-0.2)
         props.setIfPlus(false)
       }
+      // if(props.candleWidth===1 && Number((props.candleSpacing-0.2).toFixed(1))==0.2){
+      //   props.setCandleWidth(0.3)
+      //   props.setIfPlus(false)
+      //   console.log('ds')
+      // }
     }
   }
   useEffect(() => {
@@ -123,7 +154,7 @@ const CrosshairCanvas = React.memo(forwardRef<HTMLCanvasElement, ICrosshairCanva
         document.removeEventListener('mouseup', handleMouseUp as  any)
       }
     };
-  }, [crosshairContainer,props.data,props.heightM]);
+  }, [props.data,props.heightM, props.xLeft,props.candleSpacing,props.candleWidth]);
   return (
     <canvas onMouseDown={(e:MouseEvent)=>handleMouseDown(e)}
       onMouseMove={(e:MouseEvent)=>handleMouseMove(e)}

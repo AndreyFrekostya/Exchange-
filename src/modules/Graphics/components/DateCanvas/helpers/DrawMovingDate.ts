@@ -1,6 +1,6 @@
 export function DrawMovingDate(ctx:CanvasRenderingContext2D,canvas:HTMLCanvasElement, data: string[][], xLeft:number,eClientX:number,candleWidth:number, candleSpacing:number, scrolledCandle:number, pressedCandle:string[] | undefined){
     let rect=canvas.getBoundingClientRect()
-    let allLeft=Math.abs(xLeft)+(eClientX-rect.left)
+    let allLeft=xLeft>=0 ? (eClientX-rect.left)-Math.abs(xLeft) : Math.abs(xLeft)+(eClientX-rect.left)
     let neededCandle=data[Math.floor(allLeft/(candleWidth+candleSpacing))]
     function formatDateTime(timestamp:string) {
         const date = new Date(timestamp);
@@ -16,9 +16,6 @@ export function DrawMovingDate(ctx:CanvasRenderingContext2D,canvas:HTMLCanvasEle
         return formattedDateTime;
       }
     let x=(data.indexOf(neededCandle)-scrolledCandle)*(candleWidth+candleSpacing)+candleWidth/2
-    // if(pressedCandle!==undefined){
-    //     x=(data.indexOf(pressedCandle)-scrolledCandle)*(candleWidth+candleSpacing)+candleWidth/2
-    // }
     if(!neededCandle){
         x=-200
     }

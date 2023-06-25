@@ -41,7 +41,8 @@ const DateCanvas:React.FC<IDateCanvas> = ({graphicRef, data, xLeft, scrolledCand
     }, []);
     useEffect(()=>{
         if(refCanvas.current && ctx){
-            DateCanvasStart(ctx,refCanvas.current, data, xLeft, candleWidth, candleSpacing,scrolledCandle, distance)
+            let startCandle=xLeft >=0 ? -Math.abs(xLeft/(candleSpacing+candleWidth)) : Math.abs(xLeft/(candleSpacing+candleWidth))
+            DateCanvasStart(ctx,refCanvas.current, data, xLeft, candleWidth, candleSpacing,startCandle, distance)
         }
     },[width, xLeft, candleWidth,candleSpacing,data])
     
@@ -49,7 +50,8 @@ const DateCanvas:React.FC<IDateCanvas> = ({graphicRef, data, xLeft, scrolledCand
     useEffect(()=>{
         if(ctx2 && refCanvas2.current){
             if(x!==-200){
-                DrawMovingDate(ctx2, refCanvas2.current,data,xLeft,x,candleWidth,candleSpacing,scrolledCandle, pressedCandle)
+                let startCandle=xLeft >=0 ? -Math.abs(xLeft/(candleSpacing+candleWidth)) : Math.abs(xLeft/(candleSpacing+candleWidth))
+                DrawMovingDate(ctx2, refCanvas2.current,data,xLeft,x,candleWidth,candleSpacing,startCandle, pressedCandle)
             }else{
                 ctx2.clearRect(0,0,refCanvas2.current.width, refCanvas2.current.height)
             }

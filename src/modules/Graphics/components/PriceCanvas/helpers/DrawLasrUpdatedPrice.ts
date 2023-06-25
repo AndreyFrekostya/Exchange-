@@ -1,6 +1,6 @@
 import { yToPixelCoords } from "../../../helpers/yToPixelCoords";
 
-export function DrawLastUpdatedPrice(ctx:any,canvas:HTMLCanvasElement, candle: string[], maxPrice:number,priceRange:number,height:number, timer:string,timeFrame:string,fixedNumber:number){
+export function DrawLastUpdatedPrice(ctx:any,canvas:HTMLCanvasElement, candle: string[], maxPrice:number,priceRange:number,height:number, timer:string,timeFrame:string,fixedNumber:number, width:number){
     let color = candle[4] > candle[1]  ? '#09e8bb' : '#EB602F';
     let colorForText=candle[4]>candle[1] ? '#191970' : '#fff'
     let price: string | number=Number(candle[4])
@@ -18,15 +18,15 @@ export function DrawLastUpdatedPrice(ctx:any,canvas:HTMLCanvasElement, candle: s
         price=Number(price).toFixed(fixedNumber)
     }
     let priceLength=ctx.measureText(price).width
-    let x=((priceLength+8)-priceLength)/2
+    let x=(width-priceLength)/2
     const yLine=Math.round(yToPixelCoords(maxPrice,Number(candle[4]),priceRange,height))
     ctx.beginPath();
 	ctx.setLineDash([0,0]);
 	ctx.lineWidth = 1;
     ctx.fillStyle=color
     let widthTimer=ctx.measureText(timer).width
-    let xTimer=(priceLength+8-widthTimer)/2
-	ctx.fillRect(1,yLine+5,priceLength+8,30)
+    let xTimer=(width-widthTimer)/2
+	ctx.fillRect(1,yLine+5,width-5.7,30)
     ctx.font = "100 10.5px Helvetica ";
     ctx.textRendering = "optimizeLegibility";
     ctx.fontStretch =  "ultra-expanded";

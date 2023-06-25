@@ -30,7 +30,10 @@ export interface ICrosshairCanvasProps{
     setMaxPrice:setState<number>,
     setMinPrice:setState<number>,
     setStartCandle:setState<number>,
-    
+    historyData:string[][]
+    setHistoryData:setState<string[][]>,
+    graphic:IGraphic,
+    allDataCopy:string[][]
 }
 
 export interface IMainCanvas{
@@ -66,6 +69,9 @@ export interface IMainCanvas{
     dataHistory:string[][],
     setData:setState<string[][]>,
     allDataCopy:string[][],
-    setAllDataCopy:setState<string[][]> 
+    setAllDataCopy:setState<string[][]>,
+    setIsGottenHistory:setState<boolean>,
+    graphic:IGraphic,
+    firstData:string[][]
 }
 

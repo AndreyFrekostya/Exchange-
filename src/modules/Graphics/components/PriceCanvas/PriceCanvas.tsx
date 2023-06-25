@@ -23,9 +23,10 @@ interface IPriceCanvas{
   fulfieldGraphicRefAndVolumeAndPrice:(grRef:HTMLCanvasElement | null | undefined, voRef:HTMLCanvasElement | null | undefined,priceRefArg: HTMLCanvasElement | null | undefined)=>void,
   setFixedNumber:Dispatch<SetStateAction<number>>,
   graphic:IGraphic,
-  fixedNumber:number
+  fixedNumber:number,
+  allDataCopy:string[][]
 }
-const PriceCanvas:React.FC<IPriceCanvas> = ({graphicRef, data, xLeft, howCandleInRange, startCandle,heightM,setHeightM, yMouse,candleWidth,candleSpacing,q,  width, setWidth,fulfieldGraphicRefAndVolumeAndPrice,setFixedNumber, graphic,fixedNumber}) => {
+const PriceCanvas:React.FC<IPriceCanvas> = ({graphicRef, data, xLeft, howCandleInRange, startCandle,heightM,setHeightM, yMouse,candleWidth,candleSpacing,q,  width, setWidth,fulfieldGraphicRefAndVolumeAndPrice,setFixedNumber, graphic,fixedNumber,allDataCopy}) => {
   const refCanvas=useRef<HTMLCanvasElement>(null)
   const ctx=refCanvas.current?.getContext('2d')
   const refCanvas2=useRef<HTMLCanvasElement>(null)
@@ -57,13 +58,13 @@ const PriceCanvas:React.FC<IPriceCanvas> = ({graphicRef, data, xLeft, howCandleI
         ctx.clearRect(0,0,refCanvas.current.width, refCanvas.current.height)
         let fixedBigNumber=graphic.typeCoin==='' ? 2 : 1
         DrawPrice(ctx, refCanvas.current, data, xLeft, startCandle, howCandleInRange, thatMaxPrice, thatMinPrice, candleWidth, candleSpacing, setWidth, width,setIntervalPrice, fixedBigNumber)
-        DrawLastUpdatedPrice(ctx,refCanvas.current,data[data.length-1],thatMaxPrice,thatMaxPrice-thatMinPrice,refCanvas.current.height-61,timer,graphic.distance,fixedNumber)
+        DrawLastUpdatedPrice(ctx,refCanvas.current,allDataCopy[allDataCopy.length-1],thatMaxPrice,thatMaxPrice-thatMinPrice,refCanvas.current.height-61,timer,graphic.distance,fixedNumber, width)
         setMaxPrice(()=>thatMaxPrice)
         setMinPrice(()=>thatMinPrice)
   }
   },[xLeft,width, timer,data, fixedNumber])
   useEffect(()=>{
-      if(ctx && refCanvas.current && ifFirst && data.length!==0){
+      if(ctx && refCanvas.current && ifFirst && data.length!==0 && interval!==-Infinity && interval!==0){
         let thatMaxPrice=Math.max(...data.map((d)=>Number(d[2])));
         let thatMaxPriceSlice=Math.max(...data.slice(startCandle,startCandle+howCandleInRange).map((d)=>Number(d[2])));
         let thatMinPrice=Math.min(...data.slice(startCandle,startCandle+howCandleInRange).map((d)=>Number(d[3])));

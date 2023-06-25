@@ -38,8 +38,9 @@ export const VolumeCanvas:React.FC<ICanvasVolume> = ({graphicRef,data,howCandleI
 
   useEffect(()=>{
     if(container && data.length!==0){
-      let thatMaxVolume=Math.max(...data.slice(startCandle,startCandle+howCandleInRange).map((d)=>Number(d[5])));
-      let thatMinVolume=Math.min(...data.slice(startCandle,startCandle+howCandleInRange).map((d)=>Number(d[5])));
+      let scrollCandle=xLeft>=0 ? 0 : Math.abs(xLeft/(candleWidth+candleSpacing))
+      let thatMaxVolume=Math.max(...data.slice(scrollCandle,scrollCandle+howCandleInRange).map((d)=>Number(d[5])));
+      let thatMinVolume=Math.min(...data.slice(scrollCandle,scrollCandle+howCandleInRange).map((d)=>Number(d[5])));
       setMaxVolume(()=>thatMaxVolume)
       setMinVolume(()=>thatMinVolume)
         requestAnimationFrame(() => {
@@ -51,7 +52,7 @@ export const VolumeCanvas:React.FC<ICanvasVolume> = ({graphicRef,data,howCandleI
           }  
         })
     }
-  },[xLeft,width,howCandleInRange,startCandle, heightV])
+  },[xLeft,width,howCandleInRange,startCandle, heightV,data])
   useEffect(()=>{
     if(graphicRef.current){
       setWidth(graphicRef.current.clientWidth-priceWidth)
