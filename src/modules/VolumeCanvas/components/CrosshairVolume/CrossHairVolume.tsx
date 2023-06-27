@@ -10,7 +10,8 @@ const CrosshairVolume = forwardRef<HTMLCanvasElement,CrosshairVolumeProps>(({set
         setIsMouseOnGraphic({...isMouseOnGraphic, x:e.clientX,q:false})
         if(ctx3 && crosshairContainer && ctx4 &&  refCanvas4.current){
           let y=e.clientY-crosshairContainer.getBoundingClientRect().top
-          DrawCrosshairVolume(ctx3,crosshairContainer,data,candleWidth,candleSpacing,Math.abs(xLeft/(candleSpacing+candleWidth)),isMouseOnGraphic.x,isMouseOnGraphic.q,grRef,e.clientX,y,xLeft, e.offsetX)
+          let scrolledCandle=xLeft >=0 ? -Math.abs(xLeft/(candleSpacing+candleWidth)) : Math.abs(xLeft/(candleSpacing+candleWidth))
+          DrawCrosshairVolume(ctx3,crosshairContainer,data,candleWidth,candleSpacing,scrolledCandle,isMouseOnGraphic.x,isMouseOnGraphic.q,grRef,e.clientX,y,xLeft, e.offsetX)
           DrawInfoVolume(ctx4,refCanvas4.current,y, maxVolume,priceWidth)
         }
       }

@@ -22,7 +22,7 @@ export function DrawCrosshairVolume(
     const greenColor='#37DBBA'
     let rect = canvas.getBoundingClientRect();
     q=false
-    let allLeft=Math.abs(xLeft)+(eClientX-rect.left)
+    let allLeft=xLeft>=0 ? (eClientX-rect.left)-Math.abs(xLeft) : Math.abs(xLeft)+(eClientX-rect.left)
     let neededCandle=candlestiks[Math.floor(allLeft/(candleWidth+candleSpacing))]
     let x=(candlestiks.indexOf(neededCandle)-scrolledCandle)*(candleWidth+candleSpacing)+candleWidth/2
     if(!neededCandle){

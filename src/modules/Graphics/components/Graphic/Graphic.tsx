@@ -93,12 +93,12 @@ const Graphic:React.FC<IGraphicComponent> = ({graphic, onClick, one,wideS}) => {
   useEffect(()=>{
     if(dataUpdated && dataCopy.length!==0){
       if(allDataCopy[allDataCopy.length-1][0]!==dataUpdated[0]){
-        if(startCandle>dataCopy.length-howCandleInRange){
+        if(dataCopy[dataCopy.length-1]==allDataCopy[allDataCopy.length-1]){
           setDataCopy(()=>[...dataCopy,dataUpdated])
         }
         setAllDataCopy(()=>[...allDataCopy,dataUpdated])
       }else{
-        if(startCandle>dataCopy.length-howCandleInRange){
+        if(dataCopy[dataCopy.length-1]==allDataCopy[allDataCopy.length-1]){
           let copy=dataCopy.slice()
           copy.pop()
           setDataCopy(()=>[...copy,dataUpdated])

@@ -33,7 +33,8 @@ export interface ICrosshairCanvasProps{
     historyData:string[][]
     setHistoryData:setState<string[][]>,
     graphic:IGraphic,
-    allDataCopy:string[][]
+    allDataCopy:string[][],
+    setData:setState<string[][]>
 }
 
 export interface IMainCanvas{

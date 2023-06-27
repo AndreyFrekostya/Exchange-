@@ -47,37 +47,79 @@ const CrosshairCanvas = React.memo(forwardRef<HTMLCanvasElement, ICrosshairCanva
       if(props.isPressed && crosshairContainer){
         const deltaX = startX-event.clientX;
         const newX=props.xLeft-deltaX
-        const scrollCandle=newX>=0 ? 0 : Math.floor(newX/(props.candleWidth+props.candleSpacing))
-        let ifRightGraph=newX>=0 ? Math.floor(Math.abs(newX-crosshairContainer.clientWidth))>Math.floor((props.candleWidth+props.candleSpacing))*2 : true
-        if(Math.abs(scrollCandle)<props.data.length-1 && ifRightGraph){
+        const scrollCandle=newX>=0 ?  props.howCandleInRange-Math.floor(newX/(props.candleWidth+props.candleSpacing))   :Math.floor(newX/(props.candleWidth+props.candleSpacing))
+        let ifCanMove=newX>= 0 ?Math.abs(scrollCandle)>2 : Math.abs(scrollCandle)<props.data.length-1
+        if(ifCanMove){
           props.setXLeft(()=>newX)
         }
         // Redraw graph
         if(crosshairContainer){
           let scrollCandle=Math.abs(props.xLeft/(props.candleWidth+props.candleSpacing))
-          let copyHowCandleInRange=props.howCandleInRange
-          if(props.xLeft>=0){
-            scrollCandle=0
-            copyHowCandleInRange=(crosshairContainer.clientWidth-props.xLeft)/(props.candleWidth+props.candleSpacing)
-          }
-          let thatMinPrice=Math.min(...props.data.slice(scrollCandle,scrollCandle+copyHowCandleInRange).map((d)=>Number(d[3])));
-          let thatMaxPrice=Math.max(...props.data.slice(scrollCandle,scrollCandle+copyHowCandleInRange).map((d)=>Number(d[2])));
-          let priceRange = thatMaxPrice - thatMinPrice;
-          if(props.ctx && props.mainCanvas){
-            requestAnimationFrame(() => {
-              if(props.mainCanvas && props.ctx){
-                props.ctx.clearRect( 0 , 0 , props.mainCanvas.width ,props.mainCanvas.height  );
-                DrawCandleFunc(props.ctx,props.data,props.mainCanvas.width,props.candleWidth,thatMaxPrice,priceRange,props.mainCanvas.height-40,props.candleSpacing,props.data.length, 0,props.xLeft)
-                console.log(props.data.length, props.allDataCopy.length, newX,props.howCandleInRange, props.candleSpacing, props.candleWidth, scrollCandle)
-                DrawUpdatedLinePrice(props.ctx,props.allDataCopy[props.allDataCopy.length-1],props.mainCanvas.height-40,thatMaxPrice,thatMaxPrice-thatMinPrice,props.xLeft,props.mainCanvas.width)
+          if(scrollCandle+props.howCandleInRange>props.data.length-props.howCandleInRange/3 && props.data[props.data.length-1][0]!==props.allDataCopy[props.allDataCopy.length-1][0]){
+            let firstIndex=props.allDataCopy.indexOf(props.data[Math.floor(scrollCandle-props.howCandleInRange)]); 
+            if(firstIndex!==-1){
+              let lastIndex=firstIndex+props.howCandleInRange*4!<props.allDataCopy.length ? firstIndex+props.howCandleInRange*4 : props.allDataCopy.length
+              let newX=0
+              firstIndex=lastIndex===props.allDataCopy.length ? firstIndex-props.howCandleInRange*3 : firstIndex
+              firstIndex=firstIndex>0 ? firstIndex : 0
+              newX=lastIndex===props.allDataCopy.length ? -(props.candleWidth+props.candleSpacing)*props.howCandleInRange*4   : -(props.candleWidth+props.candleSpacing)*props.howCandleInRange
+              const s=props.allDataCopy.slice(firstIndex,lastIndex)
+              console.log(firstIndex, lastIndex, s.length, props.allDataCopy.length, newX,props.howCandleInRange, props.candleSpacing, props.candleWidth, 'ds', scrollCandle)
+              props.setXLeft(()=>newX)
+              props.setData((prev)=>s)
+              props.setStartCandle(()=>{
+                if(lastIndex===props.allDataCopy.length){
+                  return props.howCandleInRange*4
+                }else{
+                  return props.howCandleInRange
+                }
+              })
+            }
+          }else if(props.xLeft>-50){
+            let lastIndex=props.allDataCopy.indexOf(props.data[scrollCandle+props.howCandleInRange*2])
+            let firstIndex=props.allDataCopy.indexOf(props.data[0])-scrollCandle-props.howCandleInRange*3;
+            if(firstIndex>0 && lastIndex!==-1){
+              scrollCandle=Math.abs(scrollCandle-props.howCandleInRange*3)
+              let newX=-(props.candleWidth+props.candleSpacing)*scrollCandle
+              const allData=props.allDataCopy.slice(firstIndex, lastIndex)
+              props.setData((prev)=>allData)
+              props.setXLeft(()=>newX)
+              props.setStartCandle(()=>scrollCandle)
+            }else if(firstIndex<0 && lastIndex!==-1){
+              firstIndex=0
+              let scrollCandle=props.allDataCopy.indexOf(props.data[0])
+              if(scrollCandle!==-1 && scrollCandle!==0){
+                let newX=-(props.candleWidth+props.candleSpacing)*scrollCandle
+                const allData=props.allDataCopy.slice(firstIndex, lastIndex)
+                props.setData((prev)=>allData)
+                props.setXLeft(()=>newX)
+                props.setStartCandle(()=>scrollCandle)
               }
-            });
-            props.ctx.clearRect(props.mainCanvas.width, 0,props.mainCanvas.width, props.mainCanvas.height) 
-            props.ctx.clearRect(props.mainCanvas.width,0,props.mainCanvas.width,props.mainCanvas.height)
-            props.setMaxPrice(()=>thatMaxPrice)
-            props.setMinPrice(()=>thatMinPrice)
-            props.setStartCandle(scrollCandle)
+            }
           }
+            let copyHowCandleInRange=props.howCandleInRange
+            if(props.xLeft>=0){
+              scrollCandle=0
+              copyHowCandleInRange=(crosshairContainer.clientWidth-props.xLeft)/(props.candleWidth+props.candleSpacing)
+            }
+            let thatMinPrice=Math.min(...props.data.slice(scrollCandle,scrollCandle+copyHowCandleInRange).map((d)=>Number(d[3])));
+            let thatMaxPrice=Math.max(...props.data.slice(scrollCandle,scrollCandle+copyHowCandleInRange).map((d)=>Number(d[2])));
+            let priceRange = thatMaxPrice - thatMinPrice;
+            if(props.ctx && props.mainCanvas){
+              requestAnimationFrame(() => {
+                if(props.mainCanvas && props.ctx){
+                  props.ctx.clearRect( 0 , 0 , props.mainCanvas.width ,props.mainCanvas.height  );
+                  DrawCandleFunc(props.ctx,props.data,props.mainCanvas.width,props.candleWidth,thatMaxPrice,priceRange,props.mainCanvas.height-40,props.candleSpacing,props.data.length, 0,props.xLeft)
+                  DrawUpdatedLinePrice(props.ctx,props.allDataCopy[props.allDataCopy.length-1],props.mainCanvas.height-40,thatMaxPrice,thatMaxPrice-thatMinPrice,props.xLeft,props.mainCanvas.width)
+                }
+              });
+              props.ctx.clearRect(props.mainCanvas.width, 0,props.mainCanvas.width, props.mainCanvas.height) 
+              props.ctx.clearRect(props.mainCanvas.width,0,props.mainCanvas.width,props.mainCanvas.height)
+              props.setMaxPrice(()=>thatMaxPrice)
+              props.setMinPrice(()=>thatMinPrice)
+              props.setStartCandle(()=>scrollCandle)
+            }
+          
         }
         setStartX((prev)=>event.clientX)
       }
@@ -120,7 +162,6 @@ const CrosshairCanvas = React.memo(forwardRef<HTMLCanvasElement, ICrosshairCanva
     let candleSpacingPrev:number=props.candleSpacing
     if (e.deltaY < 0) {
       if(props.candleWidth===1 && props.candleSpacing<0.8){
-        
         props.setCandleSpacing(candleSpacingPrev+0.2)
         props.setIfPlus(true)
       }else if(props.candleWidth+2!==41 && props.candleSpacing+0.2!==4){
@@ -128,21 +169,26 @@ const CrosshairCanvas = React.memo(forwardRef<HTMLCanvasElement, ICrosshairCanva
         props.setCandleSpacing(candleSpacingPrev+0.2)
         props.setIfPlus(true)
       }
+      if(props.candleWidth===0.3){
+        props.setCandleWidth(1)
+        props.setCandleSpacing(0.4)
+        props.setIfPlus(true)
+      }
     } else {
-      if(props.candleWidth-2!==-1 && props.candleSpacing-0.2!==-0.4){
+      if(props.candleWidth-2!==-1 && props.candleWidth!==0.3 && props.candleSpacing-0.2!==-0.4){
         props.setCandleWidth(candleWidthPrev-2)
-        props.setCandleSpacing(candleSpacingPrev-0.2)
+        props.setCandleSpacing(Number((candleSpacingPrev-0.2).toFixed(1)))
         props.setIfPlus(false)
       }
       if(props.candleWidth===1 && props.candleSpacing-0.2!>0.2){
-        props.setCandleSpacing(candleSpacingPrev-0.2)
+        props.setCandleSpacing(Number((candleSpacingPrev-0.2).toFixed(1)))
         props.setIfPlus(false)
       }
-      // if(props.candleWidth===1 && Number((props.candleSpacing-0.2).toFixed(1))==0.2){
-      //   props.setCandleWidth(0.3)
-      //   props.setIfPlus(false)
-      //   console.log('ds')
-      // }
+      if(props.candleWidth===1 && Number((props.candleSpacing-0.2).toFixed(1))==0.2){
+        props.setCandleWidth(0.3)
+        props.setCandleSpacing(0.2)
+        props.setIfPlus(false)
+      }
     }
   }
   useEffect(() => {
@@ -154,7 +200,7 @@ const CrosshairCanvas = React.memo(forwardRef<HTMLCanvasElement, ICrosshairCanva
         document.removeEventListener('mouseup', handleMouseUp as  any)
       }
     };
-  }, [props.data,props.heightM, props.xLeft,props.candleSpacing,props.candleWidth]);
+  }, [props.data,props.heightM, props.xLeft,props.candleSpacing,props.candleWidth, props.graphic.distance, props.graphic.coin]);
   return (
     <canvas onMouseDown={(e:MouseEvent)=>handleMouseDown(e)}
       onMouseMove={(e:MouseEvent)=>handleMouseMove(e)}
