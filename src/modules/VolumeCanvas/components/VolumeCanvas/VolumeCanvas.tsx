@@ -43,14 +43,14 @@ export const VolumeCanvas:React.FC<ICanvasVolume> = ({graphicRef,data,howCandleI
       let thatMinVolume=Math.min(...data.slice(scrollCandle,scrollCandle+howCandleInRange).map((d)=>Number(d[5])));
       setMaxVolume(()=>thatMaxVolume)
       setMinVolume(()=>thatMinVolume)
-        requestAnimationFrame(() => {
+        
           if(ctx && refCanvas.current && ctx2 && refCanvas2.current && canvas3Element){
             ctx.clearRect( 0 , 0 , refCanvas.current.width , heightV  );
             DrawVolume(ctx,refCanvas.current,data, thatMaxVolume,xLeft,candleWidth, candleSpacing)
             ctx2.clearRect( 0 , 0 , refCanvas.current.width , refCanvas.current.height  )
             DrawMaxAndMinVolume(ctx2, refCanvas2.current, thatMaxVolume, thatMinVolume,priceWidth)
           }  
-        })
+        
     }
   },[xLeft,width,howCandleInRange,startCandle, heightV,data])
   useEffect(()=>{

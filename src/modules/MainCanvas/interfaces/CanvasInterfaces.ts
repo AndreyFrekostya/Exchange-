@@ -73,6 +73,7 @@ export interface IMainCanvas{
     setAllDataCopy:setState<string[][]>,
     setIsGottenHistory:setState<boolean>,
     graphic:IGraphic,
-    firstData:string[][]
+    firstData:string[][],
+    dataUpdated:string[]
 }
 

@@ -26,7 +26,7 @@ interface KeyboardEvent {
 const Graphic:React.FC<IGraphicComponent> = ({graphic, onClick, one,wideS}) => {
   const dispatch=useAppDispatch()
   const [getKlinesSymbol,{data=[]}]=useLazyGetKlinesSymbolQuery()
-  const {data:dataUpdated}=useGetUpdatedKlinesQuery({symbol:graphic.coin, interval:TransformDistance(graphic.distance),type:graphic.typeCoin}) 
+  const {data:dataUpdated=[]}=useGetUpdatedKlinesQuery({symbol:graphic.coin, interval:TransformDistance(graphic.distance),type:graphic.typeCoin}) 
   const [activeCoin, setActiveCoin]=useState<boolean>(false)
   const [getHistoricalKlines,{data:dataHistory=[]}]=useLazyGetHisoricalKlinesQuery() 
   const [howCandleInRange, setHowCandleInRange]=useState<number>(0)
@@ -90,31 +90,6 @@ const Graphic:React.FC<IGraphicComponent> = ({graphic, onClick, one,wideS}) => {
       }
     }
   },[graphic.coin,graphic.distance])
-  useEffect(()=>{
-    if(dataUpdated && dataCopy.length!==0){
-      if(allDataCopy[allDataCopy.length-1][0]!==dataUpdated[0]){
-        if(dataCopy[dataCopy.length-1]==allDataCopy[allDataCopy.length-1]){
-          setDataCopy(()=>[...dataCopy,dataUpdated])
-        }
-        setAllDataCopy(()=>[...allDataCopy,dataUpdated])
-      }else{
-        if(dataCopy[dataCopy.length-1]==allDataCopy[allDataCopy.length-1]){
-          let copy=dataCopy.slice()
-          copy.pop()
-          setDataCopy(()=>[...copy,dataUpdated])
-        }
-        let copy=allDataCopy.slice()
-        copy.pop()
-        setAllDataCopy([...copy,dataUpdated])
-      }
-    }
-  },[dataUpdated])
-  useEffect(()=>{
-    if(data.length!==0){
-      setDataCopy(()=>data)
-      setAllDataCopy(()=>data)
-    }
-  },[data])
   function fulfieldGraphicRefAndVolumeAndPrice(grRef:HTMLCanvasElement | null | undefined, voRef:HTMLCanvasElement | null | undefined,priceRefArg: HTMLCanvasElement | null | undefined){
     if(grRef){
       mainCanvasRef.current=grRef
@@ -129,7 +104,7 @@ const Graphic:React.FC<IGraphicComponent> = ({graphic, onClick, one,wideS}) => {
   return (
     <div  ref={graphicRef} className={graphic.choosed ? styles.wrapActive : styles.wrap} onMouseDown={onClick}>
       <HeaderGraphic wideS={wideS} one={one} setActiveCoin={setActiveCoin} activeCoin={activeCoin} graphic={graphic} graphicRef={graphicRef}/>
-      <MainCanvas  {...propsToCanvas} firstData={data} setIsGottenHistory={setIsGottenHistory} voRef={volumeRef} graphic={graphic} mainCanvasRef={mainCanvasRef} dataHistory={dataHistory} setData={setDataCopy} allDataCopy={allDataCopy} setAllDataCopy={setAllDataCopy} priceRef={priceRef} fixedNumber={fixedNumber} setIfFirst={setIfFirst} ifFirst={ifFirst} lastData={lastData} setLastData={setLastData} />
+      <MainCanvas  {...propsToCanvas} dataUpdated={dataUpdated} firstData={data} setIsGottenHistory={setIsGottenHistory} voRef={volumeRef} graphic={graphic} mainCanvasRef={mainCanvasRef} dataHistory={dataHistory} setData={setDataCopy} allDataCopy={allDataCopy} setAllDataCopy={setAllDataCopy} priceRef={priceRef} fixedNumber={fixedNumber} setIfFirst={setIfFirst} ifFirst={ifFirst} lastData={lastData} setLastData={setLastData} />
       <VolumeCanvas {...propsToCanvas} grRef={mainCanvasRef} volumeRef={volumeRef} />
       <DateCanvas graphicRef={graphicRef} data={dataCopy} xLeft={xLeft} scrolledCandle={startCandle} candleWidth={candleWidth} setCandleWidth={setCandleWidth}  setCandleSpacing={setCandleSpacing} candleSpacing={candleSpacing} howCandleInRange={howCandleInRange} setHowCandleInRange={setHowCandleInRange} x={isMouseOnGraphic.x} pressedCandle={pressedCandle} priceWidth={priceWidth} distance={distance} setXLeft={setXLeft} />
       <PriceCanvas allDataCopy={allDataCopy} graphicRef={graphicRef} data={dataCopy} xLeft={xLeft} howCandleInRange={howCandleInRange} startCandle={startCandle} heightM={heightM} setHeightM={setHeightM} yMouse={isMouseOnGraphic.y} candleWidth={candleWidth} candleSpacing={candleSpacing} q={isMouseOnGraphic.q} width={priceWidth} setWidth={setPriceWidth}  fulfieldGraphicRefAndVolumeAndPrice={fulfieldGraphicRefAndVolumeAndPrice} setFixedNumber={setFixedNumber} graphic={graphic} fixedNumber={fixedNumber}/>
