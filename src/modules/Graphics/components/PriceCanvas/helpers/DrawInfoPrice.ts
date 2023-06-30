@@ -1,4 +1,14 @@
-export function DrawInfoPrice (ctx:any,canvas:HTMLCanvasElement, howCandleInRange:number,maxPrice:number, minPrice:number,y:number, candleWidth:number, candleSpacing:number,q:boolean,fixedNumber:number,width:number){
+export function DrawInfoPrice (ctx:any,
+  canvas:HTMLCanvasElement, 
+  howCandleInRange:number,
+  maxPrice:number, 
+  minPrice:number,
+  y:number, 
+  candleWidth:number, 
+  candleSpacing:number,
+  q:boolean,
+  fixedNumber:number,
+  width:number){
   let price:string | number=minPrice + (canvas.height-y-61)*(maxPrice-minPrice)/(canvas.height-61);
     ctx.clearRect(0,0,canvas.width, canvas.height)
     ctx.beginPath();

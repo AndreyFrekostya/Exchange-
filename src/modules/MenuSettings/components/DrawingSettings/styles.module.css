@@ -12,6 +12,7 @@
     min-width: 25px;
     max-height: 28px;
     padding: 2px;
+    cursor: pointer;
 }
 .activeDraw img{
     filter: invert(30%) sepia(86%) saturate(3041%) hue-rotate(219deg) brightness(100%) contrast(104%);

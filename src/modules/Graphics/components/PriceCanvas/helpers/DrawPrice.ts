@@ -62,7 +62,6 @@ export function DrawPrice (ctx:any,canvas:HTMLCanvasElement, data: string[][],xL
                 price=price+'.'+end
             }
         }
-        // console.log(Number(price),price)
 
         let priceLength=ctx.measureText(price).width
         let x=(width-priceLength)/2

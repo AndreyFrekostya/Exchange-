@@ -98,7 +98,6 @@ export const CoinList:React.FC<ICoinList> = ({setActive, active,id, graphicRef})
                 }
             }
         }
-        console.log('ds')
     },[ref.current?.clientHeight])
   return (
     <div className={styles.wrap} ref={ref}>

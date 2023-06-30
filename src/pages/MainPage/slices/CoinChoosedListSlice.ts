@@ -8,7 +8,6 @@ const CoinChoosedListSlice = createSlice({
        addCoinList(state, action){
        const nameCoin=state.find(item=>item.symbol===action.payload.sym.symbol)
        if(nameCoin){
-            console.log(nameCoin)
             if((action.payload.type==='futures' && nameCoin?.permissions===undefined) || (action.payload.type==='spot' && nameCoin?.permissions!==undefined)){
                 return state.filter(item=>item.symbol!==nameCoin.symbol)
             }

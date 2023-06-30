@@ -1,7 +1,13 @@
-import { MutableRefObject } from "react"
+import { Dispatch, MutableRefObject, SetStateAction } from "react"
 import { DrawVolumeTextOneCandle } from "../../VolumeCanvas/helpers/DrawVolumeTextOneCandle"
 import { DrawPlus } from "./DrawPlus"
-
+import { yToPixelCoords } from "../../Graphics/helpers/yToPixelCoords"
+import { useAppSelector } from "../../../hooks/redux-hooks"
+import { DrawInfoPrice } from "../../Graphics/components/PriceCanvas/helpers/DrawInfoPrice"
+type DrawingElements={
+    name:string,
+    isMagnit: boolean|null
+}
 export function DrawCrosshairCanvas(
     ctx2:any,
     canvas2:HTMLCanvasElement, 
@@ -16,6 +22,15 @@ export function DrawCrosshairCanvas(
     eOffsetY:number,
     xLeft:number,
     eOffsetX:number,
+    maxPrice:number,
+    minPrice:number,
+    height:number,
+    drawingElements:DrawingElements,
+    ctxP:any,
+    priceCanvas:HTMLCanvasElement,
+    howCandleInRange:number,
+    fixedNumber:number,
+    priceWidth:number,
     xZoom?:number |undefined,
     pressedCandle?:string[],
     ){
@@ -26,6 +41,7 @@ export function DrawCrosshairCanvas(
     const ctxV=volumeCanvas?.getContext('2d')
     let rect = canvas2.getBoundingClientRect();
     q=true
+    const priceRange=maxPrice-minPrice
     if(ctxV && volumeCanvas){
         let crosshairY = eOffsetY+0.5;
         // очищаем холст
@@ -46,7 +62,59 @@ export function DrawCrosshairCanvas(
             neededCandle=pressedCandle
         }
         let ranger=String(candleWidth/2).includes('.') ? 0 : 0.5
+        // вычисляем y координату с магнитом
+        if (drawingElements.name!=='nothing'&& drawingElements.isMagnit===true && neededCandle){
+            let open=neededCandle[4]>neededCandle[1] ? neededCandle[4] : neededCandle[1]
+            let close=neededCandle[4]>neededCandle[1] ? neededCandle[1] : neededCandle[4]
+            let yCenterCandle=((yToPixelCoords(maxPrice,Number(neededCandle[4]),priceRange,height)+yToPixelCoords(maxPrice,Number(neededCandle[1]),priceRange,height))/2)+40
+            let yCenterBetweenHighOpen=((yToPixelCoords(maxPrice,Number(open),priceRange,height)+yToPixelCoords(maxPrice,Number(neededCandle[2]),priceRange,height))/2)+40
+            let yCenterBetweenLowClose=((yToPixelCoords(maxPrice,Number(close),priceRange,height)+yToPixelCoords(maxPrice,Number(neededCandle[3]),priceRange,height))/2)+40
+            if(crosshairY<yCenterBetweenHighOpen){
+                crosshairY=yToPixelCoords(maxPrice,Number(neededCandle[2]),priceRange,height)+40
+            }else if(crosshairY<yCenterCandle){
+                crosshairY=yToPixelCoords(maxPrice,Number(open),priceRange,height)+40
+            }else if( crosshairY>yCenterCandle && crosshairY<yCenterBetweenLowClose){
+                crosshairY=yToPixelCoords(maxPrice,Number(close),priceRange,height)+40
+            }else{
+                crosshairY=yToPixelCoords(maxPrice,Number(neededCandle[3]),priceRange,height)+40
+            }
+            console.log(crosshairY)
+        }else if(drawingElements.name!=='nothing'&& drawingElements.isMagnit===false && neededCandle){
+            let open=neededCandle[4]>neededCandle[1] ? neededCandle[4] : neededCandle[1]
+            let close=neededCandle[4]>neededCandle[1] ? neededCandle[1] : neededCandle[4]
+            let openCoords=yToPixelCoords(maxPrice,Number(open),priceRange,height)+40
+            let closeCoords=yToPixelCoords(maxPrice,Number(close),priceRange,height)+40
+            let highCoords=yToPixelCoords(maxPrice,Number(neededCandle[2]),priceRange,height)+40
+            let lowCoords=yToPixelCoords(maxPrice,Number(neededCandle[3]),priceRange,height)+40
+            let yCenterBetweenHighOpen=((yToPixelCoords(maxPrice,Number(open),priceRange,height)+yToPixelCoords(maxPrice,Number(neededCandle[2]),priceRange,height))/2)+40
+            let yCenterBetweenLowClose=((yToPixelCoords(maxPrice,Number(close),priceRange,height)+yToPixelCoords(maxPrice,Number(neededCandle[3]),priceRange,height))/2)+40
+            const heightCandle = Math.abs(yToPixelCoords(maxPrice,Number(open),priceRange,height) - yToPixelCoords(maxPrice,Number(close),priceRange,height));
+            let ifHeightCandleMore40Number=heightCandle>40 ? true : false
+            if(ifHeightCandleMore40Number){
+                if(crosshairY>highCoords-40 && crosshairY<yCenterBetweenHighOpen){
+                    crosshairY=yToPixelCoords(maxPrice,Number(neededCandle[2]),priceRange,height)+40
+                }else if(crosshairY>yCenterBetweenHighOpen && crosshairY<openCoords+40){
+                    crosshairY=yToPixelCoords(maxPrice,Number(open),priceRange,height)+40
+                }else if(crosshairY>closeCoords-40 && crosshairY<yCenterBetweenLowClose){
+                    crosshairY=yToPixelCoords(maxPrice,Number(close),priceRange,height)+40
+                }else if(crosshairY>yCenterBetweenLowClose && crosshairY<lowCoords+40){
+                    crosshairY=yToPixelCoords(maxPrice,Number(neededCandle[3]),priceRange,height)+40
+                }
+            }else{
+                let yCenterCandle=((yToPixelCoords(maxPrice,Number(neededCandle[4]),priceRange,height)+yToPixelCoords(maxPrice,Number(neededCandle[1]),priceRange,height))/2)+40
+                if(crosshairY>highCoords-40 && crosshairY<yCenterBetweenHighOpen){
+                    crosshairY=yToPixelCoords(maxPrice,Number(neededCandle[2]),priceRange,height)+40
+                }else if(crosshairY>yCenterBetweenHighOpen && crosshairY<yCenterCandle){
+                    crosshairY=yToPixelCoords(maxPrice,Number(open),priceRange,height)+40
+                }else if(crosshairY>yCenterCandle && crosshairY<yCenterBetweenLowClose){
+                    crosshairY=yToPixelCoords(maxPrice,Number(close),priceRange,height)+40
+                }else if(crosshairY>yCenterBetweenLowClose && crosshairY<lowCoords+40){
+                    crosshairY=yToPixelCoords(maxPrice,Number(neededCandle[3]),priceRange,height)+40
+                }
+            }
+        }
         // рисуем перекрестие
+        DrawInfoPrice(ctxP, priceCanvas, howCandleInRange,maxPrice,minPrice,crosshairY-40.5,candleWidth,candleSpacing,q,fixedNumber,priceWidth )
         if(q){
             ctx2.imageSmoothingEnabled = false
             ctx2.beginPath();

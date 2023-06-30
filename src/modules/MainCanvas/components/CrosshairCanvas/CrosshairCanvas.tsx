@@ -54,7 +54,7 @@ const CrosshairCanvas = React.memo(forwardRef<HTMLCanvasElement, ICrosshairCanva
         }
         // Redraw graph
         if(crosshairContainer){
-          let scrollCandle=Math.abs(props.xLeft/(props.candleWidth+props.candleSpacing))
+          let scrollCandle=Math.abs(newX/(props.candleWidth+props.candleSpacing))
           if(scrollCandle+props.howCandleInRange>props.data.length-props.howCandleInRange/3 && props.data[props.data.length-1][0]!==props.allDataCopy[props.allDataCopy.length-1][0]){
             let firstIndex=props.allDataCopy.indexOf(props.data[Math.floor(scrollCandle-props.howCandleInRange)]); 
             if(firstIndex!==-1){
@@ -68,32 +68,31 @@ const CrosshairCanvas = React.memo(forwardRef<HTMLCanvasElement, ICrosshairCanva
               props.setData((prev)=>s)
               props.setStartCandle(()=>{
                 if(lastIndex===props.allDataCopy.length){
-                  return props.howCandleInRange*4
+                  return props.howCandleInRange*2.5
                 }else{
                   return props.howCandleInRange
                 }
               })
             }
           }else if(props.xLeft>-50){
-            let lastIndex=props.allDataCopy.indexOf(props.data[scrollCandle+props.howCandleInRange*2])
-            let firstIndex=props.allDataCopy.indexOf(props.data[0])-scrollCandle-props.howCandleInRange*2;
+            let firstIndex=props.allDataCopy.indexOf(props.data[0])-props.howCandleInRange*2;
+            let lastIndex=firstIndex+props.howCandleInRange*4
             if(firstIndex>0 && lastIndex!==-1){
-              scrollCandle=Math.abs(scrollCandle-props.howCandleInRange*2)
+              scrollCandle=scrollCandle+props.howCandleInRange*2
               let newX=-(props.candleWidth+props.candleSpacing)*scrollCandle
               const allData=props.allDataCopy.slice(firstIndex, lastIndex)
               props.setData((prev)=>allData)
               props.setXLeft(()=>newX)
               props.setStartCandle(()=>scrollCandle)
-            }else if(firstIndex<0 && lastIndex!==-1){
+            }else if(firstIndex<0 && props.data[0]!==props.allDataCopy[0]){
               firstIndex=0
-              let scrollCandle=props.allDataCopy.indexOf(props.data[0])
-              if(scrollCandle!==-1 && scrollCandle!==0){
-                let newX=-(props.candleWidth+props.candleSpacing)*scrollCandle
-                const allData=props.allDataCopy.slice(firstIndex, lastIndex)
-                props.setData((prev)=>allData)
-                props.setXLeft(()=>newX)
-                props.setStartCandle(()=>scrollCandle)
-              }
+              lastIndex=firstIndex+props.howCandleInRange*4
+              scrollCandle=scrollCandle+props.allDataCopy.indexOf(props.data[0])
+              let newX=-(props.candleWidth+props.candleSpacing)*scrollCandle
+              const allData=props.allDataCopy.slice(firstIndex, lastIndex)
+              props.setData((prev)=>allData)
+              props.setXLeft(()=>newX)
+              props.setStartCandle(()=>scrollCandle)
             }
           }
             let copyHowCandleInRange=props.howCandleInRange

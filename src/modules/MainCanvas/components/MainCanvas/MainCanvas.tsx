@@ -12,6 +12,7 @@ import { DrawLastUpdatedPrice } from '../../../Graphics/components/PriceCanvas/h
 import { useLazyGetHisoricalKlinesQuery } from '../../../Graphics/api/KlinesSymbolApi'
 import { TransformDistance } from '../../../Graphics/helpers/TransformDistance'
 import { GetFactorDistance } from '../../helpers/GetFactorDistance'
+import { useAppSelector } from '../../../../hooks/redux-hooks'
 
 export const MainCanvas:React.FC<IMainCanvas> = React.memo(({graphicRef,data,howCandleInRange,setHowCandleInRange,candleWidth,setCandleWidth,xLeft,setXLeft, startCandle,setStartCandle,candleSpacing,setCandleSpacing,setIsMouseOnGraphic,isMouseOnGraphic,voRef,heightM, setHeightM, heightV, pressedCandle, setPressedCandle,priceWidth,priceRef,fixedNumber,mainCanvasRef, ifFirst, setIfFirst, lastData, setLastData, dataHistory, allDataCopy,
 setAllDataCopy, setData,setIsGottenHistory, graphic, firstData,dataUpdated}) => {
@@ -25,6 +26,7 @@ setAllDataCopy, setData,setIsGottenHistory, graphic, firstData,dataUpdated}) => 
     const [historyData, setHistoryData]=useState<string[][]>([])
     const [active, setActive]=useState<{active:boolean, y:number}>({active:false,y:0})
     const [lastTimeStamp,setLastTimeStamp]=useState<number>(0)
+    const drawingElements=useAppSelector(state=>state.drawing)
     const refCanvas=useRef<HTMLCanvasElement>(null)
     const refContainer=useRef<HTMLDivElement>(null)
     const container=refContainer.current
@@ -111,7 +113,7 @@ setAllDataCopy, setData,setIsGottenHistory, graphic, firstData,dataUpdated}) => 
 
       let thatMinPrice=Math.min(...data.slice(copyScrollCandle,copyScrollCandle+candles).map((d)=>Number(d[3])));
       let thatMaxPrice=Math.max(...data.slice(copyScrollCandle,copyScrollCandle+candles).map((d)=>Number(d[2])));
-
+      let allData:string[][]=[]
       //slice graph
       let dopXLeft=0
       if(ifPlus){
@@ -122,7 +124,7 @@ setAllDataCopy, setData,setIsGottenHistory, graphic, firstData,dataUpdated}) => 
         newX=firstIndex===0 ? newX : newX+(scrollCandle-candles)*(candleWidth+candleSpacing)-dopXLeft
         scrollCandle=newX>=0 ? 0 :  Math.abs(newX/allWidth)
         let copyHowCandleInRange=newX>=0 ? (crosshairContainer.clientWidth-newX)/(candleWidth+candleSpacing) : candles
-        const allData=allDataCopy.slice(firstIndex, lastIndex)
+        allData=allDataCopy.slice(firstIndex, lastIndex)
         thatMinPrice=Math.min(...allData.slice(scrollCandle,scrollCandle+copyHowCandleInRange).map((d)=>Number(d[3])));
         thatMaxPrice=Math.max(...allData.slice(scrollCandle,scrollCandle+copyHowCandleInRange).map((d)=>Number(d[2])));
         ctx.clearRect( container.scrollLeft-container.clientWidth , 0 , container.clientWidth*2, refCanvas.current.height  );
@@ -137,11 +139,10 @@ setAllDataCopy, setData,setIsGottenHistory, graphic, firstData,dataUpdated}) => 
           let lastIndex=firstIndex+candles*3
           scrollCandle=candles
           newX=-candles*(candleSpacing+candleWidth)-dopXLeft
-          const allData=allDataCopy.slice(firstIndex, lastIndex)
+          allData=allDataCopy.slice(firstIndex, lastIndex)
           thatMinPrice=Math.min(...allData.slice(scrollCandle,scrollCandle+candles).map((d)=>Number(d[3])));
           thatMaxPrice=Math.max(...allData.slice(scrollCandle,scrollCandle+candles).map((d)=>Number(d[2])));
           ctx.clearRect( container.scrollLeft-container.clientWidth , 0 , container.clientWidth*2, refCanvas.current.height  );
-          console.log(firstIndex, lastIndex, scrollCandle, newX, thatMaxPrice, thatMinPrice, )
           DrawCandleFunc(ctx,allData,refCanvas.current.width,candleWidth,thatMaxPrice,thatMaxPrice-thatMinPrice,refCanvas.current.height-40,candleSpacing,allData.length, 0,newX)
           setData((prev)=>allData)
           setStartCandle(()=>newX>=0 ? 0 :  Math.abs(newX/allWidth))
@@ -152,11 +153,10 @@ setAllDataCopy, setData,setIsGottenHistory, graphic, firstData,dataUpdated}) => 
           scrollCandle=Math.abs(allDataCopy.indexOf(data[Math.floor(scrollCandle)])-allDataCopy.indexOf(data[0]))
           newX=newX-allDataCopy.indexOf(data[0])*(candleSpacing+candleWidth)
           let lastIndex=firstIndex+candles*3
-          const allData=allDataCopy.slice(firstIndex, lastIndex)
+          allData=allDataCopy.slice(firstIndex, lastIndex)
           thatMinPrice=Math.min(...allData.slice(scrollCandle,scrollCandle+candles).map((d)=>Number(d[3])));
           thatMaxPrice=Math.max(...allData.slice(scrollCandle,scrollCandle+candles).map((d)=>Number(d[2])));
           ctx.clearRect( container.scrollLeft-container.clientWidth , 0 , container.clientWidth*2, refCanvas.current.height  );
-          console.log(firstIndex, lastIndex, scrollCandle, newX, thatMaxPrice, thatMinPrice,'da')
           DrawCandleFunc(ctx,allData,refCanvas.current.width,candleWidth,thatMaxPrice,thatMaxPrice-thatMinPrice,refCanvas.current.height-40,candleSpacing,allData.length, 0,newX)
           setData((prev)=>allData)
           setStartCandle(()=>newX>=0 ? 0 :  Math.abs(newX/allWidth))
@@ -171,15 +171,15 @@ setAllDataCopy, setData,setIsGottenHistory, graphic, firstData,dataUpdated}) => 
       //вычисление нужной свечи
 
       let allLeft=newX>=0 ? (isMouseOnGraphic.x-crosshairContainer.getBoundingClientRect().left)-Math.abs(newX) : Math.abs(newX)+(isMouseOnGraphic.x-crosshairContainer.getBoundingClientRect().left)
-      let neededCandle=data[Math.floor(allLeft/(allWidth))]
+      let neededCandle=allData[Math.floor(allLeft/(allWidth))]
       let x=undefined
-      if(data.indexOf(neededCandle)!==-1){
-         x=(data.indexOf(neededCandle)-scrollCandle)*(allWidth)+candleWidth/2-dopXLeft
+      if(allData.indexOf(neededCandle)!==-1){
+         x=(allData.indexOf(neededCandle)-scrollCandle)*(allWidth)+candleWidth/2-dopXLeft
       }
 
       //отрисовка и смена состояний
 
-      DrawCrosshairCanvas(ctx2,crosshairContainer,data,candleWidth,candleSpacing,Math.abs(newX/(candleSpacing+candleWidth)), isMouseOnGraphic.q,voRef,isPressed,isMouseOnGraphic.x,isMouseOnGraphic.y+41, newX, isMouseOnGraphic.x, x,undefined)
+      DrawCrosshairCanvas(ctx2,crosshairContainer,allData,candleWidth,candleSpacing,Math.abs(newX/(candleSpacing+candleWidth)), isMouseOnGraphic.q,voRef,isPressed,isMouseOnGraphic.x,isMouseOnGraphic.y+41, newX, isMouseOnGraphic.x,thatMaxPrice,thatMinPrice,refCanvas.current.height-40,drawingElements,ctxP,priceRef?.current,howCandleInRange,fixedNumber,priceWidth,x,undefined)
       setXLeft(()=>newX)
       // setStartCandle(copyScrollCandle)
       setMaxPrice(()=>thatMaxPrice)
@@ -370,8 +370,7 @@ setAllDataCopy, setData,setIsGottenHistory, graphic, firstData,dataUpdated}) => 
           let y=e.clientY-refCanvas.current.getBoundingClientRect().top
           setIsMouseOnGraphic({x:e.clientX,y:y,q:true})
           let scrollCandle=xLeft >=0 ? -Math.abs(xLeft/(candleSpacing+candleWidth)) : Math.abs(xLeft/(candleSpacing+candleWidth))
-          DrawCrosshairCanvas(ctx2,crosshairContainer,data,candleWidth,candleSpacing,scrollCandle, isMouseOnGraphic.q,voRef,isPressed,e.clientX,e.offsetY, xLeft, e.offsetX,undefined, pressedCandle)
-          DrawInfoPrice(ctxP, priceRef?.current, howCandleInRange,maxPrice,minPrice,e.offsetY-40.5,candleWidth,candleSpacing,isMouseOnGraphic.q,fixedNumber,priceWidth)
+          DrawCrosshairCanvas(ctx2,crosshairContainer,data,candleWidth,candleSpacing,scrollCandle, isMouseOnGraphic.q,voRef,isPressed,e.clientX,e.offsetY, xLeft, e.offsetX,maxPrice,minPrice,refCanvas.current.height-40,drawingElements,ctxP,priceRef?.current,howCandleInRange,fixedNumber,priceWidth,undefined, pressedCandle)
         }
       }
       const handleCrosshairLeave=()=>{
@@ -396,7 +395,7 @@ setAllDataCopy, setData,setIsGottenHistory, graphic, firstData,dataUpdated}) => 
           crosshairContainer?.removeEventListener('mouseleave', handleCrosshairLeave)
         }
 
-      },[xLeft, isPressed,fixedNumber,priceRef,priceWidth,data, maxPrice, minPrice])
+      },[xLeft, isPressed,fixedNumber,priceRef,priceWidth,data, maxPrice, minPrice, drawingElements])
   return (
     <>  
       <CrosshairCanvas {...propsToCrosshairCanvas} ref={mainCanvasRef} />
@@ -407,19 +406,3 @@ setAllDataCopy, setData,setIsGottenHistory, graphic, firstData,dataUpdated}) => 
     </>
   )
 })
-
-
-// let firstIndexLastData=allDataCopy.indexOf(data[0])
-//         let firstIndex=firstIndexLastData-candles < 0 ? 0 : firstIndexLastData-candles;
-//         let lastIndex=firstIndex+candles*3
-//         newX=firstIndex===0 ? newX-firstIndexLastData*(candleSpacing+candleWidth) :newX-candles*(candleSpacing+candleWidth)
-//         scrollCandle=newX>=0 ? 0 : scrollCandle+firstIndexLastData
-//         const allData=allDataCopy.slice(firstIndex, lastIndex)
-//         thatMinPrice=Math.min(...allData.slice(scrollCandle,scrollCandle+candles).map((d)=>Number(d[3])));
-//         thatMaxPrice=Math.max(...allData.slice(scrollCandle,scrollCandle+candles).map((d)=>Number(d[2])));
-//         ctx.clearRect( container.scrollLeft-container.clientWidth , 0 , container.clientWidth*2, refCanvas.current.height  );
-//         console.log(firstIndex, lastIndex, candles,newX,scrollCandle,allData,thatMaxPrice,thatMinPrice,allData.slice(scrollCandle,scrollCandle+candles))
-//         DrawCandleFunc(ctx,allData,refCanvas.current.width,candleWidth,thatMaxPrice,thatMaxPrice-thatMinPrice,refCanvas.current.height-40,candleSpacing,allData.length, 0,newX)
-//         setData((prev)=>allData)
-//         setStartCandle(()=>newX>=0 ? 0 : scrollCandle+firstIndexLastData)
-//         scrollCandle=newX>=0 ? -Math.abs(newX/(candleWidth+candleSpacing)) : Math.abs(newX/(candleWidth+candleSpacing))
