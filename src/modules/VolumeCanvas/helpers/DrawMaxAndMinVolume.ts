@@ -1,4 +1,4 @@
-export function DrawMaxAndMinVolume(ctx:any,canvas:HTMLCanvasElement, maxVolume:number, minVolume:number,width:number){
+export function DrawMaxAndMinVolume(ctx:any,canvas:HTMLCanvasElement, maxVolume:number, minVolume:number,width:number,dopHeight:number, yDown:number){
     function nFormatter(num:number) {
         if (num >= 1000000000) {
         return (num / 1000000000).toFixed(1).replace(/.0$/, '') + 'B';
@@ -11,14 +11,20 @@ export function DrawMaxAndMinVolume(ctx:any,canvas:HTMLCanvasElement, maxVolume:
         }
         return num.toFixed(0);
     }
-    const heightScale = (ctx.canvas.height-15)  / maxVolume;
-    const rangeMaxMin=canvas.height-16-19
-    const range=90
+    const heightCanvas=dopHeight
+    const heightScale = (heightCanvas-15)  / maxVolume;
+    const rangeMaxMin=heightCanvas-16-19
+    const range=80
     let howLines=Math.round(rangeMaxMin/range)
-    let newArr=[16,canvas.height-16]
+    let newArr=[16,heightCanvas-16]
     let volumeArr: number[]=[maxVolume,minVolume]
+    let rangeHeight=(canvas.height-dopHeight)/2
     for (let i=0; i<howLines-2; i++){
-        addValue(newArr)
+        if(newArr[i+1]-newArr[i]>80){
+            addValue(newArr)
+        }else{
+            break
+        }
     }
     function addValue(arr: number[]){
         let length=arr.length
@@ -32,7 +38,6 @@ export function DrawMaxAndMinVolume(ctx:any,canvas:HTMLCanvasElement, maxVolume:
         volumeArr.sort((a, b) => b - a)
     }
     // Рисование прямоугольника для графика объема
-    
     ctx.beginPath();
     // to get a crisp 1 pixel wide line, we need to add 0.5 to the coords
     ctx.imageSmoothingEnabled = false;
@@ -47,6 +52,12 @@ export function DrawMaxAndMinVolume(ctx:any,canvas:HTMLCanvasElement, maxVolume:
         let x=(width-length)/2
         ctx.strokeStyle = '#82848c';
         ctx.stroke();
-        ctx.fillText(String(nFormatter(volumeArr[i])),x, newArr[i]+4+0.5)
+        let newHeightScale=(canvas.height-15)  / maxVolume
+        let y=heightScale*volumeArr[i]+yDown+rangeHeight
+        if(i==newArr.length-1){
+            y=y+5
+        }
+        ctx.fillText(String(nFormatter(volumeArr[i])),x, canvas.height-y)
+        //newArr[i]+4+0.5
     }
 }

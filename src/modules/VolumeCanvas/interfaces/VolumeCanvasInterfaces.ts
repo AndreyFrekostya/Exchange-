@@ -5,7 +5,12 @@ export interface IResizer{
     refContainer:RefObject<HTMLDivElement>,
     graphicRef:RefObject<HTMLDivElement>,
     setHeightV:setState<number>,
-    setHeightM:setState<number | undefined>
+    setHeightM:setState<number | undefined>,
+    setDopHeight:setState<number>,
+    dopHeight:number,
+    dopHeightCanvas:number,
+    setDopHeightCanvas:setState<number>,
+    heightM:number|undefined
 }
 
 export interface ICanvasVolume{
@@ -30,7 +35,9 @@ export interface ICanvasVolume{
     setHeightV:setState<number>,
     priceWidth:number,
     fulfieldGraphicRefAndVolumeAndPrice:(grRef:HTMLCanvasElement | null | undefined, voRef:HTMLCanvasElement | null | undefined,priceRefArg: HTMLCanvasElement | null | undefined)=>void,
-    volumeRef:MutableRefObject<HTMLCanvasElement | null>
+    volumeRef:MutableRefObject<HTMLCanvasElement | null>,
+    dopHeightCanvas:number,
+    setDopHeightCanvas:setState<number>
 }
 
 export interface CrosshairVolumeProps{
@@ -46,5 +53,17 @@ export interface CrosshairVolumeProps{
     maxVolume:number,
     priceWidth:number,
     heightV:number,
-    grRef:MutableRefObject<HTMLCanvasElement | null>
+    grRef:MutableRefObject<HTMLCanvasElement | null>,
+    setIsPressedMain:setState<boolean>,
+    setStartYMain:setState<number>,
+    isPressedMain:boolean,
+    startYMain:number,
+    yDown:number,
+    setYDown:setState<number>,
+    ctx:CanvasRenderingContext2D | null | undefined,
+    refCanvasCurrent:HTMLCanvasElement | null,
+    dopHeight:number,
+    ctx2:CanvasRenderingContext2D | null | undefined,
+    refDop:HTMLCanvasElement | null,
+    minVolume:number
 }

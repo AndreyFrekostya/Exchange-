@@ -4,7 +4,14 @@ import { DrawPlus } from "./DrawPlus"
 import { yToPixelCoords } from "../../Graphics/helpers/yToPixelCoords"
 import { useAppSelector } from "../../../hooks/redux-hooks"
 import { DrawInfoPrice } from "../../Graphics/components/PriceCanvas/helpers/DrawInfoPrice"
-type DrawingElements={
+import { DrawDot } from "./DrawDot"
+import { IDrawingElements } from "../interfaces/CanvasInterfaces"
+import { DrawLineBetweenTwoDot } from "./DrawLineBeetwenTwoDot"
+import { DrawGrLine } from "./DrawGrLine"
+import { DrawGrLuch } from "./DrawGrLuch"
+import { DrawRectangle } from "./DrawRectangle"
+import { GetCoordsWithMagnit } from "./GetCoordsWithMagnit"
+export type DrawingElements={
     name:string,
     isMagnit: boolean|null
 }
@@ -25,12 +32,15 @@ export function DrawCrosshairCanvas(
     maxPrice:number,
     minPrice:number,
     height:number,
-    drawingElements:DrawingElements,
+    drawingElementsOnPanel:DrawingElements,
     ctxP:any,
     priceCanvas:HTMLCanvasElement,
     howCandleInRange:number,
     fixedNumber:number,
     priceWidth:number,
+    yDown:number,
+    dopHeight:number,
+    drawingElements:IDrawingElements,
     xZoom?:number |undefined,
     pressedCandle?:string[],
     ){
@@ -39,6 +49,7 @@ export function DrawCrosshairCanvas(
     const greenColor='#37DBBA'
     const volumeCanvas=voRef?.current
     const ctxV=volumeCanvas?.getContext('2d')
+    let rangeHeight=(height-dopHeight)/2
     let rect = canvas2.getBoundingClientRect();
     q=true
     const priceRange=maxPrice-minPrice
@@ -58,63 +69,52 @@ export function DrawCrosshairCanvas(
             x=xZoom
         }
         if(pressedCandle && isPressed){
-            x=(candlestiks.indexOf(pressedCandle)-scrolledCandle)*(candleWidth+candleSpacing)+candleWidth/2
+            x=drawingElementsOnPanel.name=='trand' || drawingElementsOnPanel.name=='rect' || drawingElementsOnPanel.name=='fib' || drawingElementsOnPanel.name=='profile ob' || drawingElementsOnPanel.name=='price' ? x : (candlestiks.indexOf(pressedCandle)-scrolledCandle)*(candleWidth+candleSpacing)+candleWidth/2
             neededCandle=pressedCandle
         }
         let ranger=String(candleWidth/2).includes('.') ? 0 : 0.5
         // вычисляем y координату с магнитом
-        if (drawingElements.name!=='nothing'&& drawingElements.isMagnit===true && neededCandle){
-            let open=neededCandle[4]>neededCandle[1] ? neededCandle[4] : neededCandle[1]
-            let close=neededCandle[4]>neededCandle[1] ? neededCandle[1] : neededCandle[4]
-            let yCenterCandle=((yToPixelCoords(maxPrice,Number(neededCandle[4]),priceRange,height)+yToPixelCoords(maxPrice,Number(neededCandle[1]),priceRange,height))/2)+40
-            let yCenterBetweenHighOpen=((yToPixelCoords(maxPrice,Number(open),priceRange,height)+yToPixelCoords(maxPrice,Number(neededCandle[2]),priceRange,height))/2)+40
-            let yCenterBetweenLowClose=((yToPixelCoords(maxPrice,Number(close),priceRange,height)+yToPixelCoords(maxPrice,Number(neededCandle[3]),priceRange,height))/2)+40
-            if(crosshairY<yCenterBetweenHighOpen){
-                crosshairY=yToPixelCoords(maxPrice,Number(neededCandle[2]),priceRange,height)+40
-            }else if(crosshairY<yCenterCandle){
-                crosshairY=yToPixelCoords(maxPrice,Number(open),priceRange,height)+40
-            }else if( crosshairY>yCenterCandle && crosshairY<yCenterBetweenLowClose){
-                crosshairY=yToPixelCoords(maxPrice,Number(close),priceRange,height)+40
-            }else{
-                crosshairY=yToPixelCoords(maxPrice,Number(neededCandle[3]),priceRange,height)+40
-            }
-            console.log(crosshairY)
-        }else if(drawingElements.name!=='nothing'&& drawingElements.isMagnit===false && neededCandle){
-            let open=neededCandle[4]>neededCandle[1] ? neededCandle[4] : neededCandle[1]
-            let close=neededCandle[4]>neededCandle[1] ? neededCandle[1] : neededCandle[4]
-            let openCoords=yToPixelCoords(maxPrice,Number(open),priceRange,height)+40
-            let closeCoords=yToPixelCoords(maxPrice,Number(close),priceRange,height)+40
-            let highCoords=yToPixelCoords(maxPrice,Number(neededCandle[2]),priceRange,height)+40
-            let lowCoords=yToPixelCoords(maxPrice,Number(neededCandle[3]),priceRange,height)+40
-            let yCenterBetweenHighOpen=((yToPixelCoords(maxPrice,Number(open),priceRange,height)+yToPixelCoords(maxPrice,Number(neededCandle[2]),priceRange,height))/2)+40
-            let yCenterBetweenLowClose=((yToPixelCoords(maxPrice,Number(close),priceRange,height)+yToPixelCoords(maxPrice,Number(neededCandle[3]),priceRange,height))/2)+40
-            const heightCandle = Math.abs(yToPixelCoords(maxPrice,Number(open),priceRange,height) - yToPixelCoords(maxPrice,Number(close),priceRange,height));
-            let ifHeightCandleMore40Number=heightCandle>40 ? true : false
-            if(ifHeightCandleMore40Number){
-                if(crosshairY>highCoords-40 && crosshairY<yCenterBetweenHighOpen){
-                    crosshairY=yToPixelCoords(maxPrice,Number(neededCandle[2]),priceRange,height)+40
-                }else if(crosshairY>yCenterBetweenHighOpen && crosshairY<openCoords+40){
-                    crosshairY=yToPixelCoords(maxPrice,Number(open),priceRange,height)+40
-                }else if(crosshairY>closeCoords-40 && crosshairY<yCenterBetweenLowClose){
-                    crosshairY=yToPixelCoords(maxPrice,Number(close),priceRange,height)+40
-                }else if(crosshairY>yCenterBetweenLowClose && crosshairY<lowCoords+40){
-                    crosshairY=yToPixelCoords(maxPrice,Number(neededCandle[3]),priceRange,height)+40
+        crosshairY=GetCoordsWithMagnit(drawingElementsOnPanel,neededCandle,crosshairY,dopHeight,maxPrice,maxPrice-minPrice,rangeHeight,yDown)
+        //перерисовываем элементы рисования
+        if(drawingElements.lines.length!==0){
+            drawingElements.lines.forEach((line)=>{
+                if(line.x1!==0 && line.x2==0){
+                    DrawLineBetweenTwoDot(ctx2, line.x1,line.y1,x,crosshairY)
                 }
-            }else{
-                let yCenterCandle=((yToPixelCoords(maxPrice,Number(neededCandle[4]),priceRange,height)+yToPixelCoords(maxPrice,Number(neededCandle[1]),priceRange,height))/2)+40
-                if(crosshairY>highCoords-40 && crosshairY<yCenterBetweenHighOpen){
-                    crosshairY=yToPixelCoords(maxPrice,Number(neededCandle[2]),priceRange,height)+40
-                }else if(crosshairY>yCenterBetweenHighOpen && crosshairY<yCenterCandle){
-                    crosshairY=yToPixelCoords(maxPrice,Number(open),priceRange,height)+40
-                }else if(crosshairY>yCenterCandle && crosshairY<yCenterBetweenLowClose){
-                    crosshairY=yToPixelCoords(maxPrice,Number(close),priceRange,height)+40
-                }else if(crosshairY>yCenterBetweenLowClose && crosshairY<lowCoords+40){
-                    crosshairY=yToPixelCoords(maxPrice,Number(neededCandle[3]),priceRange,height)+40
+                if(line.x2!==0 && line.x1!==0){
+                    DrawLineBetweenTwoDot(ctx2, line.x1,line.y1,line.x2,line.y2)
                 }
-            }
+                if(line.x1!==0){
+                    DrawDot(ctx2, line.x1, line.y1)
+                }
+                if(line.x2!==0){
+                    DrawDot(ctx2, line.x2, line.y2)
+                }
+            })
         }
+        if(drawingElements.grLines.length!==0){
+            let xDot=canvas2.clientWidth/2
+            drawingElements.grLines.forEach((grLine)=>{
+                DrawGrLine(ctx2, grLine.y, xLeft, Math.abs(xLeft*3),xDot)
+            })
+        }
+        if(drawingElements.grRay.length!==0){
+            drawingElements.grRay.forEach((grRay)=>{
+                DrawGrLuch(ctx2, grRay.x, grRay.y,Math.abs(xLeft*3))
+            })
+        }
+        if(drawingElements.rectangles.length!==0){
+            drawingElements.rectangles.forEach((rect)=>{
+                if(rect.x!==0 && rect.x1==0){
+                    DrawRectangle(ctx2, rect.x,rect.y,x,crosshairY)
+                }else if(rect.x!==0 && rect.x1!==0){
+                    DrawRectangle(ctx2, rect.x,rect.y,rect.x1,rect.y1)
+                }
+            })
+        }
+        //рисуем цену
+        DrawInfoPrice(ctxP, priceCanvas, howCandleInRange,maxPrice,minPrice,crosshairY-40.5,candleWidth,candleSpacing,q,fixedNumber,priceWidth,dopHeight,yDown )
         // рисуем перекрестие
-        DrawInfoPrice(ctxP, priceCanvas, howCandleInRange,maxPrice,minPrice,crosshairY-40.5,candleWidth,candleSpacing,q,fixedNumber,priceWidth )
         if(q){
             ctx2.imageSmoothingEnabled = false
             ctx2.beginPath();

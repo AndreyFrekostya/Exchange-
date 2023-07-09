@@ -34,7 +34,14 @@ export interface ICrosshairCanvasProps{
     setHistoryData:setState<string[][]>,
     graphic:IGraphic,
     allDataCopy:string[][],
-    setData:setState<string[][]>
+    setData:setState<string[][]>,
+    dopHeightCanvas:number,
+    setYDown:setState<number>,
+    yDown:number,
+    maxPrice:number,
+    minPrice:number,
+    ctx2:CanvasRenderingContext2D | null | undefined,
+    drawingElements:IDrawingElements
 }
 
 export interface IMainCanvas{
@@ -74,6 +81,27 @@ export interface IMainCanvas{
     setIsGottenHistory:setState<boolean>,
     graphic:IGraphic,
     firstData:string[][],
-    dataUpdated:string[]
+    dataUpdated:string[],
+    isUsuallyScroll:boolean,
+    dopHeightCanvas:number,
+    setDopHeightCanvas:setState<number>,
+    setYDown:setState<number>,
+    yDown:number,
+    ifPlus:boolean,
+    setIfPlus:setState<boolean>,
 }
-
+type Lines=Array<{x1:number, y1:number, x2:number, y2:number}>
+type GrLines=Array<{y:number}>
+type GrRay=Array<{x:number, y:number}>
+type Rectangles=Array<{x:number, y:number,x1:number, y1:number}>
+type fixedPriceVolume=Array<{x1:number,y2:number,x:number, y:number}>
+export interface IDrawingElements{
+  lines:Lines,
+  grLines:GrLines,
+  grRay:GrRay,
+  fibonacciRetracement:null,
+  rectangles:Rectangles,
+  pricesRanges:Rectangles,
+  fixedPriceVolume:fixedPriceVolume,
+  texts:null,
+}

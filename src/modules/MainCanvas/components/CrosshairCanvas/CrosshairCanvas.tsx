@@ -6,9 +6,19 @@ import { DrawUpdatedLinePrice } from '../../helpers/DrawUpdatedLinePrice';
 import { useLazyGetHisoricalKlinesQuery } from '../../../Graphics/api/KlinesSymbolApi';
 import { TransformDistance } from '../../../Graphics/helpers/TransformDistance';
 import { GetFactorDistance } from '../../helpers/GetFactorDistance';
+import { useAppSelector } from '../../../../hooks/redux-hooks';
+import { DrawDot } from '../../helpers/DrawDot';
+import { DrawLineBetweenTwoDot } from '../../helpers/DrawLineBeetwenTwoDot';
+import { yToPixelCoords } from '../../../Graphics/helpers/yToPixelCoords';
+import { DrawGrLine } from '../../helpers/DrawGrLine';
+import { DrawGrLuch } from '../../helpers/DrawGrLuch';
+import { GetCoordsWithMagnit } from '../../helpers/GetCoordsWithMagnit';
 const CrosshairCanvas = React.memo(forwardRef<HTMLCanvasElement, ICrosshairCanvasProps>((props, mainCanvasRef) => {
   const crosshairContainer = mainCanvasRef && 'current' in mainCanvasRef ? mainCanvasRef.current : null;
+  const drawingElementOnPanel=useAppSelector(state=>state.drawing.name)
+  const drawingElementWithMagnit=useAppSelector(state=>state.drawing)
   const [startX, setStartX]=useState<number>(0)
+  const [startY, setStartY]=useState<number>(0)
   const [getHistoricalKlines,{data:dataHistory=[]}]=useLazyGetHisoricalKlinesQuery()
   const [isAdded, setIsAdded]=useState<boolean>(true)
   const  handleMouseDown=(e:MouseEvent)=>{
@@ -29,12 +39,62 @@ const CrosshairCanvas = React.memo(forwardRef<HTMLCanvasElement, ICrosshairCanva
       }else{
         props.setPressedCandle(()=>undefined)
       }
+      //рисуем элементы рисования если есть
+      let x=mouseX
+      let y=mouseY
+      if(props.ctx2 && crosshairContainer && props.mainCanvas){
+        y=GetCoordsWithMagnit(drawingElementWithMagnit,neededCandle,y,props.dopHeightCanvas,props.maxPrice,props.maxPrice-props.minPrice,(props.mainCanvas.clientHeight-40-props.dopHeightCanvas)/2,props.yDown)
+        if(drawingElementOnPanel=='trand'){
+          if(props.drawingElements.lines.length!==0){
+            if(props.drawingElements.lines[0].x1==0){
+              props.drawingElements.lines=[{x1:x, y1:y, x2:0, y2:0}, ...props.drawingElements.lines]
+            }else if(props.drawingElements.lines[0].x2==0){
+              props.drawingElements.lines[0].x2=x
+              props.drawingElements.lines[0].y2=y
+              DrawLineBetweenTwoDot(props.ctx2, props.drawingElements.lines[0].x1,props.drawingElements.lines[0].y1,x,y)
+            }else{
+              props.drawingElements.lines=[{x1:x, y1:y, x2:0, y2:0}, ...props.drawingElements.lines]
+            }
+          }else{
+            props.drawingElements.lines=[{x1:x, y1:y, x2:0, y2:0}, ...props.drawingElements.lines]
+          }
+          DrawDot(props.ctx2, x,y)
+        }else if(drawingElementOnPanel=='gorizontal'){
+          let xDot=props.mainCanvas.clientWidth/2
+          props.drawingElements.grLines=[{y:y}, ...props.drawingElements.grLines]
+          DrawGrLine(props.ctx2, y, props.xLeft, Math.abs(props.xLeft*3),xDot)
+        }else if(drawingElementOnPanel=='gr luch'){
+          props.drawingElements.grRay=[{x:x, y:y}, ...props.drawingElements.grRay]
+          DrawGrLuch(props.ctx2, x, y,Math.abs(props.xLeft*3))
+        }else if(drawingElementOnPanel=='rect'){
+          if(props.drawingElements.rectangles.length!==0){
+            if(props.drawingElements.rectangles[0].x==0){
+              props.drawingElements.rectangles=[{x:x,y:y,x1:0,y1:0},...props.drawingElements.rectangles]
+              DrawDot(props.ctx2, x,y)
+            }else if(props.drawingElements.rectangles[0].x1==0){
+              props.drawingElements.rectangles[0].x1=x
+              props.drawingElements.rectangles[0].y1=y
+            }else{
+              props.drawingElements.rectangles=[{x:x,y:y,x1:0,y1:0},...props.drawingElements.rectangles]
+            }
+          }else{
+            DrawDot(props.ctx2, x,y)
+            props.drawingElements.rectangles=[{x:x,y:y,x1:0,y1:0},...props.drawingElements.rectangles]
+          }
+        }else if(drawingElementOnPanel=='price'){
+          
+        }
+      }
     }
+    console.log(drawingElementOnPanel)
+    //изменяем состяние
     props.setIsPressed(()=>true)
     setStartX((prev)=>e.clientX)
+    setStartY((prev)=>e.clientY)
   }
   const handleMouseMove=(event:MouseEvent)=> {
     event.preventDefault();
+    if(drawingElementOnPanel!=='trand' && drawingElementOnPanel!=='rect' && drawingElementOnPanel!=='fib' && drawingElementOnPanel!=='price' && drawingElementOnPanel!=='profile ob'){
       if(props.graphicRef.current && crosshairContainer){
         const mouseX = event.clientX - props.graphicRef.current.getBoundingClientRect().left;
         if(mouseX>crosshairContainer.clientWidth-19 && mouseX<crosshairContainer.clientWidth){
@@ -47,10 +107,15 @@ const CrosshairCanvas = React.memo(forwardRef<HTMLCanvasElement, ICrosshairCanva
       if(props.isPressed && crosshairContainer){
         const deltaX = startX-event.clientX;
         const newX=props.xLeft-deltaX
+        const deltaY=startY-event.clientY
+        const newY=props.yDown-deltaY
         const scrollCandle=newX>=0 ?  props.howCandleInRange-Math.floor(newX/(props.candleWidth+props.candleSpacing))   :Math.floor(newX/(props.candleWidth+props.candleSpacing))
         let ifCanMove=newX>= 0 ?Math.abs(scrollCandle)>2 : Math.abs(scrollCandle)<props.data.length-1
         if(ifCanMove){
           props.setXLeft(()=>newX)
+        }
+        if(props.dopHeightCanvas+40!==props.heightM){
+          props.setYDown(()=>newY)
         }
         // Redraw graph
         if(crosshairContainer){
@@ -61,14 +126,15 @@ const CrosshairCanvas = React.memo(forwardRef<HTMLCanvasElement, ICrosshairCanva
               let lastIndex=firstIndex+props.howCandleInRange*2.5!<props.allDataCopy.length ? firstIndex+props.howCandleInRange*2.5 : props.allDataCopy.length
               let newX=0
               firstIndex=lastIndex===props.allDataCopy.length ? firstIndex-props.howCandleInRange*1.5 : firstIndex
+              let startCandle=firstIndex>0 ? props.howCandleInRange*2.5 : props.allDataCopy.indexOf(props.data[Math.floor(scrollCandle)])
               firstIndex=firstIndex>0 ? firstIndex : 0
-              newX=lastIndex===props.allDataCopy.length ? -(props.candleWidth+props.candleSpacing)*props.howCandleInRange*2.5  : -(props.candleWidth+props.candleSpacing)*props.howCandleInRange
+              newX=lastIndex===props.allDataCopy.length ? -(props.candleWidth+props.candleSpacing)*startCandle  : -(props.candleWidth+props.candleSpacing)*props.howCandleInRange
               const s=props.allDataCopy.slice(firstIndex,lastIndex)
               props.setXLeft(()=>newX)
               props.setData((prev)=>s)
               props.setStartCandle(()=>{
                 if(lastIndex===props.allDataCopy.length){
-                  return props.howCandleInRange*2.5
+                  return startCandle
                 }else{
                   return props.howCandleInRange
                 }
@@ -103,24 +169,52 @@ const CrosshairCanvas = React.memo(forwardRef<HTMLCanvasElement, ICrosshairCanva
             let thatMinPrice=Math.min(...props.data.slice(scrollCandle,scrollCandle+copyHowCandleInRange).map((d)=>Number(d[3])));
             let thatMaxPrice=Math.max(...props.data.slice(scrollCandle,scrollCandle+copyHowCandleInRange).map((d)=>Number(d[2])));
             let priceRange = thatMaxPrice - thatMinPrice;
+            if(props.dopHeightCanvas+40!==props.heightM){
+              thatMinPrice=props.minPrice
+              thatMaxPrice=props.maxPrice
+              priceRange=thatMaxPrice - thatMinPrice
+            }
             if(props.ctx && props.mainCanvas){
               props.ctx.clearRect( 0 , 0 , props.mainCanvas.width ,props.mainCanvas.height  );
-              DrawCandleFunc(props.ctx,props.data,props.mainCanvas.width,props.candleWidth,thatMaxPrice,priceRange,props.mainCanvas.height-40,props.candleSpacing,props.data.length, 0,props.xLeft)
-              DrawUpdatedLinePrice(props.ctx,props.allDataCopy[props.allDataCopy.length-1],props.mainCanvas.height-40,thatMaxPrice,thatMaxPrice-thatMinPrice,props.xLeft,props.mainCanvas.width)
+              DrawCandleFunc(props.ctx,props.data,props.mainCanvas.width,props.candleWidth,thatMaxPrice,priceRange,props.mainCanvas.height-40,props.candleSpacing,props.data.length, 0,props.xLeft,props.dopHeightCanvas,props.yDown)
+              DrawUpdatedLinePrice(props.ctx,props.allDataCopy[props.allDataCopy.length-1],props.mainCanvas.height-40,thatMaxPrice,thatMaxPrice-thatMinPrice,props.xLeft,props.mainCanvas.width, props.dopHeightCanvas, props.yDown)
               props.ctx.clearRect(props.mainCanvas.width, 0,props.mainCanvas.width, props.mainCanvas.height) 
               props.ctx.clearRect(props.mainCanvas.width,0,props.mainCanvas.width,props.mainCanvas.height)
+              //изменение коорд элементов рисования
+              if(props.drawingElements.lines.length!==0){
+                  let absoluteMax=props.maxPrice>thatMaxPrice ? props.maxPrice : thatMaxPrice
+                  let notAbsolutMax=props.maxPrice>thatMaxPrice ? thatMaxPrice : props.maxPrice
+                  let rangeY=yToPixelCoords(absoluteMax,notAbsolutMax,absoluteMax-thatMinPrice,props.mainCanvas.height-40)
+                  rangeY=props.maxPrice>thatMaxPrice ? rangeY : 0-rangeY
+                  // console.log(props.maxPrice,thatMaxPrice,props.minPrice,thatMinPrice,props.mainCanvas.height-40,rangeY)
+                  // 30259.5 30257.4 30132.5 30132.5 456 7.666933546832067 2.1
+                  // 30257.4 30259.5 30132.5 30132.5 456 -7.540157480309735 -2.1
+                  props.drawingElements.lines.forEach((line)=>{
+                    line.x1=line.x1-deltaX
+                    line.x2=line.x2-deltaX
+                    if(props.dopHeightCanvas+40!==props.heightM){
+                      line.y1=line.y1-deltaY
+                      line.y2=line.y2-deltaY
+                    }else{
+                      line.y1=line.y1-rangeY
+                      line.y2=line.y2-rangeY
+                    }
+                  })
+              }
               props.setMaxPrice(()=>thatMaxPrice)
               props.setMinPrice(()=>thatMinPrice)
               props.setStartCandle(()=>scrollCandle)
             }
-          
         }
         setStartX((prev)=>event.clientX)
+        setStartY((prev)=>event.clientY)
       }
+    }
   }
   const handleMouseUp=async(event:MouseEvent) =>{
     event.preventDefault();
     setStartX((prev)=>0)
+    setStartY((prev)=>0)
     props.setMouseX((prev)=>0)
     props.setIsPressed((prev)=>false)
     if(props.graphicRef.current &&crosshairContainer){
@@ -167,8 +261,8 @@ const CrosshairCanvas = React.memo(forwardRef<HTMLCanvasElement, ICrosshairCanva
       if(props.candleWidth===1 && props.candleSpacing<0.8){
         props.setCandleSpacing(candleSpacingPrev+0.2)
         props.setIfPlus(true)
-      }else if(props.candleWidth+2!==41 && props.candleSpacing+0.2!==4){
-        props.setCandleWidth(candleWidthPrev+2)
+      }else if(props.candleWidth+1!==41 && props.candleSpacing+0.2!==4){
+        props.setCandleWidth(candleWidthPrev+1)
         props.setCandleSpacing(candleSpacingPrev+0.2)
         props.setIfPlus(true)
       }
@@ -178,8 +272,8 @@ const CrosshairCanvas = React.memo(forwardRef<HTMLCanvasElement, ICrosshairCanva
         props.setIfPlus(true)
       }
     } else {
-      if(props.candleWidth-2!==-1 && props.candleWidth!==0.3 && props.candleSpacing-0.2!==-0.4){
-        props.setCandleWidth(candleWidthPrev-2)
+      if(props.candleWidth-1!==-1 && props.candleWidth!==0.3 && props.candleSpacing-0.2!==-0.4){
+        props.setCandleWidth(candleWidthPrev-1)
         props.setCandleSpacing(Number((candleSpacingPrev-0.2).toFixed(1)))
         props.setIfPlus(false)
       }
@@ -203,7 +297,7 @@ const CrosshairCanvas = React.memo(forwardRef<HTMLCanvasElement, ICrosshairCanva
         document.removeEventListener('mouseup', handleMouseUp as  any)
       }
     };
-  }, [props.data,props.heightM, props.xLeft,props.candleSpacing,props.candleWidth]);
+  }, [props.data,props.heightM, props.xLeft,props.candleSpacing,props.candleWidth, drawingElementWithMagnit]);
   return (
     <canvas onMouseDown={(e:MouseEvent)=>handleMouseDown(e)}
       onMouseMove={(e:MouseEvent)=>handleMouseMove(e)}

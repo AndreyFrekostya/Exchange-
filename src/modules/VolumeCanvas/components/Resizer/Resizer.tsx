@@ -1,7 +1,7 @@
 import React, { FC, useEffect, useRef } from 'react'
 import styles from './styles.module.css'
 import { IResizer } from '../../interfaces/VolumeCanvasInterfaces';
-const Resizer:FC<IResizer> = ({refContainer,graphicRef,setHeightV,setHeightM,heightV}) => {
+const Resizer:FC<IResizer> = ({refContainer,graphicRef,setHeightV,setHeightM,heightV,setDopHeight,dopHeight, dopHeightCanvas, setDopHeightCanvas, heightM}) => {
     const refTop=useRef<HTMLDivElement | null>(null)
     useEffect(() => {
         if(refTop.current!==null && refContainer.current){
@@ -13,6 +13,8 @@ const Resizer:FC<IResizer> = ({refContainer,graphicRef,setHeightV,setHeightM,hei
             const dy = event.clientY - y;
             heightd = heightd - dy;
             y = event.clientY;
+            const rangeBetweenHeightVolume=heightV-dopHeight
+            const rangeBetweenHeightCanvas=heightM? heightM-dopHeightCanvas : 0
             let range=0
             if(graphicRef.current?.clientHeight){
                 range=graphicRef.current?.clientHeight-180<70 ? 70 : 0
@@ -33,6 +35,14 @@ const Resizer:FC<IResizer> = ({refContainer,graphicRef,setHeightV,setHeightM,hei
                 refTop.current.style.top = `${graphicRef.current.clientHeight-(graphicRef.current.clientHeight-145+range)}px`;
                 }else{
                     setHeightV(()=>heightd)
+                    setDopHeight(()=>heightd-rangeBetweenHeightVolume)
+                    setDopHeightCanvas(()=>{
+                        if(graphicRef.current?.clientHeight){
+                          return graphicRef.current?.clientHeight-heightd-70-rangeBetweenHeightCanvas
+                        }else{
+                          return 0
+                        }
+                    })
                     setHeightM(()=>{
                         if(graphicRef.current?.clientHeight){
                           return graphicRef.current?.clientHeight-heightd-70
@@ -63,7 +73,7 @@ const Resizer:FC<IResizer> = ({refContainer,graphicRef,setHeightV,setHeightM,hei
                 }
             };
         }
-    }, [heightV]);
+    }, [heightV, dopHeight, dopHeightCanvas, heightM]);
   return (
     <div className={styles.resizer} ref={refTop}></div>
   )

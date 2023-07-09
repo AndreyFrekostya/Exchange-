@@ -1,4 +1,4 @@
-export function DrawInfoVolume(ctx:any,canvas:HTMLCanvasElement,y:number, maxVolume:number,priceWidth:number){
+export function DrawInfoVolume(ctx:any,canvas:HTMLCanvasElement,y:number, maxVolume:number,priceWidth:number,dopHeight:number,yDown:number){
     function nFormatter(num:number) {
         if (num >= 1000000000) {
         return (num / 1000000000).toFixed(3).replace(/.0$/, '') + 'B';
@@ -11,8 +11,10 @@ export function DrawInfoVolume(ctx:any,canvas:HTMLCanvasElement,y:number, maxVol
         }
         return num.toFixed(0);
     }
-    const heightScale=(canvas.height-14)/maxVolume;
-    let volume=(canvas.height-y)/heightScale
+    const rangeHeight=(canvas.height-dopHeight)/2
+    const height=dopHeight
+    const heightScale=(height-15)/maxVolume;
+    let volume=(height-y-yDown+rangeHeight)/heightScale
     ctx.clearRect(0,0,canvas.width, canvas.height)
     ctx.beginPath();
     ctx.lineWidth = 0.1;

@@ -1,9 +1,11 @@
-import React, { FC, forwardRef, useEffect, useRef } from 'react'
+import React, { FC, MouseEvent, forwardRef, useEffect, useRef } from 'react'
 import styles from './styles.module.css'
 import { DrawCrosshairVolume } from '../../helpers/DrawCrosshairVolume'
 import { DrawInfoVolume } from '../../helpers/DrawInfoVolume'
 import { CrosshairVolumeProps } from '../../interfaces/VolumeCanvasInterfaces'
-const CrosshairVolume = forwardRef<HTMLCanvasElement,CrosshairVolumeProps>(({setIsMouseOnGraphic, isMouseOnGraphic, ctx4, refCanvas4, data,candleWidth,candleSpacing,xLeft,graphicRef,maxVolume,priceWidth,heightV,grRef},ref) => {
+import { DrawVolume } from '../../helpers/DrawVolume'
+import { DrawMaxAndMinVolume } from '../../helpers/DrawMaxAndMinVolume'
+const CrosshairVolume = forwardRef<HTMLCanvasElement,CrosshairVolumeProps>(({setIsMouseOnGraphic, isMouseOnGraphic, ctx4, refCanvas4, data,candleWidth,candleSpacing,xLeft,graphicRef,maxVolume,priceWidth,heightV,grRef,setIsPressedMain,setStartYMain,isPressedMain,startYMain,yDown,setYDown,ctx,refCanvasCurrent,dopHeight,minVolume,refDop,ctx2},ref) => {
   const crosshairContainer = ref && 'current' in ref ? ref.current : null;  
   const ctx3=crosshairContainer?.getContext('2d')
   const handleCrosshair=(e:any)=>{
@@ -12,7 +14,7 @@ const CrosshairVolume = forwardRef<HTMLCanvasElement,CrosshairVolumeProps>(({set
           let y=e.clientY-crosshairContainer.getBoundingClientRect().top
           let scrolledCandle=xLeft >=0 ? -Math.abs(xLeft/(candleSpacing+candleWidth)) : Math.abs(xLeft/(candleSpacing+candleWidth))
           DrawCrosshairVolume(ctx3,crosshairContainer,data,candleWidth,candleSpacing,scrolledCandle,isMouseOnGraphic.x,isMouseOnGraphic.q,grRef,e.clientX,y,xLeft, e.offsetX)
-          DrawInfoVolume(ctx4,refCanvas4.current,y, maxVolume,priceWidth)
+          DrawInfoVolume(ctx4,refCanvas4.current,y, maxVolume,priceWidth,dopHeight, yDown)
         }
       }
       const handleCrosshairLeave=()=>{
@@ -30,10 +32,41 @@ const CrosshairVolume = forwardRef<HTMLCanvasElement,CrosshairVolumeProps>(({set
           crosshairContainer?.removeEventListener('mouseleave', handleCrosshairLeave)
         }
     
-      },[xLeft, candleSpacing, candleWidth, maxVolume,priceWidth])
-
+      },[xLeft, candleSpacing, candleWidth, maxVolume,priceWidth,dopHeight,yDown])
+      const handleMouseDownMain=(e:MouseEvent)=>{
+        e.preventDefault();
+        setIsPressedMain(()=>true)
+        setStartYMain((prev)=>e.clientY)
+      }
+      const handleMouseMoveMain=(e:MouseEvent)=>{
+        e.preventDefault();
+        if(isPressedMain && dopHeight!==heightV){
+          const deltaY = startYMain-e.clientY;
+          const newY=yDown+deltaY
+          setYDown(()=>newY)
+          if(ctx && refCanvasCurrent && refDop &&ctx2){
+            ctx.clearRect( 0 , 0 , refCanvasCurrent.width , heightV  );
+            DrawVolume(ctx,refCanvasCurrent,data, maxVolume,xLeft,candleWidth, candleSpacing, dopHeight,yDown)
+            ctx2.clearRect( 0 , 0 , refDop.width , refDop.height  )
+            DrawMaxAndMinVolume(ctx2, refDop, maxVolume, minVolume,priceWidth,dopHeight,yDown)
+          }
+        }
+        setStartYMain((prev)=>e.clientY)
+      }
+      const handleMouseUpMain=(e:MouseEvent)=>{
+        setIsPressedMain(()=>false)
+        setStartYMain((prev)=>0)
+      }
+      useEffect(()=>{
+        document.addEventListener('mouseup', handleMouseUpMain as any)
+        return () => {
+          crosshairContainer?.removeEventListener('mousedown', handleMouseDownMain as  any)
+          crosshairContainer?.removeEventListener('mousemove', handleMouseMoveMain as  any)
+          document.removeEventListener('mouseup', handleMouseUpMain as  any)
+        }; 
+    },[isPressedMain])
   return (
-    <canvas className={styles.canvas3} ref={ref} width={ graphicRef.current?.clientWidth ? graphicRef.current?.clientWidth-priceWidth : undefined} id='wrap_volume' height={heightV}></canvas>
+    <canvas className={styles.canvas3} onMouseDown={(e:MouseEvent)=>handleMouseDownMain(e)} onMouseMove={(e:MouseEvent)=>handleMouseMoveMain(e)} ref={ref} width={ graphicRef.current?.clientWidth ? graphicRef.current?.clientWidth-priceWidth : undefined} id='wrap_volume' height={heightV}></canvas>
   )
 })
 

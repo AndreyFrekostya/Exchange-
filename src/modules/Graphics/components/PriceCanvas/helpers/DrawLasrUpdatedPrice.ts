@@ -1,6 +1,8 @@
 import { yToPixelCoords } from "../../../helpers/yToPixelCoords";
 
-export function DrawLastUpdatedPrice(ctx:any,canvas:HTMLCanvasElement, candle: string[], maxPrice:number,priceRange:number,height:number, timer:string,timeFrame:string,fixedNumber:number, width:number){
+export function DrawLastUpdatedPrice(ctx:any,canvas:HTMLCanvasElement, candle: string[], maxPrice:number,priceRange:number,height:number, timer:string,timeFrame:string,fixedNumber:number, width:number, dopHeight:number,yDown:number){
+    let range=dopHeight ? (height-dopHeight)/2 : 0
+    let newHeight=dopHeight ? dopHeight : height
     let color = candle[4] > candle[1]  ? '#09e8bb' : '#EB602F';
     let colorForText=candle[4]>candle[1] ? '#191970' : '#fff'
     let price: string | number=Number(candle[4])
@@ -19,7 +21,7 @@ export function DrawLastUpdatedPrice(ctx:any,canvas:HTMLCanvasElement, candle: s
     }
     let priceLength=ctx.measureText(price).width
     let x=(width-priceLength)/2
-    const yLine=Math.round(yToPixelCoords(maxPrice,Number(candle[4]),priceRange,height))
+    const yLine=Math.round(yToPixelCoords(maxPrice,Number(candle[4]),priceRange,newHeight))+range+yDown
     ctx.beginPath();
 	ctx.setLineDash([0,0]);
 	ctx.lineWidth = 1;

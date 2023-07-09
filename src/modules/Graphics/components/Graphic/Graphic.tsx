@@ -38,6 +38,8 @@ const Graphic:React.FC<IGraphicComponent> = ({graphic, onClick, one,wideS}) => {
   const [isGottenHistory, setIsGottenHistory]=useState<boolean>(true)
   const [heightV, setHeightV]=useState<number>(70)
   const [xLeft, setXLeft]=useState<number>(0)
+  const [yDown, setYDown]=useState<number>(0)
+  const [ifPlus, setIfPlus]=useState<boolean>(false)
   const [pressedCandle, setPressedCandle]=useState<string[] | undefined>([])
   const [lastData, setLastData]=useState<string[]>([])
   const [ifFirst, setIfFirst]=useState<boolean>(false)
@@ -48,9 +50,11 @@ const Graphic:React.FC<IGraphicComponent> = ({graphic, onClick, one,wideS}) => {
   const lastMode=useAppSelector(state=>state.lastMode)
   const graphicRef=useRef<HTMLDivElement | null>(null)
   const [heightM, setHeightM]=useState<number | undefined>(graphicRef.current?.clientHeight ? graphicRef.current.clientHeight-142 : undefined)
+  const [dopHeightCanvas, setDopHeightCanvas]=useState<number>(graphicRef.current?.clientHeight ? graphicRef.current.clientHeight-142 : 0)
   const mainCanvasRef=useRef<HTMLCanvasElement | null>(null)
   const volumeRef=useRef<HTMLCanvasElement | null>(null)
   const priceRef=useRef<HTMLCanvasElement | null>(null)
+  const [isUsuallyScroll, setIsUsuallyScroll]=useState<boolean>(true)
   const choosedGraphic=useAppSelector(state=>state.graphics.find(item=>item.choosed===true))
   const mode=useAppSelector(state=>state.modeGraphic.find(m=>m.choosed===true)?.name)
   const propsToCanvas={graphicRef,data:dataCopy,howCandleInRange,setHowCandleInRange,candleWidth,setCandleWidth,xLeft,setXLeft, startCandle,setStartCandle,candleSpacing,setCandleSpacing,setIsMouseOnGraphic,isMouseOnGraphic,fulfieldGraphicRefAndVolumeAndPrice,heightM, setHeightM,heightV,setHeightV,pressedCandle,setPressedCandle,priceWidth}
@@ -81,6 +85,17 @@ const Graphic:React.FC<IGraphicComponent> = ({graphic, onClick, one,wideS}) => {
       document.removeEventListener("keydown", openFromPress);
     };
   },[graphic.choosed, distance])
+  const changeTypeScroll=(e:KeyboardEvent):void=>{
+    if(e.code==='ControlLeft' && graphic.choosed===true){
+      setIsUsuallyScroll(!isUsuallyScroll)
+    }
+  }
+  useEffect(()=>{
+    document.addEventListener('keydown', changeTypeScroll)
+    return ()=>{
+      document.removeEventListener('keydown', changeTypeScroll)
+    }
+  },[isUsuallyScroll])
   useEffect(()=>{
     if(graphic.coin!=='' && graphic.distance!==''){
       const timeframe=TransformDistance(graphic.distance)
@@ -104,10 +119,10 @@ const Graphic:React.FC<IGraphicComponent> = ({graphic, onClick, one,wideS}) => {
   return (
     <div  ref={graphicRef} className={graphic.choosed ? styles.wrapActive : styles.wrap} onMouseDown={onClick}>
       <HeaderGraphic wideS={wideS} one={one} setActiveCoin={setActiveCoin} activeCoin={activeCoin} graphic={graphic} graphicRef={graphicRef}/>
-      <MainCanvas  {...propsToCanvas} dataUpdated={dataUpdated} firstData={data} setIsGottenHistory={setIsGottenHistory} voRef={volumeRef} graphic={graphic} mainCanvasRef={mainCanvasRef} dataHistory={dataHistory} setData={setDataCopy} allDataCopy={allDataCopy} setAllDataCopy={setAllDataCopy} priceRef={priceRef} fixedNumber={fixedNumber} setIfFirst={setIfFirst} ifFirst={ifFirst} lastData={lastData} setLastData={setLastData} />
-      <VolumeCanvas {...propsToCanvas} grRef={mainCanvasRef} volumeRef={volumeRef} />
-      <DateCanvas graphicRef={graphicRef} data={dataCopy} xLeft={xLeft} scrolledCandle={startCandle} candleWidth={candleWidth} setCandleWidth={setCandleWidth}  setCandleSpacing={setCandleSpacing} candleSpacing={candleSpacing} howCandleInRange={howCandleInRange} setHowCandleInRange={setHowCandleInRange} x={isMouseOnGraphic.x} pressedCandle={pressedCandle} priceWidth={priceWidth} distance={distance} setXLeft={setXLeft} />
-      <PriceCanvas allDataCopy={allDataCopy} graphicRef={graphicRef} data={dataCopy} xLeft={xLeft} howCandleInRange={howCandleInRange} startCandle={startCandle} heightM={heightM} setHeightM={setHeightM} yMouse={isMouseOnGraphic.y} candleWidth={candleWidth} candleSpacing={candleSpacing} q={isMouseOnGraphic.q} width={priceWidth} setWidth={setPriceWidth}  fulfieldGraphicRefAndVolumeAndPrice={fulfieldGraphicRefAndVolumeAndPrice} setFixedNumber={setFixedNumber} graphic={graphic} fixedNumber={fixedNumber}/>
+      <MainCanvas  {...propsToCanvas} ifPlus={ifPlus} setIfPlus={setIfPlus} yDown={yDown} setYDown={setYDown} dopHeightCanvas={dopHeightCanvas} setDopHeightCanvas={setDopHeightCanvas}  dataUpdated={dataUpdated} isUsuallyScroll={isUsuallyScroll} firstData={data} setIsGottenHistory={setIsGottenHistory} voRef={volumeRef} graphic={graphic} mainCanvasRef={mainCanvasRef} dataHistory={dataHistory} setData={setDataCopy} allDataCopy={allDataCopy} setAllDataCopy={setAllDataCopy} priceRef={priceRef} fixedNumber={fixedNumber} setIfFirst={setIfFirst} ifFirst={ifFirst} lastData={lastData} setLastData={setLastData} />
+      <VolumeCanvas {...propsToCanvas}  dopHeightCanvas={dopHeightCanvas} setDopHeightCanvas={setDopHeightCanvas} grRef={mainCanvasRef} volumeRef={volumeRef} />
+      <DateCanvas graphicRef={graphicRef} setIfPlus={setIfPlus} data={dataCopy} xLeft={xLeft} scrolledCandle={startCandle} candleWidth={candleWidth} setCandleWidth={setCandleWidth}  setCandleSpacing={setCandleSpacing} candleSpacing={candleSpacing} howCandleInRange={howCandleInRange} setHowCandleInRange={setHowCandleInRange} x={isMouseOnGraphic.x} pressedCandle={pressedCandle} priceWidth={priceWidth} distance={distance} setXLeft={setXLeft} />
+      <PriceCanvas allDataCopy={allDataCopy} yDown={yDown} setYDown={setYDown} mainCanvasRef={mainCanvasRef} dopHeightCanvas={dopHeightCanvas} setDopHeightCanvas={setDopHeightCanvas} graphicRef={graphicRef} data={dataCopy} xLeft={xLeft} howCandleInRange={howCandleInRange} startCandle={startCandle} heightM={heightM} setHeightM={setHeightM} yMouse={isMouseOnGraphic.y} candleWidth={candleWidth} candleSpacing={candleSpacing} q={isMouseOnGraphic.q} width={priceWidth} setWidth={setPriceWidth}  fulfieldGraphicRefAndVolumeAndPrice={fulfieldGraphicRefAndVolumeAndPrice} setFixedNumber={setFixedNumber} graphic={graphic} fixedNumber={fixedNumber}/>
       <>
         {graphic.coin==='' ? (
           <div className={styles.graphicAdd}>

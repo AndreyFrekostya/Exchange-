@@ -3,9 +3,9 @@ import { yToPixelCoords } from "../../../helpers/yToPixelCoords";
 import { getTransformedNumber } from "./getTransformedNumber";
 import { getTransformedNumberWithFloat } from "./getTrasnformedNumerWithFloat";
 
-export function DrawPrice (ctx:any,canvas:HTMLCanvasElement, data: string[][],xLeft:number,startCandle:number, howCandleInRange:number, maxPrice:number, minPrice:number,candleWidth:number, candleSpacing:number,  setWidth:Dispatch<SetStateAction<number>>,width:number,setInterval:Dispatch<SetStateAction<number>>,fixedNumber:number){
+export function DrawPrice (ctx:any,canvas:HTMLCanvasElement, data: string[][],xLeft:number,startCandle:number, howCandleInRange:number, maxPrice:number, minPrice:number,candleWidth:number, candleSpacing:number,  setWidth:Dispatch<SetStateAction<number>>,width:number,setInterval:Dispatch<SetStateAction<number>>,fixedNumber:number,dopHeightCanvas:number, yDown:number){
     let range=maxPrice-minPrice
-    const height=canvas.height
+    const height=dopHeightCanvas
     const labelsRange=height+21<120 ? 15 : 30
     const maxLabels = Math.round(height / (labelsRange + 5));
     let interval = 0
@@ -13,6 +13,7 @@ export function DrawPrice (ctx:any,canvas:HTMLCanvasElement, data: string[][],xL
     let minArr=String(minPrice).split('.')
     let maxrounded=0
     let minrounded=0
+    let rangeHeight=(canvas.height-dopHeightCanvas)/2
     if(maxArr[0]==='0' || minArr[0]==='0'){
         maxrounded=Number(getTransformedNumberWithFloat(Number(maxPrice),Math.ceil))
         minrounded=Number(getTransformedNumberWithFloat(Number(minPrice),Math.floor))
@@ -21,7 +22,7 @@ export function DrawPrice (ctx:any,canvas:HTMLCanvasElement, data: string[][],xL
         interval=range / (maxLabels - 1) > 0.50 && range / (maxLabels - 1)<1  ? Number(getTransformedNumberWithFloat(Math.ceil(range / (maxLabels - 1)))) : Number(getTransformedNumberWithFloat(range / (maxLabels - 1)))
         maxrounded=getTransformedNumber(Math.ceil(maxPrice),undefined,Math.ceil);
         minrounded=getTransformedNumber(Math.floor(minPrice),undefined,Math.floor);
-        minrounded=minrounded-interval*2
+        minrounded=minrounded-interval*20
     }
     //adaeth
     //Helvetica  
@@ -32,7 +33,7 @@ export function DrawPrice (ctx:any,canvas:HTMLCanvasElement, data: string[][],xL
     while(minrounded<maxPrice+5*interval) {
         let price:number | string = minrounded+interval;
         minrounded=minrounded+interval
-        const y=yToPixelCoords(maxPrice,price,range,height)
+        const y=yToPixelCoords(maxPrice,price,range,height)+yDown+rangeHeight
         ctx.imageSmoothingEnabled = false;
         ctx.font = "100 10.5px Helvetica ";
         ctx.textRendering = "optimizeLegibility";

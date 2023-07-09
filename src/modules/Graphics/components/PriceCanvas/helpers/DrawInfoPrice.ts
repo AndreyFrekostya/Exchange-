@@ -8,8 +8,12 @@ export function DrawInfoPrice (ctx:any,
   candleSpacing:number,
   q:boolean,
   fixedNumber:number,
-  width:number){
-  let price:string | number=minPrice + (canvas.height-y-61)*(maxPrice-minPrice)/(canvas.height-61);
+  width:number,
+  dopHeightCanvas:number,
+  yDown:number){
+    const height=dopHeightCanvas
+    const rangeHeight=(canvas.height-61-dopHeightCanvas)/2
+  let price:string | number=minPrice + (height-y+yDown+rangeHeight)*(maxPrice-minPrice)/height;
     ctx.clearRect(0,0,canvas.width, canvas.height)
     ctx.beginPath();
     ctx.lineWidth = 0.1;
