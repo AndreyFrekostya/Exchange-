@@ -250,7 +250,8 @@ const GraphicModeSlice = createSlice({
             })
             graph.drawingElements.grRay.forEach((grR)=>{
                 grR.y=grR.y-action.payload.deltaY
-                grR.x=grR.x-action.payload.deltaX            
+                grR.x=grR.x-action.payload.deltaX  
+                console.log(grR.x)          
             })
             graph.drawingElements.rectangles.forEach((rect)=>{
                 rect.y=rect.y-action.payload.deltaY

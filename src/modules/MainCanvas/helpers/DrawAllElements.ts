@@ -9,25 +9,26 @@ export function DrawAllElements(ctx:CanvasRenderingContext2D,canvas:HTMLCanvasEl
     ctx.setLineDash([])
     if(drawingElements.lines.length!==0){
         drawingElements.lines.forEach((line)=>{
-            let higherX=line.x1>line.x2 ? line.x1 : line.x2
-            let lowerX=line.x1>line.x2 ? line.x2 : line.x1
-            let ifInScreen=higherX<canvas.clientWidth && lowerX>0 ? true : false
-            let ifInRightPartScreen=higherX>canvas.clientWidth && lowerX<canvas.clientWidth ? true : false
-            let ifInLeftPartScreen=higherX>0 && lowerX<0 ? true : false
-            if(ifInScreen || ifInRightPartScreen  || ifInLeftPartScreen){
-                if(line.x1!==0 && line.x2==0){
-                    DrawLineBetweenTwoDot(ctx, line.x1,line.y1,x,crosshairY)
-                }
-                if(line.x2!==0 && line.x1!==0){
+            if(line.x1!==0 && line.x2==0){
+                DrawLineBetweenTwoDot(ctx, line.x1,line.y1,x,crosshairY)
+            }
+            if(line.x2!==0 && line.x1!==0){
+                let higherX=line.x1>line.x2 ? line.x1 : line.x2
+                let lowerX=line.x1>line.x2 ? line.x2 : line.x1
+                let ifInScreen=higherX<canvas.clientWidth && lowerX>0 ? true : false
+                let ifInRightPartScreen=higherX>canvas.clientWidth && lowerX<canvas.clientWidth ? true : false
+                let ifInLeftPartScreen=higherX>0 && lowerX<0 ? true : false
+                if(ifInScreen || ifInRightPartScreen  || ifInLeftPartScreen){
                     DrawLineBetweenTwoDot(ctx, line.x1,line.y1,line.x2,line.y2)
                 }
-                if(line.x1!==0){
-                    DrawDot(ctx, line.x1, line.y1)
-                }
-                if(line.x2!==0){
-                    DrawDot(ctx, line.x2, line.y2)
-                }
             }
+            if(line.x1!==0){
+                DrawDot(ctx, line.x1, line.y1)
+            }
+            if(line.x2!==0){
+                DrawDot(ctx, line.x2, line.y2)
+            }
+            
         })
     }
     if(drawingElements.grLines.length!==0){

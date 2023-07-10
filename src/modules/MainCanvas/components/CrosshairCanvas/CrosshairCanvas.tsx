@@ -14,6 +14,7 @@ import { DrawGrLine } from '../../helpers/DrawGrLine';
 import { DrawGrLuch } from '../../helpers/DrawGrLuch';
 import { GetCoordsWithMagnit } from '../../helpers/GetCoordsWithMagnit';
 import { addGrLine, addGrRay, addLine, addRect, remakeCoords, setLine, setRect } from '../../../../pages/MainPage/slices/GraphicSlice';
+import { DrawAllElements } from '../../helpers/DrawAllElements';
 const CrosshairCanvas = React.memo(forwardRef<HTMLCanvasElement, ICrosshairCanvasProps>((props, mainCanvasRef) => {
   const crosshairContainer = mainCanvasRef && 'current' in mainCanvasRef ? mainCanvasRef.current : null;
   const dispatch=useAppDispatch()
@@ -173,7 +174,7 @@ const CrosshairCanvas = React.memo(forwardRef<HTMLCanvasElement, ICrosshairCanva
               thatMaxPrice=props.maxPrice
               priceRange=thatMaxPrice - thatMinPrice
             }
-            if(props.ctx && props.mainCanvas){
+            if(props.ctx && props.mainCanvas && props.ctx2){
               props.ctx.clearRect( 0 , 0 , props.mainCanvas.width ,props.mainCanvas.height  );
               DrawCandleFunc(props.ctx,props.data,props.mainCanvas.width,props.candleWidth,thatMaxPrice,priceRange,props.mainCanvas.height-40,props.candleSpacing,props.data.length, 0,props.xLeft,props.dopHeightCanvas,props.yDown)
               DrawUpdatedLinePrice(props.ctx,props.allDataCopy[props.allDataCopy.length-1],props.mainCanvas.height-40,thatMaxPrice,thatMaxPrice-thatMinPrice,props.xLeft,props.mainCanvas.width, props.dopHeightCanvas, props.yDown)
@@ -188,8 +189,8 @@ const CrosshairCanvas = React.memo(forwardRef<HTMLCanvasElement, ICrosshairCanva
                   // 30259.5 30257.4 30132.5 30132.5 456 7.666933546832067 2.1
                   // 30257.4 30259.5 30132.5 30132.5 456 -7.540157480309735 -2.1
               let newYCoords=0 //props.dopHeightCanvas+40!==props.heightM ? deltaY : rangeY
-              console.log(deltaX)
-              dispatch(remakeCoords({deltaX,deltaY:newYCoords}))
+              console.log(deltaX, newX)
+              dispatch(remakeCoords({deltaX:deltaX,deltaY:newYCoords}))
               props.setMaxPrice(()=>thatMaxPrice)
               props.setMinPrice(()=>thatMinPrice)
               props.setStartCandle(()=>scrollCandle)
@@ -286,7 +287,7 @@ const CrosshairCanvas = React.memo(forwardRef<HTMLCanvasElement, ICrosshairCanva
         document.removeEventListener('mouseup', handleMouseUp as  any)
       }
     };
-  }, [props.data,props.heightM, props.xLeft,props.candleSpacing,props.candleWidth, drawingElementWithMagnit]);
+  }, [props.data,props.heightM, props.xLeft,props.candleSpacing,props.candleWidth, drawingElementWithMagnit,props.drawingElements]);
   useEffect(()=>{
     if(props.drawingElements.lines.length==0 && props.drawingElements.grLines.length==0 && props.drawingElements.grRay.length==0 && props.drawingElements.pricesRanges.length==0
       && props.drawingElements.rectangles.length==0 && props.drawingElements.fibonacciRetracement==null && props.drawingElements.grLines.length==0 && props.drawingElements.texts==null && props.drawingElements.pricesRanges.length==0 && props.drawingElements.fixedPriceVolume.length==0){
