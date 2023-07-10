@@ -1,5 +1,5 @@
 import { Dispatch, MutableRefObject, RefObject, SetStateAction } from "react";
-import { IGraphic } from "../../../pages/MainPage/slices/GraphicSlice";
+import { IDrawingElements, IGraphic } from "../../../pages/MainPage/slices/GraphicSlice";
 type setState<T>=Dispatch<SetStateAction<T>>
 export interface ICrosshairCanvasProps{
     setActive:setState<{active:boolean,y:number}>,
@@ -89,19 +89,4 @@ export interface IMainCanvas{
     yDown:number,
     ifPlus:boolean,
     setIfPlus:setState<boolean>,
-}
-type Lines=Array<{x1:number, y1:number, x2:number, y2:number}>
-type GrLines=Array<{y:number}>
-type GrRay=Array<{x:number, y:number}>
-type Rectangles=Array<{x:number, y:number,x1:number, y1:number}>
-type fixedPriceVolume=Array<{x1:number,y2:number,x:number, y:number}>
-export interface IDrawingElements{
-  lines:Lines,
-  grLines:GrLines,
-  grRay:GrRay,
-  fibonacciRetracement:null,
-  rectangles:Rectangles,
-  pricesRanges:Rectangles,
-  fixedPriceVolume:fixedPriceVolume,
-  texts:null,
 }

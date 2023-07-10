@@ -5,23 +5,29 @@ import { DrawInfoVolume } from '../../helpers/DrawInfoVolume'
 import { CrosshairVolumeProps } from '../../interfaces/VolumeCanvasInterfaces'
 import { DrawVolume } from '../../helpers/DrawVolume'
 import { DrawMaxAndMinVolume } from '../../helpers/DrawMaxAndMinVolume'
-const CrosshairVolume = forwardRef<HTMLCanvasElement,CrosshairVolumeProps>(({setIsMouseOnGraphic, isMouseOnGraphic, ctx4, refCanvas4, data,candleWidth,candleSpacing,xLeft,graphicRef,maxVolume,priceWidth,heightV,grRef,setIsPressedMain,setStartYMain,isPressedMain,startYMain,yDown,setYDown,ctx,refCanvasCurrent,dopHeight,minVolume,refDop,ctx2},ref) => {
-  const crosshairContainer = ref && 'current' in ref ? ref.current : null;  
+import { useAppSelector } from '../../../../hooks/redux-hooks'
+import { DrawAllElements } from '../../../MainCanvas/helpers/DrawAllElements'
+const CrosshairVolume = forwardRef<HTMLCanvasElement,CrosshairVolumeProps>(({setIsMouseOnGraphic, isMouseOnGraphic, ctx4, refCanvas4, data,candleWidth,candleSpacing,xLeft,graphicRef,maxVolume,priceWidth,heightV,grRef,setIsPressedMain,setStartYMain,isPressedMain,startYMain,yDown,setYDown,ctx,refCanvasCurrent,dopHeight,minVolume,refDop,ctx2,graphic},ref) => {
+  const crosshairContainer = ref && 'current' in ref ? ref.current : null; 
+  const drawingElements=useAppSelector(state=>state.graphics.find(graph=>graph.id==graphic.id)!.drawingElements)
   const ctx3=crosshairContainer?.getContext('2d')
   const handleCrosshair=(e:any)=>{
         setIsMouseOnGraphic({...isMouseOnGraphic, x:e.clientX,q:false})
         if(ctx3 && crosshairContainer && ctx4 &&  refCanvas4.current){
           let y=e.clientY-crosshairContainer.getBoundingClientRect().top
           let scrolledCandle=xLeft >=0 ? -Math.abs(xLeft/(candleSpacing+candleWidth)) : Math.abs(xLeft/(candleSpacing+candleWidth))
-          DrawCrosshairVolume(ctx3,crosshairContainer,data,candleWidth,candleSpacing,scrolledCandle,isMouseOnGraphic.x,isMouseOnGraphic.q,grRef,e.clientX,y,xLeft, e.offsetX)
+          DrawCrosshairVolume(ctx3,crosshairContainer,data,candleWidth,candleSpacing,scrolledCandle,isMouseOnGraphic.x,isMouseOnGraphic.q,grRef,e.clientX,y,xLeft, e.offsetX,drawingElements)
           DrawInfoVolume(ctx4,refCanvas4.current,y, maxVolume,priceWidth,dopHeight, yDown)
         }
       }
       const handleCrosshairLeave=()=>{
         setIsMouseOnGraphic({...isMouseOnGraphic, x:-200, y:-200, q:false})
-        if(crosshairContainer && refCanvas4.current){
+        const grCtx=grRef.current?.getContext('2d') 
+        if(crosshairContainer && refCanvas4.current && grCtx && grRef.current){
           ctx3?.clearRect(0,0,crosshairContainer.width,crosshairContainer.height)
           ctx4?.clearRect(0,0,refCanvas4.current.width,refCanvas4.current.height)
+          grCtx.clearRect(0, 0, grRef.current.width, grRef.current.height);
+          DrawAllElements(grCtx,grRef.current,drawingElements,0,0)
         }
       }
       useEffect(()=>{
@@ -32,7 +38,7 @@ const CrosshairVolume = forwardRef<HTMLCanvasElement,CrosshairVolumeProps>(({set
           crosshairContainer?.removeEventListener('mouseleave', handleCrosshairLeave)
         }
     
-      },[xLeft, candleSpacing, candleWidth, maxVolume,priceWidth,dopHeight,yDown])
+      },[xLeft, candleSpacing, candleWidth, maxVolume,priceWidth,dopHeight,yDown,drawingElements])
       const handleMouseDownMain=(e:MouseEvent)=>{
         e.preventDefault();
         setIsPressedMain(()=>true)

@@ -5,13 +5,14 @@ import { DrawCrosshairCanvas } from '../../helpers/DrawCrosshairCanvas'
 import CardGraphic from '../../../../components/CardGraphic/CardGraphic'
 import { RedrawOneCandle } from '../../helpers/RedrawOneCandle'
 import CrosshairCanvas from '../CrosshairCanvas/CrosshairCanvas'
-import { IDrawingElements, IMainCanvas } from '../../interfaces/CanvasInterfaces'
+import { IMainCanvas } from '../../interfaces/CanvasInterfaces'
 import { DrawUpdatedLinePrice } from '../../helpers/DrawUpdatedLinePrice'
 import { DrawLastUpdatedPrice } from '../../../Graphics/components/PriceCanvas/helpers/DrawLasrUpdatedPrice'
 import { useLazyGetHisoricalKlinesQuery } from '../../../Graphics/api/KlinesSymbolApi'
 import { TransformDistance } from '../../../Graphics/helpers/TransformDistance'
 import { GetFactorDistance } from '../../helpers/GetFactorDistance'
 import { useAppSelector } from '../../../../hooks/redux-hooks'
+import { DrawAllElements } from '../../helpers/DrawAllElements'
 
 export const MainCanvas:React.FC<IMainCanvas> = React.memo(({graphicRef,data,howCandleInRange,setHowCandleInRange,candleWidth,setCandleWidth,xLeft,setXLeft, startCandle,setStartCandle,candleSpacing,setCandleSpacing,setIsMouseOnGraphic,isMouseOnGraphic,voRef,heightM, setHeightM, heightV, pressedCandle, setPressedCandle,priceWidth,priceRef,fixedNumber,mainCanvasRef, ifFirst, setIfFirst, lastData, setLastData, dataHistory, allDataCopy,
 setAllDataCopy, setData,setIsGottenHistory, graphic, firstData,dataUpdated,isUsuallyScroll, dopHeightCanvas, setDopHeightCanvas,setYDown,yDown,ifPlus, setIfPlus}) => {
@@ -24,16 +25,7 @@ setAllDataCopy, setData,setIsGottenHistory, graphic, firstData,dataUpdated,isUsu
     const [historyData, setHistoryData]=useState<string[][]>([])
     const [active, setActive]=useState<{active:boolean, y:number}>({active:false,y:0})
     const [lastTimeStamp,setLastTimeStamp]=useState<number>(0)
-    const [drawingElements, setDrawingElements]=useState<IDrawingElements>({
-      lines:[],
-      grLines:[],
-      grRay:[],
-      fibonacciRetracement:null,
-      rectangles:[],
-      pricesRanges:[],
-      fixedPriceVolume:[],
-      texts:null
-    })
+    const drawingElements=useAppSelector(state=>state.graphics.find(graph=>graph.id==graphic.id)!.drawingElements)
     const drawingElementsOnPanel=useAppSelector(state=>state.drawing)
     const refCanvas=useRef<HTMLCanvasElement>(null)
     const refContainer=useRef<HTMLDivElement>(null)
@@ -298,6 +290,7 @@ setAllDataCopy, setData,setIsGottenHistory, graphic, firstData,dataUpdated,isUsu
         DrawUpdatedLinePrice(ctx,allDataCopy[allDataCopy.length-1],refCanvas.current.height-40,thatMaxPrice,thatMaxPrice-thatMinPrice,xLeft,refCanvas.current.width, dopHeightCanvas, yDown)
         ctxP?.clearRect(0,0,priceRef?.current.width,priceRef?.current.height)
         ctx2.clearRect( 0 , 0 , crosshairContainer.width , crosshairContainer.height  );
+        DrawAllElements(ctx2,crosshairContainer,drawingElements,isMouseOnGraphic.x,0)
         setStartCandle(NewStartCandle)
         setMaxPrice(()=>thatMaxPrice)
         setMinPrice(()=>thatMinPrice)
@@ -375,6 +368,7 @@ setAllDataCopy, setData,setIsGottenHistory, graphic, firstData,dataUpdated,isUsu
               ctx.clearRect( 0 , 0 , refCanvas.current.width , refCanvas.current.height  );
               DrawCandleFunc(ctx,firstData,refCanvas.current.width,candleWidth,thatMaxPrice,priceRange,refCanvas.current.height-40,candleSpacing,firstData.length, 0,newX,dopHeightCanvas,yDown)
               DrawUpdatedLinePrice(ctx,firstData[firstData.length-1],refCanvas.current.height-40,thatMaxPrice,thatMaxPrice-thatMinPrice,newX,refCanvas.current.width,dopHeightCanvas, yDown)
+              DrawAllElements(ctx2,crosshairContainer,drawingElements,0,0)
               setXLeft(()=>newX)
               setMaxPrice(()=>thatMaxPrice)
               setMinPrice(()=>thatMinPrice)
@@ -423,18 +417,19 @@ setAllDataCopy, setData,setIsGottenHistory, graphic, firstData,dataUpdated,isUsu
           DrawCrosshairCanvas(ctx2,crosshairContainer,data,candleWidth,candleSpacing,scrollCandle, isMouseOnGraphic.q,voRef,isPressed,e.clientX,e.offsetY, xLeft, e.offsetX,maxPrice,minPrice,refCanvas.current.height-40,drawingElementsOnPanel,ctxP,priceRef?.current,howCandleInRange,fixedNumber,priceWidth,yDown,dopHeightCanvas,drawingElements,undefined, pressedCandle)
         }
       }
-      const handleCrosshairLeave=()=>{
-        if(crosshairContainer){
-          ctx2?.clearRect(0,0,crosshairContainer.width,crosshairContainer.height)
+      const handleCrosshairLeave=(e:any)=>{
+        if(crosshairContainer && ctx2){
+          ctx2.clearRect(0,0,crosshairContainer.width,crosshairContainer.height)
           const volumeCanvas=voRef?.current
           const ctxV=volumeCanvas?.getContext('2d')
           const priceCanvas=priceRef?.current
           const ctxP=priceCanvas?.getContext('2d')
           setIsMouseOnGraphic({y:-200,q:false, x:-200})
           if(ctxV && volumeCanvas && ctxP && priceCanvas){
-            ctxV?.clearRect(0,0,volumeCanvas.width,volumeCanvas.height)
-            ctxP?.clearRect(0,0,priceCanvas.width,priceCanvas.height)
+            ctxV.clearRect(0,0,volumeCanvas.width,volumeCanvas.height)
+            ctxP.clearRect(0,0,priceCanvas.width,priceCanvas.height)
           }
+          DrawAllElements(ctx2,crosshairContainer,drawingElements,e.clientX,0,)
         }
       }
       useEffect(()=>{

@@ -2,12 +2,11 @@ import React, { MouseEvent, useEffect, useRef, useState } from 'react'
 import styles from './styles.module.css'
 import { DrawVolume } from '../../helpers/DrawVolume'
 import { DrawMaxAndMinVolume } from '../../helpers/DrawMaxAndMinVolume'
-import { DrawCrosshairVolume } from '../../helpers/DrawCrosshairVolume'
 import Resizer from '../Resizer/Resizer'
 import { ICanvasVolume } from '../../interfaces/VolumeCanvasInterfaces'
 import CrosshairVolume from '../CrosshairVolume/CrossHairVolume'
 
-export const VolumeCanvas:React.FC<ICanvasVolume> = ({graphicRef,data,howCandleInRange,setHowCandleInRange,candleWidth,setCandleWidth,xLeft,setXLeft, startCandle,setStartCandle,candleSpacing,setCandleSpacing,setIsMouseOnGraphic,isMouseOnGraphic, grRef,fulfieldGraphicRefAndVolumeAndPrice, setHeightM, heightM, heightV, setHeightV,priceWidth, volumeRef,dopHeightCanvas, setDopHeightCanvas}) => {
+export const VolumeCanvas:React.FC<ICanvasVolume> = ({graphicRef,data,howCandleInRange,setHowCandleInRange,candleWidth,setCandleWidth,xLeft,setXLeft, startCandle,setStartCandle,candleSpacing,setCandleSpacing,setIsMouseOnGraphic,isMouseOnGraphic, grRef,fulfieldGraphicRefAndVolumeAndPrice, setHeightM, heightM, heightV, setHeightV,priceWidth, volumeRef,dopHeightCanvas, setDopHeightCanvas,graphic}) => {
     const [maxVolume, setMaxVolume]=useState<number>(0)
     const [minVolume, setMinVolume]=useState<number>(0)  
     const [startY, setStartY]=useState<number>(0) 
@@ -26,7 +25,7 @@ export const VolumeCanvas:React.FC<ICanvasVolume> = ({graphicRef,data,howCandleI
     const ctx=refCanvas.current?.getContext('2d')
     const ctx2=refCanvas2.current?.getContext('2d')
     const ctx4=refCanvas4.current?.getContext('2d')
-    const propsToCrosshairCanvas={setIsMouseOnGraphic,ctx2,refDop:refCanvas2.current,minVolume,isMouseOnGraphic,refCanvas4,candleSpacing,candleWidth,xLeft,graphicRef,maxVolume,priceWidth,heightV,grRef,ctx4, data,setIsPressedMain,setStartYMain,isPressedMain,startYMain,yDown,setYDown,ctx,refCanvasCurrent:refCanvas.current,dopHeight}
+    const propsToCrosshairCanvas={setIsMouseOnGraphic,ctx2,refDop:refCanvas2.current,minVolume,isMouseOnGraphic,refCanvas4,candleSpacing,candleWidth,xLeft,graphicRef,maxVolume,priceWidth,heightV,grRef,ctx4, data,setIsPressedMain,setStartYMain,isPressedMain,startYMain,yDown,setYDown,ctx,refCanvasCurrent:refCanvas.current,dopHeight,graphic}
     const resizeHandler = () => {
         const {clientWidth } = graphicRef.current || {};
         if(clientWidth){

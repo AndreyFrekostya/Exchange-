@@ -1,4 +1,5 @@
 import { Dispatch, MutableRefObject, RefObject, SetStateAction } from "react";
+import { IGraphic } from "../../../pages/MainPage/slices/GraphicSlice";
 type setState<T>=Dispatch<SetStateAction<T>>
 export interface IResizer{
     heightV:number,
@@ -37,7 +38,8 @@ export interface ICanvasVolume{
     fulfieldGraphicRefAndVolumeAndPrice:(grRef:HTMLCanvasElement | null | undefined, voRef:HTMLCanvasElement | null | undefined,priceRefArg: HTMLCanvasElement | null | undefined)=>void,
     volumeRef:MutableRefObject<HTMLCanvasElement | null>,
     dopHeightCanvas:number,
-    setDopHeightCanvas:setState<number>
+    setDopHeightCanvas:setState<number>,
+    graphic:IGraphic
 }
 
 export interface CrosshairVolumeProps{
@@ -65,5 +67,6 @@ export interface CrosshairVolumeProps{
     dopHeight:number,
     ctx2:CanvasRenderingContext2D | null | undefined,
     refDop:HTMLCanvasElement | null,
-    minVolume:number
+    minVolume:number,
+    graphic:IGraphic
 }

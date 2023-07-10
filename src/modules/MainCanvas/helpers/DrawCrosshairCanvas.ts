@@ -5,12 +5,13 @@ import { yToPixelCoords } from "../../Graphics/helpers/yToPixelCoords"
 import { useAppSelector } from "../../../hooks/redux-hooks"
 import { DrawInfoPrice } from "../../Graphics/components/PriceCanvas/helpers/DrawInfoPrice"
 import { DrawDot } from "./DrawDot"
-import { IDrawingElements } from "../interfaces/CanvasInterfaces"
 import { DrawLineBetweenTwoDot } from "./DrawLineBeetwenTwoDot"
 import { DrawGrLine } from "./DrawGrLine"
 import { DrawGrLuch } from "./DrawGrLuch"
 import { DrawRectangle } from "./DrawRectangle"
 import { GetCoordsWithMagnit } from "./GetCoordsWithMagnit"
+import { IDrawingElements } from "../../../pages/MainPage/slices/GraphicSlice"
+import { DrawAllElements } from "./DrawAllElements"
 export type DrawingElements={
     name:string,
     isMagnit: boolean|null
@@ -76,42 +77,7 @@ export function DrawCrosshairCanvas(
         // вычисляем y координату с магнитом
         crosshairY=GetCoordsWithMagnit(drawingElementsOnPanel,neededCandle,crosshairY,dopHeight,maxPrice,maxPrice-minPrice,rangeHeight,yDown)
         //перерисовываем элементы рисования
-        if(drawingElements.lines.length!==0){
-            drawingElements.lines.forEach((line)=>{
-                if(line.x1!==0 && line.x2==0){
-                    DrawLineBetweenTwoDot(ctx2, line.x1,line.y1,x,crosshairY)
-                }
-                if(line.x2!==0 && line.x1!==0){
-                    DrawLineBetweenTwoDot(ctx2, line.x1,line.y1,line.x2,line.y2)
-                }
-                if(line.x1!==0){
-                    DrawDot(ctx2, line.x1, line.y1)
-                }
-                if(line.x2!==0){
-                    DrawDot(ctx2, line.x2, line.y2)
-                }
-            })
-        }
-        if(drawingElements.grLines.length!==0){
-            let xDot=canvas2.clientWidth/2
-            drawingElements.grLines.forEach((grLine)=>{
-                DrawGrLine(ctx2, grLine.y, xLeft, Math.abs(xLeft*3),xDot)
-            })
-        }
-        if(drawingElements.grRay.length!==0){
-            drawingElements.grRay.forEach((grRay)=>{
-                DrawGrLuch(ctx2, grRay.x, grRay.y,Math.abs(xLeft*3))
-            })
-        }
-        if(drawingElements.rectangles.length!==0){
-            drawingElements.rectangles.forEach((rect)=>{
-                if(rect.x!==0 && rect.x1==0){
-                    DrawRectangle(ctx2, rect.x,rect.y,x,crosshairY)
-                }else if(rect.x!==0 && rect.x1!==0){
-                    DrawRectangle(ctx2, rect.x,rect.y,rect.x1,rect.y1)
-                }
-            })
-        }
+        DrawAllElements(ctx2,canvas2,drawingElements,x,crosshairY)
         //рисуем цену
         DrawInfoPrice(ctxP, priceCanvas, howCandleInRange,maxPrice,minPrice,crosshairY-40.5,candleWidth,candleSpacing,q,fixedNumber,priceWidth,dopHeight,yDown )
         // рисуем перекрестие

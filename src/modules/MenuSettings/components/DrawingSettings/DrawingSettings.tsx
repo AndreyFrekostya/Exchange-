@@ -13,8 +13,9 @@ import rubber from './../../../../images/drawing/rubber.svg'
 import text from './../../../../images/drawing/text.svg'
 import { useAppDispatch, useAppSelector } from '../../../../hooks/redux-hooks'
 import { changeInstrument } from '../../slices/DrawigSetSlice'
+import { deleteAllDrawingElements } from '../../../../pages/MainPage/slices/GraphicSlice'
 const DrawingSettings = () => {
-    const instruments=[trand,gorizontal,gr_luch,fib,rect,price,profile_ob,text,rubber]
+    const instruments=[trand,gorizontal,gr_luch,fib,rect,price,profile_ob,text]
     const dispatch=useAppDispatch()
     const drawingChoosed=useAppSelector(state=>state.drawing)
     const setDrawing=(index:number)=>{
@@ -30,6 +31,9 @@ const DrawingSettings = () => {
                 <img src={instrument} alt="" />
             </IconMenu>
         ))}
+        <div className={styles.disabledDraw }>
+            <img onClick={()=>dispatch(deleteAllDrawingElements())} src={rubber} alt="" />
+        </div>
         <div className={drawingChoosed.isMagnit===true ? styles.activeDraw : styles.disabledDraw }>
             <img onClick={()=>dispatch(changeInstrument({element:'magnit 1'}))} src={magnit1} alt="" />
         </div>

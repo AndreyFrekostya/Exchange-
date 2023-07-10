@@ -1,5 +1,7 @@
 import { MutableRefObject } from "react"
 import { DrawVolumeTextOneCandle } from "./DrawVolumeTextOneCandle"
+import { DrawAllElements } from "../../MainCanvas/helpers/DrawAllElements"
+import { IDrawingElements } from "../../../pages/MainPage/slices/GraphicSlice"
 
 export function DrawCrosshairVolume(
     ctx:CanvasRenderingContext2D,
@@ -14,7 +16,8 @@ export function DrawCrosshairVolume(
     eClientX:number,
     eOffsetY:number,
     xLeft:number,
-    eOffsetX:number){
+    eOffsetX:number,
+    drawingElements:IDrawingElements){
     const candlestiks=data
     const GraphicCanvas=grRef?.current
     const grCtx=GraphicCanvas?.getContext('2d') as any
@@ -33,6 +36,9 @@ export function DrawCrosshairVolume(
         // очищаем холст
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         grCtx.clearRect(0, 0, GraphicCanvas.width, GraphicCanvas.height);
+        //перерисовываем элементы рисования
+        grCtx.setLineDash([])
+        DrawAllElements(grCtx,canvas,drawingElements,x,crosshairY)
         // рисуем перекрестие
         let ranger=String(candleWidth/2).includes('.') ? 0 : 0.5
         if(!q){
@@ -98,10 +104,4 @@ export function DrawCrosshairVolume(
         
         }
     }       
-    canvas.addEventListener('mouseleave',function(){
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            if(grCtx && GraphicCanvas){
-                grCtx.clearRect(0, 0, GraphicCanvas.width, GraphicCanvas.height);
-            }
-    }) 
 }
