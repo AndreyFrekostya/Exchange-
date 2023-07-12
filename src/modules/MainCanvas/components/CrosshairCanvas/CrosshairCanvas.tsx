@@ -15,6 +15,7 @@ import { DrawGrLuch } from '../../helpers/DrawGrLuch';
 import { GetCoordsWithMagnit } from '../../helpers/GetCoordsWithMagnit';
 import { addGrLine, addGrRay, addLine, addRect, remakeCoords, setLine, setRect } from '../../../../pages/MainPage/slices/GraphicSlice';
 import { DrawAllElements } from '../../helpers/DrawAllElements';
+import { changeInstrument } from '../../../MenuSettings/slices/DrawigSetSlice';
 const CrosshairCanvas = React.memo(forwardRef<HTMLCanvasElement, ICrosshairCanvasProps>((props, mainCanvasRef) => {
   const crosshairContainer = mainCanvasRef && 'current' in mainCanvasRef ? mainCanvasRef.current : null;
   const dispatch=useAppDispatch()
@@ -54,6 +55,7 @@ const CrosshairCanvas = React.memo(forwardRef<HTMLCanvasElement, ICrosshairCanva
               dispatch(addLine({id:id,x:x,y:y}))
             }else if(props.drawingElements.lines[0].x2==0){
               dispatch(setLine({id:id,x:x,y:y}))
+              dispatch(changeInstrument('nothing'))
             }else{
               dispatch(addLine({id:id,x:x,y:y}))
             }
@@ -65,9 +67,11 @@ const CrosshairCanvas = React.memo(forwardRef<HTMLCanvasElement, ICrosshairCanva
           let xDot=props.mainCanvas.clientWidth/2
           dispatch(addGrLine({id:id, y:y}))
           DrawGrLine(props.ctx2, y, 0, props.mainCanvas.clientWidth*2,xDot)
+          dispatch(changeInstrument('nothing'))
         }else if(drawingElementOnPanel=='gr luch'){
           dispatch(addGrRay({id:id, x:x,y:y}))
           DrawGrLuch(props.ctx2, x, y,props.mainCanvas.clientWidth*2)
+          dispatch(changeInstrument('nothing'))
         }else if(drawingElementOnPanel=='rect'){
           if(props.drawingElements.rectangles.length!==0){
             if(props.drawingElements.rectangles[0].x==0){
@@ -75,6 +79,7 @@ const CrosshairCanvas = React.memo(forwardRef<HTMLCanvasElement, ICrosshairCanva
               DrawDot(props.ctx2, x,y)
             }else if(props.drawingElements.rectangles[0].x1==0){
               dispatch(setRect({id:id, x:x, y:y}))
+              dispatch(changeInstrument('nothing'))
             }else{
               dispatch(addRect({id:id, x:x, y:y}))
             }
@@ -189,7 +194,7 @@ const CrosshairCanvas = React.memo(forwardRef<HTMLCanvasElement, ICrosshairCanva
                   // 30259.5 30257.4 30132.5 30132.5 456 7.666933546832067 2.1
                   // 30257.4 30259.5 30132.5 30132.5 456 -7.540157480309735 -2.1
               let newYCoords=0 //props.dopHeightCanvas+40!==props.heightM ? deltaY : rangeY
-              console.log(deltaX, newX)
+              // console.log(deltaX, newX, props.xLeft)
               dispatch(remakeCoords({deltaX:deltaX,deltaY:newYCoords}))
               props.setMaxPrice(()=>thatMaxPrice)
               props.setMinPrice(()=>thatMinPrice)
@@ -218,7 +223,7 @@ const CrosshairCanvas = React.memo(forwardRef<HTMLCanvasElement, ICrosshairCanva
     if(props.xLeft>0 && isAdded){
       let howCandle=0
       let howCandleNeeded=props.xLeft/(props.candleSpacing+props.candleWidth)
-      if(howCandleNeeded>=1000){
+      if(howCandleNeeded>=1000 && props.graphic.typeCoin!==''){
         howCandle=1500
       }else if( howCandleNeeded>=500){
         howCandle=1000
@@ -248,11 +253,11 @@ const CrosshairCanvas = React.memo(forwardRef<HTMLCanvasElement, ICrosshairCanva
     let candleWidthPrev:number=props.candleWidth
     let candleSpacingPrev:number=props.candleSpacing
     if (e.deltaY < 0) {
-      if(props.candleWidth===1 && props.candleSpacing<0.8){
+      if(props.candleWidth===1 && props.candleSpacing<0.6){
         props.setCandleSpacing(candleSpacingPrev+0.2)
         props.setIfPlus(true)
       }else if(props.candleWidth+1!==41 && props.candleSpacing+0.2!==4){
-        props.setCandleWidth(candleWidthPrev+1)
+        props.setCandleWidth(candleWidthPrev+0.5)
         props.setCandleSpacing(candleSpacingPrev+0.2)
         props.setIfPlus(true)
       }
@@ -262,7 +267,7 @@ const CrosshairCanvas = React.memo(forwardRef<HTMLCanvasElement, ICrosshairCanva
         props.setIfPlus(true)
       }
     } else {
-      if(props.candleWidth-1!==-1 && props.candleWidth!==0.3 && props.candleSpacing-0.2!==-0.4){
+      if(props.candleWidth-1!==0 && props.candleWidth!==0.3 && props.candleSpacing-0.2!==-0.4){
         props.setCandleWidth(candleWidthPrev-1)
         props.setCandleSpacing(Number((candleSpacingPrev-0.2).toFixed(1)))
         props.setIfPlus(false)
@@ -287,7 +292,7 @@ const CrosshairCanvas = React.memo(forwardRef<HTMLCanvasElement, ICrosshairCanva
         document.removeEventListener('mouseup', handleMouseUp as  any)
       }
     };
-  }, [props.data,props.heightM, props.xLeft,props.candleSpacing,props.candleWidth, drawingElementWithMagnit,props.drawingElements]);
+  }, [props.data,props.heightM, props.xLeft,props.candleSpacing,props.candleWidth, drawingElementWithMagnit]);
   useEffect(()=>{
     if(props.drawingElements.lines.length==0 && props.drawingElements.grLines.length==0 && props.drawingElements.grRay.length==0 && props.drawingElements.pricesRanges.length==0
       && props.drawingElements.rectangles.length==0 && props.drawingElements.fibonacciRetracement==null && props.drawingElements.grLines.length==0 && props.drawingElements.texts==null && props.drawingElements.pricesRanges.length==0 && props.drawingElements.fixedPriceVolume.length==0){
@@ -300,7 +305,7 @@ const CrosshairCanvas = React.memo(forwardRef<HTMLCanvasElement, ICrosshairCanva
     <canvas onMouseDown={(e:MouseEvent)=>handleMouseDown(e)}
       onMouseMove={(e:MouseEvent)=>handleMouseMove(e)}
       onWheel = {(e:WheelEvent<HTMLCanvasElement>) => HandleWheel(e)}
-      ref={mainCanvasRef} style={{zIndex:'6'}} className={styles.canvas2} width={props.graphicRef.current?.clientWidth ? props.graphicRef.current?.clientWidth-props.priceWidth : undefined} height={props.heightM? props.heightM+41 : undefined}>
+      ref={mainCanvasRef} style={{zIndex:'6'}} className={styles.canvas2} width={props.width} height={props.heightM? props.heightM+41 : undefined}>
     </canvas>
   )
 }))

@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import React, { Dispatch, SetStateAction, useRef, useState } from 'react'
 import styles from './styles.module.css'
 import useOutsideClick from '../../../../hooks/useOutClick'
 import { useAppDispatch, useAppSelector } from '../../../../hooks/redux-hooks'
@@ -7,7 +7,7 @@ import { setGraphicGroup, unTieGraphicGroup } from '../../../../pages/MainPage/s
 import { changeDistance } from '../../../MenuSettings/slices/DistanceSetSlice';
 interface IGroupModal{
     active:boolean,
-    setActive: (arg:boolean)=>void,
+    setActive: Dispatch<SetStateAction<boolean>>,
     group: number | null
 }
 const GroupsModal:React.FC<IGroupModal> = ({active, setActive, group}) => {
@@ -25,6 +25,12 @@ const GroupsModal:React.FC<IGroupModal> = ({active, setActive, group}) => {
         if(graphics.find(item=>item.choosed===true)?.distance==='0' && graphics.find(item=>item.group===gr)){
             dispatch(changeDistance('Д'))
         }
+        setActive(()=>false)
+    }
+    const unTie=()=>{
+        dispatch(unTieGraphicGroup())
+        setChoosedGroup(0)
+        setActive(()=>false)
     }
     useOutsideClick(ref,onClose, active)
   return (
@@ -38,8 +44,8 @@ const GroupsModal:React.FC<IGroupModal> = ({active, setActive, group}) => {
                 </div>
             ))}
         </div>
-        <div className={styles.untie} onClick={()=>dispatch(unTieGraphicGroup())}>
-            <LockOpenIcon onClick={()=>setChoosedGroup(0)}/>
+        <div className={styles.untie} onClick={unTie}>
+            <LockOpenIcon/>
         </div>
     </div>
   )

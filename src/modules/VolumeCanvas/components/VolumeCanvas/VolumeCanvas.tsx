@@ -29,7 +29,7 @@ export const VolumeCanvas:React.FC<ICanvasVolume> = ({graphicRef,data,howCandleI
     const resizeHandler = () => {
         const {clientWidth } = graphicRef.current || {};
         if(clientWidth){
-          setWidth(clientWidth)
+          setWidth(clientWidth-priceWidth)
         }
       };
     useEffect(() => {
@@ -111,8 +111,8 @@ const dbClickSetGraph=()=>{
       <Resizer heightV={heightV} setHeightM={setHeightM} heightM={heightM} dopHeightCanvas={dopHeightCanvas} setDopHeightCanvas={setDopHeightCanvas} dopHeight={dopHeight} setHeightV={setHeightV} setDopHeight={setDopHeight} refContainer={refContainer} graphicRef={graphicRef}/> 
       <CrosshairVolume {...propsToCrosshairCanvas} ref={volumeRef}/>
       <div className={styles.wrapVolume} style={{width:graphicRef.current?.clientWidth ? graphicRef.current?.clientWidth : undefined, height:heightV}}>
-        <div ref={refContainer} className={styles.wrap} style={{width:graphicRef.current?.clientWidth ? graphicRef.current?.clientWidth-priceWidth : undefined, height:heightV}}>
-            <canvas width={graphicRef.current?.clientWidth ? graphicRef.current?.clientWidth-priceWidth : undefined} height={heightV} ref={refCanvas} className={styles.canvas} id='main_canvas'></canvas>
+        <div ref={refContainer} className={styles.wrap} style={{width:width, height:heightV}}>
+            <canvas width={width} height={heightV} ref={refCanvas} className={styles.canvas} id='main_canvas'></canvas>
         </div>
         <canvas ref={refCanvas2} width={priceWidth} height={heightV+4}  className={styles.canvas2} id='dop_canvas'></canvas>
         <canvas onMouseDown={(e:MouseEvent)=>handleMouseDown(e)} onDoubleClick={dbClickSetGraph} onMouseMove={(e:MouseEvent)=>handleMouseMove(e)}  ref={refCanvas4} className={styles.canvas4} width={priceWidth}  height={heightV}></canvas>

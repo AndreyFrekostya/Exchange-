@@ -18,9 +18,11 @@ interface IDateCanvas{
     howCandleInRange:number, 
     setHowCandleInRange:React.Dispatch<React.SetStateAction<number>>,
     priceWidth:number,
-    setIfPlus:React.Dispatch<React.SetStateAction<boolean>>
+    setIfPlus:React.Dispatch<React.SetStateAction<boolean>>,
+    isUsuallyScroll:boolean | null,
+    setIsUsuallyScroll:React.Dispatch<React.SetStateAction<boolean | null>>
 }
-const DateCanvas:React.FC<IDateCanvas> = ({graphicRef, data, xLeft, scrolledCandle, candleWidth, candleSpacing, x, pressedCandle,distance,setXLeft,setCandleSpacing,setCandleWidth, howCandleInRange,setHowCandleInRange,priceWidth,setIfPlus}) => {
+const DateCanvas:React.FC<IDateCanvas> = ({graphicRef,isUsuallyScroll,setIsUsuallyScroll, data, xLeft, scrolledCandle, candleWidth, candleSpacing, x, pressedCandle,distance,setXLeft,setCandleSpacing,setCandleWidth, howCandleInRange,setHowCandleInRange,priceWidth,setIfPlus}) => {
     const refCanvas=useRef<HTMLCanvasElement>(null)
     const refCanvas2=useRef<HTMLCanvasElement>(null)
     const refContainer=useRef<HTMLDivElement>(null)
@@ -47,10 +49,11 @@ const DateCanvas:React.FC<IDateCanvas> = ({graphicRef, data, xLeft, scrolledCand
         if(isPressed){
             const deltaX = startX-e.clientX;
             const newX=xLeft+deltaX
-            if(deltaX<0){
-                if(candleWidth+2!==41 && candleSpacing+0.2!==4){
-                    setCandleWidth((prev)=>prev+2)
-                    setCandleSpacing((prev)=>prev+0.2)
+            setIsUsuallyScroll(()=>null)
+            if(deltaX>0){
+                if(candleWidth+0.2!==41 && candleSpacing+0.04!==4){
+                    setCandleWidth((prev)=>prev+0.2)
+                    setCandleSpacing((prev)=>prev+0.04)
                     setIfPlus(()=>true)
                 }
             }
@@ -102,8 +105,8 @@ const DateCanvas:React.FC<IDateCanvas> = ({graphicRef, data, xLeft, scrolledCand
   return (
     <div className={styles.wrap} ref={refContainer}  onDoubleClick={dbClickSetGraph} onMouseDown={(e:MouseEvent)=>handleMouseDown(e)} onMouseMove={(e:MouseEvent)=>handleMouseMove(e)}
     style={{width: width, height:'26px'}}>
-        <canvas ref={refCanvas} className={styles.canvas} height='25px' width={graphicRef.current? graphicRef.current.clientWidth-priceWidth :   undefined}></canvas>
-        <canvas ref={refCanvas2} className={styles.canvas} height='25px'  width={graphicRef.current? graphicRef.current.clientWidth-priceWidth :   undefined}></canvas>
+        <canvas ref={refCanvas} className={styles.canvas} height='25px' width={width}></canvas>
+        <canvas ref={refCanvas2} className={styles.canvas} height='25px'  width={width}></canvas>
     </div>
   )
 }

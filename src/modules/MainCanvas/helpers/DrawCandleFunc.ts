@@ -6,7 +6,7 @@ export const DrawCandleFunc=(ctx:CanvasRenderingContext2D,candlestiks:string[][]
     let range=dopHeight ? (height-dopHeight)/2 : 0
     let newHeight=dopHeight ? dopHeight : height
     let x0=xLeft
-    console.log(xLeft)
+    let rangeX=candleWidth%2==0 ? 0.5 : 0
     const redColor='#EB602F'
     const greenColor='#03fcdf'
     ctx.imageSmoothingEnabled = false;

@@ -97,7 +97,9 @@ export const CoinModal:React.FC<ICoinModal> = ({setActive, active}) => {
             </div>
             </div>
             <div className={styles.input}>
-              <input id='preset_input' type="text" value={text} onChange={(e:React.ChangeEvent<HTMLInputElement>)=>setText(e.target.value)} placeholder='Найти монету'/>
+              <form autoComplete='off'>
+                <input id='preset_input' type="text" value={text} onChange={(e:React.ChangeEvent<HTMLInputElement>)=>setText(e.target.value)} placeholder='Найти монету'/>
+              </form>
             </div>
             <div style={{overflowX: 'auto', flexBasis: '100%', overflowY:'hidden'}}>
               {isLoadingDataFirst && <Loader/>}

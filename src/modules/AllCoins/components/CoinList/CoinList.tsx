@@ -102,7 +102,9 @@ export const CoinList:React.FC<ICoinList> = ({setActive, active,id, graphicRef})
   return (
     <div className={styles.wrap} ref={ref}>
         <div className={styles.coiIinp}>
-            <input id='preset_input' type="text" value={text} onChange={(e:ChangeEvent<HTMLInputElement>)=>setText(e.target.value)} placeholder='Найти монету'/>
+            <form autoComplete="off">
+                <input id='preset_input' type="text" value={text} onChange={(e:ChangeEvent<HTMLInputElement>)=>setText(e.target.value)} placeholder='Найти монету'/>
+            </form>
             <div className={styles.filter} onClick={setFilter}>
                 <p className={isFutures ? styles.futures : isSpot ? styles.spot  : ''}>{filteredBy}</p>
                 <KeyboardArrowRightIcon/>

@@ -41,7 +41,8 @@ export interface ICrosshairCanvasProps{
     maxPrice:number,
     minPrice:number,
     ctx2:CanvasRenderingContext2D | null | undefined,
-    drawingElements:IDrawingElements
+    drawingElements:IDrawingElements,
+    width:number | undefined
 }
 
 export interface IMainCanvas{
@@ -82,7 +83,7 @@ export interface IMainCanvas{
     graphic:IGraphic,
     firstData:string[][],
     dataUpdated:string[],
-    isUsuallyScroll:boolean,
+    isUsuallyScroll:boolean | null,
     dopHeightCanvas:number,
     setDopHeightCanvas:setState<number>,
     setYDown:setState<number>,

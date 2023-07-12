@@ -71,7 +71,9 @@ const PresetModal:React.FC<IModalPreset>= memo(({active, setIsActive}) => {
     <div ref={ref} style={{overflowY: heightMain > 400 ? 'scroll' : 'auto'}} className={styles.main} onKeyDown={(e)=>addPresetFunc(e)}>
       <div className={styles.wrap}>
         <div className={styles.inputField}>
+        <form autoComplete="off">
           <input id='preset_input' type="text" value={text} placeholder='Сохранить шаблон' onChange={(e:React.ChangeEvent<HTMLInputElement>)=>setText(e.target.value)} />
+        </form>  
           <CheckIcon onClick={()=>addPresetFunc(null)}/>
         </div>
         <div className={styles.error}>

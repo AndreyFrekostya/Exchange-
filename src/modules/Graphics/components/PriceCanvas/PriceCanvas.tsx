@@ -64,7 +64,7 @@ const PriceCanvas:React.FC<IPriceCanvas> = ({graphicRef, data, xLeft, howCandleI
         setMaxPrice(()=>newthatMaxPrice)
         setMinPrice(()=>newthatMinPrice)
   }
-  },[xLeft,width, timer,data, fixedNumber,yDown])
+  },[xLeft,width, timer,data, fixedNumber,yDown, heightM])
   useEffect(()=>{
       if(ctx && refCanvas.current && ifFirst && data.length!==0 && interval!==-Infinity && interval!==0){
         let thatMaxPrice=Math.max(...data.map((d)=>Number(d[2])));
